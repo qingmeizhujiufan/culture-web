@@ -55,10 +55,10 @@ class DishList extends React.Component {
             containerStyle: {
                 position: 'relative'
             },     // 设置容器样式
-            transitionDuration: '0.8s',      // 改变位置或变为显示后，重布局变换的持续时间，时间格式为css的时间格式
+            transitionDuration: '0.5s',      // 改变位置或变为显示后，重布局变换的持续时间，时间格式为css的时间格式
             stagger: '0.03s',                // 重布局时网格并不是一起变换的，排在后面的网格比前一个延迟开始，该项设置延迟时间
             resize: true,                  // 改变窗口大小将不会影响布局
-            initLayout: false,                // 初始化布局，设未true可手动初试化布局
+            initLayout: true,                // 初始化布局，设未true可手动初试化布局
         });
     }
 
