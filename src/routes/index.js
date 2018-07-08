@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, IndexRoute} from 'react-router';
+import {Router, Route, IndexRoute, IndexRedirect, hashHistory} from 'react-router'
 
 import App from '../modules/App';
 import Frame from '../modules/Frame';
@@ -20,21 +20,21 @@ import DishSurvey from '../modules/dish/component/survey';
 import BrandAdmin from '../modules/dish/component/brandAdmin';
 
 module.exports = (
-    <Route path="/" component={App}>
-        <IndexRoute component={Login}/>
-        <route path="login" component={Login} />
-        <Route path="/frame" component={Frame}>
-            <IndexRoute component={Home}/>
-            <route path="home" component={Home} />
-            <route path="dish/dishList" component={DishList} />
-            <route path="dish/dishDetailInfo/:id" component={DishDetailInfo} />
-            <route path="dish/editDish/:id" component={EditDish} />
-            <route path="dish/AddDish" component={AddDish} />
-            <route path="dish/healthFood" component={HealthFood} />
-            <route path="dish/addHealthFood" component={AddHealthFood} />
-            <route path="dish/editHealth/:id" component={EditHealth} />
-            <route path="dish/survey" component={DishSurvey} />
-            <route path="dish/brandAdmin" component={BrandAdmin} />
+    <Router path="/" history={hashHistory}>
+        <IndexRedirect to="frame"/>
+        <Route path="frame" component={Frame}>
+            <IndexRoute component={Home} />
+            <Route path="home" component={Home}/>
+            <Route path="dish/dishList" component={DishList}/>
+            <Route path="dish/dishDetailInfo/:id" component={DishDetailInfo}/>
+            <Route path="dish/editDish/:id" component={EditDish}/>
+            <Route path="dish/AddDish" component={AddDish}/>
+            <Route path="dish/healthFood" component={HealthFood}/>
+            <Route path="dish/addHealthFood" component={AddHealthFood}/>
+            <Route path="dish/editHealth/:id" component={EditHealth}/>
+            <Route path="dish/survey" component={DishSurvey}/>
+            <Route path="dish/brandAdmin" component={BrandAdmin}/>
         </Route>
-    </Route>
+        <Route path="login" component={Login}/>
+    </Router>
 );
