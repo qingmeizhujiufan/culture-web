@@ -128,7 +128,7 @@ class HealthFoodList extends React.Component {
                                   extra={<img style={{width: 180, height: 120}} alt="logo" src={ restUrl.BASE_HOST + 'UpLoadFile/' + item.health_cover + '.png'} />}
                               >
                                   <List.Item.Meta
-                                      title={<Link to={'/frame/dish/editHealth/' + item.id}>{item.health_title}</Link>}
+                                      title={<Link to={'/frame/culture/editHealth/' + item.id}>{item.health_title}</Link>}
                                       description={item.health_desc}
                                   />
                                   {item.create_time} <Button onClick={this.delHealth.bind(null, item.id)}>删除</Button>
@@ -148,7 +148,7 @@ class HealthFoodList extends React.Component {
                                   extra={<img style={{width: 180, height: 120}} alt="logo" src={ restUrl.BASE_HOST + 'UpLoadFile/' + item.health_cover + '.png'} />}
                               >
                                   <List.Item.Meta
-                                      title={<Link to={'/frame/dish/editHealth/' + item.id}>{item.health_title}</Link>}
+                                      title={<Link to={'/frame/culture/editHealth/' + item.id}>{item.health_title}</Link>}
                                       description={item.health_desc}
                                   />
                                   {item.create_time} <Button onClick={this.delHealth.bind(null, item.id)}>删除</Button>

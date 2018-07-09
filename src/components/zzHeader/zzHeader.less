@@ -1,29 +1,42 @@
 .zui-header {
-	height: 50px;
-	padding: 0 15px 0 0;
-	background-color: #fff;
+    height: 70px;
+    padding: 0 30px;
+    background-color: #fff;
 
-	.trigger {
-		font-size: 18px;
-	    line-height: 64px;
-	    padding: 0 24px;
-	    cursor: pointer;
-	    transition: color .3s;
+    .logo {
+        font-family: STXingkai-SC-Bold;
+        font-size: 24px;
+        color: rgba(38, 37, 35, 1);
+        line-height: 24px;
+    }
 
-	    &:hover {
-	    	color: #fc5a59;
-	    }
-	}
+    .header-tabs {
+        height: 24px;
+        list-style-type: none;
 
-	.input-search {
+        .tab {
+            display: inline-block;
+            margin-right: 50px;
+            font-size: 14px;
+            color: #47340B;
+            line-height: 24px;
 
-		input {
-			border: none;
+            &.tab-active {
+                color: #9E5C29;
+                font-size: 16px;
+            }
+        }
+    }
 
-			&:focus {
-				border: none;
-				box-shadow: none;
-			}
-		}
-	}
+    .input-search {
+
+        input {
+            border: none;
+
+            &:focus {
+                border: none;
+                box-shadow: none;
+            }
+        }
+    }
 }

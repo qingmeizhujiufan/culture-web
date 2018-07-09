@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
-import {Row, Col, Affix, Icon, Input, Dropdown, Menu, Avatar, Tooltip, notification} from 'antd';
+import {Row, Col, Affix, Icon, Input, Dropdown, Menu, Avatar, Divider, notification} from 'antd';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
 import './zzHeader.less';
@@ -41,24 +41,27 @@ class ZZHeader extends React.Component {
     }
 
     render() {
-        const {collapsed, onToggleClick} = this.props;
 
         return (
             <Affix>
                 <header className="zui-header">
                     <Row type="flex" justify="space-between" align="middle" style={{height: '100%'}}>
-                        <Col span={2}>
-                            <Tooltip placement="right" title={collapsed ? '点击张开左侧菜单栏' : '点击收缩左侧菜单栏'}>
-                                <Icon
-                                    className="trigger"
-                                    type={collapsed ? 'menu-unfold' : 'menu-fold'}
-                                    onClick={onToggleClick}
-                                />
-                            </Tooltip>
+                        <Col span={4}>
+                            <div className='logo'>湖北民俗</div>
                         </Col>
-                        <Col span={10}>
+                        <Col span={14}>
+                            <div className='header-tabs'>
+                                <li className='tab tab-active'>首页</li>
+                                <li className='tab'>文化展示</li>
+                                <li className='tab'>新闻资讯</li>
+                                <li className='tab'>图片交流</li>
+                                <li className='tab'>在线视频</li>
+                                <li className='tab'>VR视频</li>
+                                <li className='tab'>联系我们</li>
+                            </div>
                         </Col>
-                        <Col span={12} style={{textAlign: 'right'}}>
+                        <Col span={6} style={{textAlign: 'right'}}>
+                            <Divider type="vertical" />
                             <Input
                                 className="input-search"
                                 placeholder="别说话，搜我..."
@@ -66,12 +69,9 @@ class ZZHeader extends React.Component {
                                               style={{color: 'rgba(0,0,0,1)', fontSize: 16, fontWeight: 600}}/>}
                                 style={{width: 200}}
                             />
-                            <Dropdown overlay={this.menu}>
-                                <a className="ant-dropdown-link">
-                                    <Avatar style={{verticalAlign: '-6px', backgroundColor: '#fc5a59'}} size="small"
-                                            icon="user"/> 管理员<Icon type="down"/>
-                                </a>
-                            </Dropdown>
+                            <Divider type="vertical" />
+                            <Avatar style={{verticalAlign: '-6px', backgroundColor: '#666'}} size="small"
+                                    icon="user"/> 您好，请登录
                         </Col>
                     </Row>
                 </header>

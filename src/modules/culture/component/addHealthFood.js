@@ -56,7 +56,7 @@ class AddHealthGood extends React.Component {
                             message: '新增健康信息成功！',
                             icon: <Icon type="smile-circle" style={{ color: '#108ee9' }} />,
                         });
-                        this.context.router.push('/frame/dish/healthFood');
+                        this.context.router.push('/frame/culture/healthFood');
                     }
                 });
             }

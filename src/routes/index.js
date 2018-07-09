@@ -9,15 +9,17 @@ import Home from '../modules/home/component/home';
 /* 登录 */
 import Login from '../modules/login/component/login';
 /* 菜单管理 */
-import DishList from '../modules/dish/component/dishList';
-import DishDetailInfo from '../modules/dish/component/dishDetailInfo';
-import EditDish from '../modules/dish/component/editDish';
-import AddDish from '../modules/dish/component/addDish';
-import HealthFood from '../modules/dish/component/healthFood';
-import AddHealthFood from '../modules/dish/component/addHealthFood';
-import EditHealth from '../modules/dish/component/editHealth';
-import DishSurvey from '../modules/dish/component/survey';
-import BrandAdmin from '../modules/dish/component/brandAdmin';
+import DishList from '../modules/culture/component/dishList';
+import DishDetailInfo from '../modules/culture/component/dishDetailInfo';
+import EditDish from '../modules/culture/component/editDish';
+import AddDish from '../modules/culture/component/addDish';
+import HealthFood from '../modules/culture/component/healthFood';
+import AddHealthFood from '../modules/culture/component/addHealthFood';
+import EditHealth from '../modules/culture/component/editHealth';
+import DishSurvey from '../modules/culture/component/survey';
+import BrandAdmin from '../modules/culture/component/brandAdmin';
+/* 图片交流 */
+import Picture from '../modules/picture/component/';
 
 module.exports = (
     <Router path="/" history={hashHistory}>
@@ -34,6 +36,7 @@ module.exports = (
             <Route path="dish/editHealth/:id" component={EditHealth}/>
             <Route path="dish/survey" component={DishSurvey}/>
             <Route path="dish/brandAdmin" component={BrandAdmin}/>
+            <Route path="picture/show" component={Picture}/>
         </Route>
         <Route path="login" component={Login}/>
     </Router>
