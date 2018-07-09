@@ -6,20 +6,20 @@ import Frame from '../modules/Frame';
 
 /* 首页 */
 import Home from '../modules/home/component/home';
+/* 文化展示 */
+import Culture from '../modules/culture/component/';
+/* 新闻资讯 */
+import News from '../modules/news/component/';
+/* 图片展示 */
+import Picture from '../modules/picture/component/';
+/* 在线视频 */
+import Video from '../modules/video/component/';
+/* VR视频 */
+/* 联系我们 */
+import ContractUs from '../modules/ContractUs/component/';
+
 /* 登录 */
 import Login from '../modules/login/component/login';
-/* 菜单管理 */
-import DishList from '../modules/culture/component/dishList';
-import DishDetailInfo from '../modules/culture/component/dishDetailInfo';
-import EditDish from '../modules/culture/component/editDish';
-import AddDish from '../modules/culture/component/addDish';
-import HealthFood from '../modules/culture/component/healthFood';
-import AddHealthFood from '../modules/culture/component/addHealthFood';
-import EditHealth from '../modules/culture/component/editHealth';
-import DishSurvey from '../modules/culture/component/survey';
-import BrandAdmin from '../modules/culture/component/brandAdmin';
-/* 图片交流 */
-import Picture from '../modules/picture/component/';
 
 module.exports = (
     <Router path="/" history={hashHistory}>
@@ -27,16 +27,11 @@ module.exports = (
         <Route path="frame" component={Frame}>
             <IndexRoute component={Home} />
             <Route path="home" component={Home}/>
-            <Route path="dish/dishList" component={DishList}/>
-            <Route path="dish/dishDetailInfo/:id" component={DishDetailInfo}/>
-            <Route path="dish/editDish/:id" component={EditDish}/>
-            <Route path="dish/AddDish" component={AddDish}/>
-            <Route path="dish/healthFood" component={HealthFood}/>
-            <Route path="dish/addHealthFood" component={AddHealthFood}/>
-            <Route path="dish/editHealth/:id" component={EditHealth}/>
-            <Route path="dish/survey" component={DishSurvey}/>
-            <Route path="dish/brandAdmin" component={BrandAdmin}/>
+            <Route path="culture/show" component={Culture}/>
+            <Route path="news/list" component={News}/>
             <Route path="picture/show" component={Picture}/>
+            <Route path="video/show" component={Video}/>
+            <Route path="ContractUs" component={ContractUs}/>
         </Route>
         <Route path="login" component={Login}/>
     </Router>

@@ -7,6 +7,29 @@ import './zzHeader.less';
 
 const logoutUrl = restUrl.ADDR + 'server/LoginOut';
 
+const tabs = [{
+    active: true,
+    title: '首页'
+}, {
+    active: false,
+    title: '文化展示'
+}, {
+    active: false,
+    title: '新闻资讯'
+}, {
+    active: false,
+    title: '图片展示'
+}, {
+    active: false,
+    title: '在线视频'
+}, {
+    active: false,
+    title: 'VR视频'
+}, {
+    active: false,
+    title: '联系我们'
+}];
+
 class ZZHeader extends React.Component {
     constructor(props) {
         super(props);
@@ -51,17 +74,18 @@ class ZZHeader extends React.Component {
                         </Col>
                         <Col span={14}>
                             <div className='header-tabs'>
-                                <li className='tab tab-active'>首页</li>
-                                <li className='tab'>文化展示</li>
-                                <li className='tab'>新闻资讯</li>
-                                <li className='tab'>图片交流</li>
-                                <li className='tab'>在线视频</li>
-                                <li className='tab'>VR视频</li>
-                                <li className='tab'>联系我们</li>
+                                {
+                                    tabs.map((item, index) => {
+                                        return (
+                                            <span key={index}
+                                                  className={`tab ${item.active ? 'tab-active' : ''}`}>{item.title}</span>
+                                        )
+                                    })
+                                }
                             </div>
                         </Col>
                         <Col span={6} style={{textAlign: 'right'}}>
-                            <Divider type="vertical" />
+                            <Divider type="vertical"/>
                             <Input
                                 className="input-search"
                                 placeholder="别说话，搜我..."
@@ -69,7 +93,7 @@ class ZZHeader extends React.Component {
                                               style={{color: 'rgba(0,0,0,1)', fontSize: 16, fontWeight: 600}}/>}
                                 style={{width: 200}}
                             />
-                            <Divider type="vertical" />
+                            <Divider type="vertical"/>
                             <Avatar style={{verticalAlign: '-6px', backgroundColor: '#666'}} size="small"
                                     icon="user"/> 您好，请登录
                         </Col>

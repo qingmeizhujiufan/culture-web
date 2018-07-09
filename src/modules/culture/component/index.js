@@ -32,7 +32,7 @@ const getDishListUrl = restUrl.ADDR + 'server/getDishList';
 const onlineStateChangeUrl = restUrl.ADDR + 'server/onlineStateChange';
 const delDsihUrl = restUrl.ADDR + 'server/delDish';
 
-class DishList extends React.Component {
+class Index extends React.Component {
     constructor(props) {
         super(props);
 
@@ -91,8 +91,8 @@ class DishList extends React.Component {
     }
 }
 
-DishList.contextTypes = {
+Index.contextTypes = {
     router: React.PropTypes.object
 }
 
-export default DishList;
+export default Index;
