@@ -9,25 +9,32 @@ const logoutUrl = restUrl.ADDR + 'server/LoginOut';
 
 const tabs = [{
     active: true,
-    title: '首页'
+    title: '首页',
+    link: ''
 }, {
     active: false,
-    title: '文化展示'
+    title: '文化展示',
+    link: '/frame/culture/show'
 }, {
     active: false,
-    title: '新闻资讯'
+    title: '新闻资讯',
+    link: '/frame/news/list'
 }, {
     active: false,
-    title: '图片展示'
+    title: '图片展示',
+    link: '/frame/picture/show'
 }, {
     active: false,
-    title: '在线视频'
+    title: '在线视频',
+    link: '/frame/video/show'
 }, {
     active: false,
-    title: 'VR视频'
+    title: 'VR视频',
+    link: ''
 }, {
     active: false,
-    title: '联系我们'
+    title: '联系我们',
+    link: '/frame/ContractUs'
 }];
 
 class ZZHeader extends React.Component {
@@ -41,6 +48,22 @@ class ZZHeader extends React.Component {
                 </Menu.Item>
             </Menu>
         );
+
+        this.state = {
+            tabs,
+        };
+    }
+
+    changeTab = index => {
+        const {tabs} = this.state;
+        tabs.map(item => item.active = false);
+        tabs[index].active = true;
+
+        this.setState({
+            tabs,
+        });
+
+        this.context.router.push(tabs[index].link);
     }
 
     logout = () => {
@@ -77,8 +100,11 @@ class ZZHeader extends React.Component {
                                 {
                                     tabs.map((item, index) => {
                                         return (
-                                            <span key={index}
-                                                  className={`tab ${item.active ? 'tab-active' : ''}`}>{item.title}</span>
+                                            <span
+                                                key={index}
+                                                className={`tab ${item.active ? 'tab-active' : ''}`}
+                                                onClick={() => this.changeTab(index)}
+                                            >{item.title}</span>
                                         )
                                     })
                                 }

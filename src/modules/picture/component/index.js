@@ -4,19 +4,13 @@ import {
     Row,
     Col,
     Tree,
-    Table,
     Icon,
-    List,
-    Divider,
-    Breadcrumb,
-    Badge,
-    notification,
-    Menu,
     Button,
     Spin,
     Tabs,
     message,
     Modal,
+    Avatar,
     Select
 } from 'antd';
 import imagesLoaded from 'imagesLoaded';
@@ -100,39 +94,41 @@ class Picture extends React.Component {
                     <Col span={18} style={{margin: '25px 0 50px 0'}}>
                         <div>
                             <div className="grid" id="container">
-                                <div className="grid-item">
-                                    <img src={demo}/>
-                                </div>
-                                <div className="grid-item">
-                                    <img src={demo1}/>
-                                </div>
-                                <div className="grid-item">
-                                    <img src={demo2}/>
-                                </div>
-                                <div className="grid-item">
-                                    <img src={demo3}/>
-                                </div>
-                                <div className="grid-item">
-                                    <img src={demo4}/>
-                                </div>
-                                <div className="grid-item">
-                                    <img src={demo5}/>
-                                </div>
-                                <div className="grid-item">
-                                    <img src={demo6}/>
-                                </div>
-                                <div className="grid-item">
-                                    <img src={demo7}/>
-                                </div>
-                                <div className="grid-item">
-                                    <img src={demo8}/>
-                                </div>
-                                <div className="grid-item">
-                                    <img src={demo9}/>
-                                </div>
-                                <div className="grid-item">
-                                    <img src={demo10}/>
-                                </div>
+                                {
+                                    [demo, demo1, demo2, demo3, demo4, demo4, demo5, demo6, demo7, demo8, demo9, demo10].map((item, index) => {
+                                        return (
+                                            <div key={index} className="grid-item">
+                                                <img src={item}/>
+                                                <div className='info'>
+                                                    <div className='creator'>
+                                                        <Row  type="flex" justify="space-between">
+                                                            <Col span={11} offset={1}>
+                                                                <Avatar style={{verticalAlign: '-6px', backgroundColor: '#666'}} size="small"
+                                                                        icon="user"/> 达摩法师
+                                                            </Col>
+                                                            <Col span={11}>
+                                                                <div className="date">11小时前</div>
+                                                            </Col>
+                                                            <Col span={1}/>
+                                                        </Row>
+                                                    </div>
+                                                    <div className='extra'>
+                                                        <Row>
+                                                            <Col span={8} offset={2}>
+                                                                <Icon type="heart-o" style={{marginRight: 5, fontSize: 16}} />
+                                                                <span>12</span>
+                                                            </Col>
+                                                            <Col span={8}>
+                                                                <Icon type="message" style={{marginRight: 5, fontSize: 16}} />
+                                                                <span>11小时前</span>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
                             </div>
                         </div>
                     </Col>
