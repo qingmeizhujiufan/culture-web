@@ -1,8 +1,11 @@
 .grid {
+    width: 1200px !important;
 
     .grid-item {
         width: 220px;
         margin-bottom: 25px;
+        box-shadow: 0px 0px 3px 0px rgba(144, 144, 144, 0.5);
+        border: 1px solid rgba(239, 239, 239, 1);
 
         img {
             width: 100%;
@@ -12,18 +15,28 @@
             background-color: #fff;
             line-height: 60px;
 
+            .creator {
+                color: #170202;
+            }
+
             .date {
                 text-align: right;
                 color: #999;
             }
         }
-        
+
         .extra {
             font-size: 12px;
             color: #9E7D6B;
             background-color: #FAFAFA;
             line-height: 47px;
-            border-top: 1px solid rgba(156,156,156, .12);
+            border-top: 1px solid rgba(156, 156, 156, .12);
+
+            .anticon {
+                margin-right: 5px;
+                font-size: 16px;
+                vertical-align: text-bottom;
+            }
         }
     }
 }
