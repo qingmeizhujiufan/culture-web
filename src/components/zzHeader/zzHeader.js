@@ -117,7 +117,7 @@ class ZZHeader extends React.Component {
                                 placeholder="别说话，搜我..."
                                 prefix={<Icon type="search"
                                               style={{color: 'rgba(0,0,0,1)', fontSize: 16, fontWeight: 600}}/>}
-                                style={{width: 200}}
+                                style={{width: 40}}
                             />
                             <Divider type="vertical"/>
                             <Avatar style={{verticalAlign: '-6px', backgroundColor: '#666'}} size="small"

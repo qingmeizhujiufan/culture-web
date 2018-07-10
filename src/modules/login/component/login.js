@@ -4,7 +4,7 @@ import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
 import '../login.less';
 
-import loginBg from 'Img/login-bg.jpg';
+import loginBg from 'Img/login-bg.png';
 const FormItem = Form.Item;
 
 const loginUrl = restUrl.ADDR + 'server/login';
@@ -54,14 +54,13 @@ class Login extends React.Component {
     return (
       <div className="login">
         <img src={loginBg} className="login-bg" />
-        <div className="backup"></div>
         <div className="login-box">
           <Row>
             <Col span={13} style={{height: '400px', backgroundColor: 'rgba(101, 116, 154, .65)'}}>
               <div style={{margin: '85px 0 40px', textAlign: 'center'}}>
                 <Icon type="windows" style={{fontSize: 90, color: '#fff'}} />
               </div>
-              <div style={{paddingTop: 30, textAlign: 'center', fontSize: 20, color: '#fff'}}>后勤保障服务管理后台</div>
+              <div style={{paddingTop: 30, textAlign: 'center', fontSize: 20, color: '#fff'}}>民俗文化生活平台</div>
             </Col>
             <Col span={11} style={{height: '400px', padding: '20px 35px', backgroundColor: '#fff'}}>
               <Form onSubmit={this.handleSubmit} className="login-form">

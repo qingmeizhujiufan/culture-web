@@ -18,6 +18,7 @@ import Masonry from 'masonry-layout';
 import _ from 'lodash';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
+import {shifitDate} from "Utils/util";
 import '../index.less';
 import demo from 'Img/demo.jpg';
 import demo1 from 'Img/demo1.jpg';
@@ -52,7 +53,8 @@ class Picture extends React.Component {
         this.state = {
             dataSource: [],
             loading: false,
-            current: 0,
+            submitLoading: false,
+            current: -1,
             fileList: [],
             visible: false,
         };
@@ -88,6 +90,9 @@ class Picture extends React.Component {
     }
 
     queryList = (callback) => {
+        this.setState({
+            loading: true
+        });
         ajax.getJSON(queryListUrl, null, data => {
             if (data.success) {
                 this.setState({
@@ -98,6 +103,9 @@ class Picture extends React.Component {
             } else {
                 message.error(data.backMsg);
             }
+            this.setState({
+                loading: false
+            });
         })
     }
 
@@ -108,9 +116,12 @@ class Picture extends React.Component {
     }
 
     handleChange = ({fileList}) => {
-        this.setState({
-            fileList,
-        });
+        if (fileList && fileList[0].status === "done") {
+            this.setState({
+                fileList,
+                current: 0
+            });
+        }
     }
 
     handleOk = () => {
@@ -121,13 +132,14 @@ class Picture extends React.Component {
         }).join(',');
         param.tasteBrief = '这是描述';
         param.creator = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
-        this.setState({loading: true});
+        this.setState({submitLoading: true});
         ajax.postJSON(saveUrl, JSON.stringify(param), data => {
             if (data.success) {
                 message.success('上传图片成功');
                 this.setState({
-                    loading: false,
-                    visible: false
+                    submitLoading: false,
+                    visible: false,
+                    current: 1
                 });
             } else {
                 message.error('上传图片失败');
@@ -140,7 +152,7 @@ class Picture extends React.Component {
     }
 
     render() {
-        const {dataSource, visible, current, loading} = this.state;
+        const {dataSource, visible, current, loading, submitLoading} = this.state;
 
         return (
             <div className="page-content">
@@ -155,73 +167,88 @@ class Picture extends React.Component {
                                 title="发布美图"
                                 onOk={this.handleOk}
                                 onCancel={this.handleCancel}
-                                footer={[
-                                    <Button key="back" onClick={this.handleCancel}>取消</Button>,
-                                    <Button key="submit" type="primary" loading={loading}
-                                            onClick={this.handleOk}>发布</Button>,
-                                ]}
+                                footer={[]}
                             >
-                                <Dragger
-                                    action={restUrl.UPLOAD}
-                                    onChange={this.handleChange}
-                                >
-                                    <p className="ant-upload-drag-icon">
-                                        <Icon type="inbox"/>
-                                    </p>
-                                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                                    <p className="ant-upload-hint">Support for a single or bulk upload. Strictly
-                                        prohibit from uploading company data or other band files</p>
-                                </Dragger>
-                                <Steps current={current}>
-                                    {steps.map(item => <Step key={item.title} title={item.title}/>)}
-                                </Steps>
+                                {
+                                    current === -1 ? (
+                                        <Dragger
+                                            action={restUrl.UPLOAD}
+                                            onChange={this.handleChange}
+                                        >
+                                            <p className="ant-upload-drag-icon">
+                                                <Button className='zui-btn'>上传美图</Button>
+                                            </p>
+                                            <p className="ant-upload-text">也可拖拽图片到该区域上传</p>
+                                            <p className="ant-upload-hint">支持单张 5m 以内图片上传</p>
+                                            <p className="ant-upload-hint">提示：请严格遵守保密法律法规，严谨在互联网上储存、处理、传输、发布泄密、违法信息</p>
+                                        </Dragger>
+                                    ) : null
+                                }
+                                {
+                                    current > -1 ? (
+                                        <Steps current={current}>
+                                            {steps.map(item => <Step key={item.title} title={item.title}/>)}
+                                        </Steps>
+                                    ) : null
+                                }
+                                {
+                                    current === 0 ? (
+                                        <div style={{textAlign: 'center'}}>
+                                            <Button onClick={this.handleOk} loading={submitLoading}
+                                                    className='zui-btn'>上传美图</Button>
+                                        </div>
+                                    ) : null
+                                }
                             </Modal>
                         </div>
                     </div>
                 </div>
                 <div style={{background: 'rgba(237,236,234,1)'}}>
-                    <div style={{width: 1200, margin: '0 auto', padding: '25px 0 50px'}}>
-                        <div className="grid" id="container">
-                            {
-                                dataSource.map((item, index) => {
-                                    return (
-                                        <div key={index} className="grid-item">
-                                            <img src={restUrl.BASE_HOST + item.tasteCover.filePath}/>
-                                            <div className='info'>
-                                                <div className='creator'>
-                                                    <Row type="flex" justify="space-between">
-                                                        <Col span={11} offset={1}>
-                                                            <Avatar style={{
-                                                                marginRight: 5,
-                                                                verticalAlign: '-7px',
-                                                            }} size="small"
-                                                                    icon="user"/> 达摩法师
-                                                        </Col>
-                                                        <Col span={11}>
-                                                            <div
-                                                                className="date">{item.create_time.substring(0, 10)}</div>
-                                                        </Col>
-                                                        <Col span={1}/>
-                                                    </Row>
-                                                </div>
-                                                <div className='extra'>
-                                                    <Row>
-                                                        <Col span={8} offset={2}>
-                                                            <Icon type="heart-o"/>
-                                                            <span>{item.likeNum}</span>
-                                                        </Col>
-                                                        <Col span={8}>
-                                                            <Icon type="message"/>
-                                                            <span>{item.commentNum}</span>
-                                                        </Col>
-                                                    </Row>
+                    <div style={{width: 1200, margin: '0 auto', padding: '15px 0 50px'}}>
+                        <Spin spinning={loading} size="large">
+                            <div className="grid" id="container">
+                                {
+                                    dataSource.map((item, index) => {
+                                        return (
+                                            <div key={index} className="grid-item">
+                                                <img src={restUrl.BASE_HOST + item.tasteCover.filePath}/>
+                                                <div className='info'>
+                                                    <div className='creator'>
+                                                        <Row type="flex" justify="space-between">
+                                                            <Col span={11} offset={1}>
+                                                                <Avatar style={{
+                                                                    marginRight: 5,
+                                                                    verticalAlign: '-7px',
+                                                                }} size="small"
+                                                                        src={restUrl.BASE_HOST + item.avatar.filePath}
+                                                                /> {item.creatorName}
+                                                            </Col>
+                                                            <Col span={11}>
+                                                                <div
+                                                                    className="date">{shifitDate(item.create_time)}</div>
+                                                            </Col>
+                                                            <Col span={1}/>
+                                                        </Row>
+                                                    </div>
+                                                    <div className='extra'>
+                                                        <Row>
+                                                            <Col span={8} offset={2}>
+                                                                <Icon type="heart-o"/>
+                                                                <span>{item.likeNum}</span>
+                                                            </Col>
+                                                            <Col span={8}>
+                                                                <Icon type="message"/>
+                                                                <span>{item.commentNum}</span>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                        </Spin>
                     </div>
                 </div>
             </div>

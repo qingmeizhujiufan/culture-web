@@ -1,75 +1,69 @@
+/* created by zhongzheng 2018.7.10 */
 
-export default {
+/**
+ * @param 使用js让数字的千分位用,分隔
+ */
+export function shiftThousands(val) {
+    if (typeof val !== "number") {
+        return null;
+    }
+    ;
+    return val.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');//使用正则替换，每隔三个数加一个','
+}
 
-	//日期格式
-    FormatDate : function(date, type) {
-		var seperator1 = "-";
-		var seperator2 = ":";
-		if(date == null) {
-			date = new Date();
-		} else if(typeof(date) === "number") {
-			date = new Date(date);
-		} else {
-			date = new Date(date);
-		}
-		var curyear = date.getFullYear();
-		var curmonth = date.getMonth() + 1;
-		var curday = date.getDate();
-		if(curmonth >= 1 && curmonth <= 9) {
-			curmonth = "0" + curmonth;
-		}
-		if(curday >= 0 && curday <= 9) {
-			curday = "0" + curday;
-		}
-
-		if('date' === type) {
-			var curDate = curyear + seperator1 + curmonth + seperator1 + curday; //可以获取当前日期
-			return curDate;
-		} 
-		else if('dateHM' === type){
-			var curhour = date.getHours();
-			if(curhour >= 0 && curhour <= 9) {
-				curhour = "0" + curhour;
-			}
-			var curmin = date.getMinutes();
-			if(curmin >= 0 && curmin <= 9) {
-				curmin = "0" + curmin;
-			}
-			var curDate =	 curyear + seperator1 + curmonth + seperator1 + curday + " " +
-				curhour + seperator2 + curmin ; //可以获取当前时间
-			return curDate;
-		}else {
-			var curhour = date.getHours();
-			if(curhour >= 0 && curhour <= 9) {
-				curhour = "0" + curhour;
-			}
-			var curmin = date.getMinutes();
-			if(curmin >= 0 && curmin <= 9) {
-				curmin = "0" + curmin;
-			}
-			var cursec = date.getSeconds();
-			if(cursec >= 0 && cursec <= 9) {
-				cursec = "0" + cursec;
-			}
-			var curDate = curyear + seperator1 + curmonth + seperator1 + curday + " " +
-				curhour + seperator2 + curmin + seperator2 + cursec; //可以获取当前时间
-			return curDate;
-		}
-	},
-
-	//金钱格式
-	fmoney: function(s, n) {
-		var plus_minus = '';
-		n = n > 0 && n <= 20 ? n : 2;
-		if(parseFloat(s) < 0)
-			plus_minus = '-';
-		s = parseFloat((Math.abs(s) + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
-		var l = s.split(".")[0].split("").reverse(),
-			r = s.split(".")[1];
-		var t = "";
-		for(var i = 0; i < l.length; i++) {
-			t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
-		}
-		return plus_minus + t.split("").reverse().join("") + "." + r;
-	}
-};
+/**
+ * @param 显示特定日期形式
+ */
+export function shifitDate(dateStr) {
+    if (typeof  dateStr !== 'string') return null;
+    const now = new Date().getTime();
+    const date = new Date(dateStr).getTime();
+    const diffMillisecond = now - date;
+    const second = 1000;
+    const minute = 1000 * 60;
+    const hour = 1000 * 60 * 60;
+    const day = 1000 * 60 * 60 * 24;
+    const month = 1000 * 60 * 60 * 24 * 30;
+    if (diffMillisecond <= second) return '刚刚';
+    else if(diffMillisecond < 3 * second) return '1秒前';
+    else if(diffMillisecond < 5 * second) return '3秒前';
+    else if(diffMillisecond < 10 * second) return '5秒前';
+    else if(diffMillisecond < 30 * second) return '10秒前';
+    else if(diffMillisecond < 60 * second) return '30秒前';
+    else if(diffMillisecond < 3 * minute) return '1分钟前';
+    else if(diffMillisecond < 5 * minute) return '3分钟前';
+    else if(diffMillisecond < 10 * minute) return '5分钟前';
+    else if(diffMillisecond < 30 * minute) return '10分钟前';
+    else if(diffMillisecond < 60 * minute) return '30分钟前';
+    else if(diffMillisecond < 2 * hour) return '1小时前';
+    else if(diffMillisecond < 3 * hour) return '2小时前';
+    else if(diffMillisecond < 4 * hour) return '3小时前';
+    else if(diffMillisecond < 5 * hour) return '4小时前';
+    else if(diffMillisecond < 6 * hour) return '5小时前';
+    else if(diffMillisecond < 7 * hour) return '6小时前';
+    else if(diffMillisecond < 8 * hour) return '7小时前';
+    else if(diffMillisecond < 9 * hour) return '8小时前';
+    else if(diffMillisecond < 10 * hour) return '9小时前';
+    else if(diffMillisecond < 11 * hour) return '10小时前';
+    else if(diffMillisecond < 12 * hour) return '11小时前';
+    else if(diffMillisecond < 13 * hour) return '12小时前';
+    else if(diffMillisecond < 14 * hour) return '13小时前';
+    else if(diffMillisecond < 15 * hour) return '14小时前';
+    else if(diffMillisecond < 16 * hour) return '15小时前';
+    else if(diffMillisecond < 17 * hour) return '16小时前';
+    else if(diffMillisecond < 18 * hour) return '17小时前';
+    else if(diffMillisecond < 19 * hour) return '18小时前';
+    else if(diffMillisecond < 20 * hour) return '19小时前';
+    else if(diffMillisecond < 21 * hour) return '20小时前';
+    else if(diffMillisecond < 22 * hour) return '21小时前';
+    else if(diffMillisecond < 23 * hour) return '22小时前';
+    else if(diffMillisecond < 24 * hour) return '23小时前';
+    else if(diffMillisecond < 3 * day) return '1天前';
+    else if(diffMillisecond < 7 * day) return '3天前';
+    else if(diffMillisecond < 15 * day) return '1周前';
+    else if(diffMillisecond < 30 * day) return '半个月前';
+    else if(diffMillisecond < 3 * month) return '1个月前';
+    else if(diffMillisecond < 6 * month) return '3个月前';
+    else if(diffMillisecond < 12 * month) return '半年前';
+    else return '一年前';
+}
