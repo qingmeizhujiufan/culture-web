@@ -164,9 +164,9 @@ class Picture extends React.Component {
         ajax.postJSON(collectUrl, JSON.stringify(param), data => {
             if (data.success) {
                 const dataSource = this.state.dataSource;
-                dataSource[index].isLike = !obj.isLike;
-
-                if(obj.isLike){
+                const isLike = obj.isLike;
+                dataSource[index].isLike = !isLike;
+                if(isLike){
                     dataSource[index].likeNum -= 1;
                     message.success('已取消收藏');
                 }else {
