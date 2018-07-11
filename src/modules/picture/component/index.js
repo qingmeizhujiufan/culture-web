@@ -166,15 +166,17 @@ class Picture extends React.Component {
                 const dataSource = this.state.dataSource;
                 dataSource[index].isLike = !obj.isLike;
 
+                if(obj.isLike){
+                    dataSource[index].likeNum -= 1;
+                    message.success('已取消收藏');
+                }else {
+                    dataSource[index].likeNum += 1;
+                    message.success('收藏成功!');
+                }
+
                 this.setState({
                     dataSource
                 });
-
-                if(obj.isLike){
-                    message.success('已取消收藏');
-                }else {
-                    message.success('收藏成功!');
-                }
             } else {
                 message.error(data.backMsg);
             }
