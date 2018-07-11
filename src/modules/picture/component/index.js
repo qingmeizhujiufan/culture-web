@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import {
     Row,
     Col,
-    Tree,
+    Input,
     Icon,
     Button,
     Spin,
@@ -11,7 +11,9 @@ import {
     Upload,
     Modal,
     Avatar,
-    Steps
+    Steps,
+    Form,
+    Tooltip
 } from 'antd';
 import imagesLoaded from 'imagesLoaded';
 import Masonry from 'masonry-layout';
@@ -20,23 +22,14 @@ import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
 import {shifitDate} from "Utils/util";
 import '../index.less';
-import demo from 'Img/demo.jpg';
-import demo1 from 'Img/demo1.jpg';
-import demo2 from 'Img/demo2.jpg';
-import demo3 from 'Img/demo3.jpg';
-import demo4 from 'Img/demo4.jpg';
-import demo5 from 'Img/demo5.jpg';
-import demo6 from 'Img/demo6.jpg';
-import demo7 from 'Img/demo7.jpg';
-import demo8 from 'Img/demo8.jpg';
-import demo9 from 'Img/demo9.jpg';
-import demo10 from 'Img/demo10.jpg';
 
 const Dragger = Upload.Dragger;
+const {TextArea} = Input;
 const Step = Steps.Step;
+const FormItem = Form.Item;
 const queryListUrl = restUrl.ADDR + 'taste/queryList';
 const saveUrl = restUrl.ADDR + 'taste/save';
-const delDsihUrl = restUrl.ADDR + 'server/delDish';
+const collectUrl = restUrl.ADDR + 'taste/collect';
 
 const steps = [{
     title: '上传预览',
@@ -69,9 +62,9 @@ class Picture extends React.Component {
                 // 图片加载后执行的方法
                 var grid = document.querySelector('.grid');
                 var msnry = new Masonry(grid, {
-                    columnWidth: 220,
+                    columnWidth: 228,
                     itemSelector: '.grid-item',     // 要布局的网格元素
-                    gutter: 25,                    // 网格间水平方向边距，垂直方向边距使用css的margin-bottom设置
+                    gutter: 15,                    // 网格间水平方向边距，垂直方向边距使用css的margin-bottom设置
                     percentPosition: false,           // 使用columnWidth对应元素的百分比尺寸
                     stamp: '.grid-stamp',             // 网格中的固定元素，不会因重新布局改变位置，移动元素填充到固定元素下方
                     fitWidth: true,                  // 设置网格容器宽度等于网格宽度，这样配合css的auto margin实现居中显示
@@ -90,10 +83,14 @@ class Picture extends React.Component {
     }
 
     queryList = (callback) => {
+        const param = {};
+        param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
+        param.pageNumber = 1;
+        param.pageSize = 20;
         this.setState({
             loading: true
         });
-        ajax.getJSON(queryListUrl, null, data => {
+        ajax.getJSON(queryListUrl, param, data => {
             if (data.success) {
                 this.setState({
                     dataSource: data.backData
@@ -124,25 +121,34 @@ class Picture extends React.Component {
         }
     }
 
-    handleOk = () => {
-        const {fileList} = this.state;
-        const param = {};
-        param.tasteCover = fileList.map(item => {
-            return item.response.data.id;
-        }).join(',');
-        param.tasteBrief = '这是描述';
-        param.creator = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
-        this.setState({submitLoading: true});
-        ajax.postJSON(saveUrl, JSON.stringify(param), data => {
-            if (data.success) {
-                message.success('上传图片成功');
-                this.setState({
-                    submitLoading: false,
-                    visible: false,
-                    current: 1
+    normFile = (e) => {
+        console.log('Upload event:', e);
+        if (Array.isArray(e)) {
+            return e;
+        }
+        return e && e.fileList;
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                values.tasteCover = values.tasteCover.map(item => {
+                    return item.response.data.id;
+                }).join(',');
+                values.creator = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
+                this.setState({submitLoading: true});
+                ajax.postJSON(saveUrl, JSON.stringify(values), data => {
+                    if (data.success) {
+                        message.success('上传图片成功');
+                        this.setState({
+                            submitLoading: false,
+                            current: 1
+                        });
+                    } else {
+                        message.error('上传图片失败');
+                    }
                 });
-            } else {
-                message.error('上传图片失败');
             }
         });
     }
@@ -151,8 +157,33 @@ class Picture extends React.Component {
         this.setState({visible: false});
     }
 
+    collect = (obj, index) => {
+        const param = {};
+        param.tasteId = obj.id;
+        param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
+        ajax.postJSON(collectUrl, JSON.stringify(param), data => {
+            if (data.success) {
+                const dataSource = this.state.dataSource;
+                dataSource[index].isLike = !obj.isLike;
+
+                this.setState({
+                    dataSource
+                });
+
+                if(obj.isLike){
+                    message.success('已取消收藏');
+                }else {
+                    message.success('收藏成功!');
+                }
+            } else {
+                message.error(data.backMsg);
+            }
+        })
+    }
+
     render() {
-        const {dataSource, visible, current, loading, submitLoading} = this.state;
+        const {dataSource, visible, current, fileList, loading, submitLoading} = this.state;
+        const {getFieldDecorator} = this.props.form;
 
         return (
             <div className="page-content">
@@ -165,6 +196,11 @@ class Picture extends React.Component {
                             <Modal
                                 visible={visible}
                                 title="发布美图"
+                                width={720}
+                                wrapClassName='zui-modal'
+                                maskStyle={{
+                                    background: 'rgba(237,236,234, 0.5373)'
+                                }}
                                 onOk={this.handleOk}
                                 onCancel={this.handleCancel}
                                 footer={[]}
@@ -173,14 +209,27 @@ class Picture extends React.Component {
                                     current === -1 ? (
                                         <Dragger
                                             action={restUrl.UPLOAD}
+                                            listType="picture-card"
                                             onChange={this.handleChange}
                                         >
                                             <p className="ant-upload-drag-icon">
                                                 <Button className='zui-btn'>上传美图</Button>
                                             </p>
-                                            <p className="ant-upload-text">也可拖拽图片到该区域上传</p>
-                                            <p className="ant-upload-hint">支持单张 5m 以内图片上传</p>
-                                            <p className="ant-upload-hint">提示：请严格遵守保密法律法规，严谨在互联网上储存、处理、传输、发布泄密、违法信息</p>
+                                            <p style={{
+                                                marginTop: 24,
+                                                fontSize: 14,
+                                                color: '#170202'
+                                            }}>也可拖拽图片到该区域上传</p>
+                                            <p style={{
+                                                marginTop: 11,
+                                                fontSize: 12,
+                                                color: '#7D7D7D'
+                                            }}>支持单张 5m 以内图片上传</p>
+                                            <p style={{
+                                                marginTop: 40,
+                                                fontSize: 12,
+                                                color: '#7D7D7D'
+                                            }}>提示：请严格遵守保密法律法规，严谨在互联网上储存、处理、传输、发布泄密、违法信息</p>
                                         </Dragger>
                                     ) : null
                                 }
@@ -193,9 +242,56 @@ class Picture extends React.Component {
                                 }
                                 {
                                     current === 0 ? (
-                                        <div style={{textAlign: 'center'}}>
-                                            <Button onClick={this.handleOk} loading={submitLoading}
-                                                    className='zui-btn'>上传美图</Button>
+                                        <div style={{marginTop: 50}}>
+                                            <Form onSubmit={this.handleSubmit}>
+                                                <Row>
+                                                    <Col span={12}>
+                                                        <FormItem
+                                                        >
+                                                            {getFieldDecorator('tasteCover', {
+                                                                valuePropName: 'fileList',
+                                                                getValueFromEvent: this.normFile,
+                                                                rules: [{required: true, message: '图片不能为空!'}],
+                                                                initialValue: fileList
+                                                            })(
+                                                                <Upload
+                                                                    action={restUrl.UPLOAD}
+                                                                    listType="picture-card"
+                                                                    onPreview={this.handlePreview}
+                                                                    onChange={this.handleChange}
+                                                                >
+                                                                    {fileList.length >= 1 ? null : uploadButton}
+                                                                </Upload>
+                                                            )}
+                                                        </FormItem>
+                                                    </Col>
+                                                    <Col span={12}>
+                                                        <FormItem
+                                                        >
+                                                            {getFieldDecorator('tasteBrief', {})(
+                                                                <TextArea rows={4} placeholder="请输入图片标题或心情"/>
+                                                            )}
+                                                        </FormItem>
+                                                    </Col>
+                                                </Row>
+                                                <div style={{textAlign: 'center'}}>
+                                                    <Button loading={submitLoading} htmlType="submit"
+                                                            className='zui-btn'>上传美图</Button>
+                                                </div>
+                                            </Form>
+                                        </div>
+                                    ) : null
+                                }
+                                {
+                                    current === 1 ? (
+                                        <div style={{
+                                            marginTop: 50,
+                                            textAlign: 'center',
+                                            color: '#11A00A',
+                                            fontSize: 18
+                                        }}>
+                                            <Icon type="check-circle-o"
+                                                  style={{fontSize: 24, verticalAlign: 'text-bottom'}}/> 上传成功！
                                         </div>
                                     ) : null
                                 }
@@ -232,12 +328,30 @@ class Picture extends React.Component {
                                                     </div>
                                                     <div className='extra'>
                                                         <Row>
-                                                            <Col span={8} offset={2}>
-                                                                <Icon type="heart-o"/>
+                                                            <Col span={8} offset={1}>
+                                                                <Tooltip placement="top"
+                                                                         title={item.isLike ? "点击取消收藏" : "点击收藏"}>
+                                                                    <Icon
+                                                                        type={item.isLike ? "heart" : "heart-o"}
+                                                                        onClick={() => this.collect(item, index)}
+                                                                        style={{
+                                                                            cursor: 'pointer',
+                                                                            color: item.isLike ? '#FF7979' : ''
+                                                                        }}
+                                                                    />
+                                                                </Tooltip>
                                                                 <span>{item.likeNum}</span>
                                                             </Col>
                                                             <Col span={8}>
-                                                                <Icon type="message"/>
+                                                                <Tooltip placement="top"
+                                                                         title="查看评论">
+                                                                    <Icon type="message"
+                                                                          onClick={() => this.comment(item)}
+                                                                          style={{
+                                                                              cursor: 'pointer',
+                                                                          }}
+                                                                    />
+                                                                </Tooltip>
                                                                 <span>{item.commentNum}</span>
                                                             </Col>
                                                         </Row>
@@ -256,8 +370,9 @@ class Picture extends React.Component {
     }
 }
 
+const WrappePicture = Form.create()(Picture);
 Picture.contextTypes = {
     router: React.PropTypes.object
 }
 
-export default Picture;
+export default WrappePicture;
