@@ -18,6 +18,7 @@ import {
 } from 'antd';
 import imagesLoaded from 'imagesLoaded';
 import Masonry from 'masonry-layout';
+import InfiniteScroll from 'react-infinite-scroller';
 import _ from 'lodash';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
@@ -51,8 +52,7 @@ class Picture extends React.Component {
             current: -1,
             fileList: [],
             visible: false,
-            visibleComment: false,
-            commentObj: {}
+            hasMore: true,
         };
     }
 
@@ -60,27 +60,35 @@ class Picture extends React.Component {
     }
 
     componentDidMount() {
-        this.queryList(() => {
-            var imgLoad = imagesLoaded('#container', function () {
-                // 图片加载后执行的方法
-                var grid = document.querySelector('.grid');
-                var msnry = new Masonry(grid, {
-                    columnWidth: 228,
-                    itemSelector: '.grid-item',     // 要布局的网格元素
-                    gutter: 15,                    // 网格间水平方向边距，垂直方向边距使用css的margin-bottom设置
-                    percentPosition: false,           // 使用columnWidth对应元素的百分比尺寸
-                    stamp: '.grid-stamp',             // 网格中的固定元素，不会因重新布局改变位置，移动元素填充到固定元素下方
-                    fitWidth: true,                  // 设置网格容器宽度等于网格宽度，这样配合css的auto margin实现居中显示
-                    originLeft: true,                // 默认true网格左对齐，设为false变为右对齐
-                    originTop: true,                 // 默认true网格对齐顶部，设为false对齐底部
-                    containerStyle: {
-                        position: 'relative'
-                    },     // 设置容器样式
-                    transitionDuration: '0.5s',      // 改变位置或变为显示后，重布局变换的持续时间，时间格式为css的时间格式
-                    stagger: '0.03s',                // 重布局时网格并不是一起变换的，排在后面的网格比前一个延迟开始，该项设置延迟时间
-                    resize: true,                  // 改变窗口大小将不会影响布局
-                    initLayout: true,                // 初始化布局，设未true可手动初试化布局
-                });
+        // this.queryList(data => {
+        //     this.setState({
+        //         dataSource: data.backData
+        //     });
+        //
+        //     this.imagesLoad();
+        // });
+    }
+
+    imagesLoad = () => {
+        var imgLoad = imagesLoaded('#container', function () {
+            // 图片加载后执行的方法
+            var grid = document.querySelector('.grid');
+            var msnry = new Masonry(grid, {
+                columnWidth: 228,
+                itemSelector: '.grid-item',     // 要布局的网格元素
+                gutter: 15,                    // 网格间水平方向边距，垂直方向边距使用css的margin-bottom设置
+                percentPosition: false,           // 使用columnWidth对应元素的百分比尺寸
+                stamp: '.grid-stamp',             // 网格中的固定元素，不会因重新布局改变位置，移动元素填充到固定元素下方
+                fitWidth: true,                  // 设置网格容器宽度等于网格宽度，这样配合css的auto margin实现居中显示
+                originLeft: true,                // 默认true网格左对齐，设为false变为右对齐
+                originTop: true,                 // 默认true网格对齐顶部，设为false对齐底部
+                containerStyle: {
+                    position: 'relative'
+                },     // 设置容器样式
+                transitionDuration: '0.5s',      // 改变位置或变为显示后，重布局变换的持续时间，时间格式为css的时间格式
+                stagger: '0.03s',                // 重布局时网格并不是一起变换的，排在后面的网格比前一个延迟开始，该项设置延迟时间
+                resize: true,                  // 改变窗口大小将不会影响布局
+                initLayout: true,                // 初始化布局，设未true可手动初试化布局
             });
         });
     }
@@ -90,23 +98,38 @@ class Picture extends React.Component {
         param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
         param.pageNumber = 1;
         param.pageSize = 20;
-        this.setState({
-            loading: true
-        });
         ajax.getJSON(queryListUrl, param, data => {
             if (data.success) {
-                this.setState({
-                    dataSource: data.backData
-                }, () => {
-                    if (typeof callback === 'function') callback();
-                });
+                if (typeof callback === 'function') callback(data);
             } else {
                 message.error(data.backMsg);
             }
-            this.setState({
-                loading: false
-            });
         })
+    }
+
+    handleInfiniteOnLoad = () => {
+        console.log('handleInfiniteOnLoad ====');
+        let dataSource = this.state.dataSource;
+        this.setState({
+            loading: true,
+        });
+        if (dataSource.length > 30) {
+            message.warning('Infinite List loaded all');
+            this.setState({
+                hasMore: false,
+                loading: false,
+            });
+            return;
+        }
+        this.queryList((data) => {
+            const _data = dataSource.concat(data.backData);
+            this.setState({
+                dataSource: _data,
+                loading: false,
+            });
+
+            this.imagesLoad();
+        });
     }
 
     showPublishModal = () => {
@@ -160,10 +183,6 @@ class Picture extends React.Component {
         this.setState({visible: false});
     }
 
-    handleCommentCancel = () => {
-        this.setState({visibleComment: false});
-    }
-
     collect = (obj, index) => {
         const param = {};
         param.tasteId = obj.id;
@@ -190,17 +209,10 @@ class Picture extends React.Component {
         })
     }
 
-    comment = obj => {
-        this.setState({
-            visibleComment: true,
-            commentObj: obj
-        });
-    }
-
     render() {
-        const {dataSource, visible, visibleComment, current, fileList, loading, submitLoading} = this.state;
+        const {dataSource, visible, current, fileList, hasMore, loading, submitLoading} = this.state;
         const {getFieldDecorator} = this.props.form;
-
+        console.log('dataSource === ', dataSource);
         return (
             <div>
                 <div className="page-content">
@@ -322,12 +334,16 @@ class Picture extends React.Component {
                 <div className="page-content bg-gray">
                     <div className="content bg-ghost">
                         <div style={{width: 1200, margin: '0 auto', padding: '15px 0 50px'}}>
-                            <Spin spinning={loading} size="large">
+                            <InfiniteScroll
+                                pageStart={0}
+                                loadMore={() => this.handleInfiniteOnLoad()}
+                                hasMore={!loading && hasMore}
+                            >
                                 <div className="grid" id="container">
                                     {
                                         dataSource.map((item, index) => {
                                             return (
-                                                <div key={index} className="grid-item">
+                                                <div key={item.id + index} className="grid-item">
                                                     <img src={restUrl.BASE_HOST + item.tasteCover.filePath}/>
                                                     <div className='info'>
                                                         <div className='creator'>
@@ -382,25 +398,20 @@ class Picture extends React.Component {
                                             )
                                         })
                                     }
+                                    {
+                                        this.state.loading && this.state.hasMore && (
+                                            <div className="loading-container">
+                                                <Spin/>
+                                            </div>
+                                        )
+                                    }
                                 </div>
-                            </Spin>
-                            <Modal
-                                title="Modal"
-                                visible={visibleComment}
-                                onOk={this.hideModal}
-                                onCancel={this.handleCommentCancel}
-                                okText="确认"
-                                cancelText="取消"
-                            >
-                                <p>Bla bla ...</p>
-                                <p>Bla bla ...</p>
-                                <p>Bla bla ...</p>
-                            </Modal>
+                            </InfiniteScroll>
                         </div>
                     </div>
                 </div>
                 <BackTop>
-                    <div className="zui-up"><Icon type="up" /></div>
+                    <div className="zui-up"><Icon type="up"/></div>
                 </BackTop>
             </div>
         );
