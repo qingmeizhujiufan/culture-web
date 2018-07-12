@@ -111,7 +111,7 @@ img {
     border-color: @theme_color !important;
 }
 
-.ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon{
+.ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
     color: @theme_color !important;
 }
 
@@ -123,7 +123,20 @@ img {
     background-color: @theme_color !important;
 }
 
-ul.unstyled, ol.unstyled {
+.ant-tabs-nav .ant-tabs-tab-active,
+.ant-tabs-nav .ant-tabs-tab:hover {
+    color: @theme_color !important;
+}
+
+.ant-tabs-ink-bar {
+    background-color: @theme_color !important;
+}
+
+.ant-tabs-nav .ant-tabs-tab {
+    margin: 0 32px 0 32px !important;
+}
+
+ul.zui-unstyled, ol.zui-unstyled {
     margin-left: 0;
     list-style: none;
 }
@@ -139,12 +152,40 @@ ul.inline > li, ol.inline > li {
     padding-left: 5px;
 }
 
-.zui-content {
-    padding: 15px;
+.page-content {
+
+    & > .content {
+        width: 1200px;
+        margin: 0 auto;
+        background-color: #fff;
+    }
 }
 
-.breadcrumb-block {
-    padding: 5px 20px 15px 5px;
+.bg-white {
+    background-color: #fff;
+}
+
+.bg-gray {
+    background-color: #F6F6F6;
+}
+
+.bg-ghost {
+    background-color: transparent !important;
+}
+
+.ant-back-top {
+    right: 50px !important;
+    bottom: 100px !important;
+}
+
+.zui-up {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    color: #CECECE;
+    font-size: 18px;
+    text-align: center;
+    border: 1px solid #cecece;
 }
 
 .zui-btn {
@@ -294,4 +335,25 @@ ul.inline > li, ol.inline > li {
 
 .zui-pull-right {
     float: right;
+}
+
+.wrap-html {
+    margin: 50px 0;
+
+    .title {
+        font-size: 32px;
+        color: #242121;
+        line-height: 45px;
+    }
+
+    .date {
+        margin-right: 20px;
+        font-size: 14px;
+        color: #7F7F7F;
+    }
+
+    .read-num {
+        font-size: 14px;
+        color: #7F7F7F;
+    }
 }

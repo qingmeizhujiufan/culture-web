@@ -51,41 +51,45 @@ class Index extends React.Component {
         });
     }
 
-    detailrouter = (id) => {
-        return `/frame/dish/dishDetailInfo/${id}`
-    }
-
-    editrouter = (id) => {
-        return `/frame/dish/editDish/${id}`
+    detailrouter = id => {
+        this.context.router.push(`/frame/news/detail/${id}`);
     }
 
     render() {
         const {loading, listData, pagination} = this.state;
 
         return (
-            <div className="page-content">
-                <Spin spinning={loading}>
-                    <List
-                        itemLayout="vertical"
-                        size="large"
-                        pagination={pagination}
-                        dataSource={listData}
-                        renderItem={item => (
-                            <List.Item
-                                key={item.id}
-                            >
-                                <List.Item.Meta
-                                    avatar={<img style={{width: 180, height: 120}} alt="logo"
-                                                 src={restUrl.BASE_HOST + item.newsCover.filePath}/>}
-                                    title={<Link
-                                        to={'/frame/news/detail/' + item.id}>{item.newsTitle}</Link>}
-                                    description={item.newsBrief}
-                                />
-                                {item.create_time}
-                            </List.Item>
-                        )}
-                    />
-                </Spin>
+            <div className='page-news'>
+                <div className="page-content news-bg">
+
+                </div>
+                <div className="page-content">
+                    <div className="content">
+                        <Spin spinning={loading} size={"large"}>
+                            <List
+                                itemLayout="vertical"
+                                size="large"
+                                pagination={pagination}
+                                dataSource={listData}
+                                renderItem={item => (
+                                    <List.Item
+                                        key={item.id}
+                                        extra={<Icon type="right"/>}
+                                        onClick={() => this.detailrouter(item.id)}
+                                    >
+                                        <List.Item.Meta
+                                            avatar={<img style={{width: 232, height: 180}}
+                                                         src={restUrl.BASE_HOST + item.newsCover.filePath}/>}
+                                            title={<Link
+                                                to={'/frame/news/detail/' + item.id}>{item.newsTitle}</Link>}
+                                            description={<div><p>{item.newsBrief}</p><p>{item.create_time}</p></div>}
+                                        />
+                                    </List.Item>
+                                )}
+                            />
+                        </Spin>
+                    </div>
+                </div>
             </div>
         );
     }

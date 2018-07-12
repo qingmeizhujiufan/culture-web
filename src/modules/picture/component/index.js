@@ -13,7 +13,8 @@ import {
     Avatar,
     Steps,
     Form,
-    Tooltip
+    Tooltip,
+    BackTop
 } from 'antd';
 import imagesLoaded from 'imagesLoaded';
 import Masonry from 'masonry-layout';
@@ -50,6 +51,8 @@ class Picture extends React.Component {
             current: -1,
             fileList: [],
             visible: false,
+            visibleComment: false,
+            commentObj: {}
         };
     }
 
@@ -116,7 +119,7 @@ class Picture extends React.Component {
         if (fileList && fileList[0].status === "done") {
             this.setState({
                 fileList,
-                current: 0
+                current: 0,
             });
         }
     }
@@ -157,6 +160,10 @@ class Picture extends React.Component {
         this.setState({visible: false});
     }
 
+    handleCommentCancel = () => {
+        this.setState({visibleComment: false});
+    }
+
     collect = (obj, index) => {
         const param = {};
         param.tasteId = obj.id;
@@ -166,10 +173,10 @@ class Picture extends React.Component {
                 const dataSource = this.state.dataSource;
                 const isLike = obj.isLike;
                 dataSource[index].isLike = !isLike;
-                if(isLike){
+                if (isLike) {
                     dataSource[index].likeNum -= 1;
                     message.success('已取消收藏');
-                }else {
+                } else {
                     dataSource[index].likeNum += 1;
                     message.success('收藏成功!');
                 }
@@ -183,190 +190,218 @@ class Picture extends React.Component {
         })
     }
 
+    comment = obj => {
+        this.setState({
+            visibleComment: true,
+            commentObj: obj
+        });
+    }
+
     render() {
-        const {dataSource, visible, current, fileList, loading, submitLoading} = this.state;
+        const {dataSource, visible, visibleComment, current, fileList, loading, submitLoading} = this.state;
         const {getFieldDecorator} = this.props.form;
 
         return (
-            <div className="page-content">
-                <div style={{backgroundColor: '#fff'}}>
-                    <div className='clearfix' style={{width: 1200, height: 92, margin: '0 auto', lineHeight: '92px'}}>
-                        <div className='zui-pull-left' style={{color: '#170202', fontSize: 20}}>图片展示 / 兴趣圈</div>
-                        <div className='zui-pull-right'>
-                            <Button type="primary" icon="rocket" className="zui-btn"
-                                    onClick={() => this.showPublishModal()}>我要发布</Button>
-                            <Modal
-                                visible={visible}
-                                title="发布美图"
-                                width={720}
-                                wrapClassName='zui-modal'
-                                maskStyle={{
-                                    background: 'rgba(237,236,234, 0.5373)'
-                                }}
-                                onOk={this.handleOk}
-                                onCancel={this.handleCancel}
-                                footer={[]}
-                            >
-                                {
-                                    current === -1 ? (
-                                        <Dragger
-                                            action={restUrl.UPLOAD}
-                                            listType="picture-card"
-                                            onChange={this.handleChange}
-                                        >
-                                            <p className="ant-upload-drag-icon">
-                                                <Button className='zui-btn'>上传美图</Button>
-                                            </p>
-                                            <p style={{
-                                                marginTop: 24,
-                                                fontSize: 14,
-                                                color: '#170202'
-                                            }}>也可拖拽图片到该区域上传</p>
-                                            <p style={{
-                                                marginTop: 11,
-                                                fontSize: 12,
-                                                color: '#7D7D7D'
-                                            }}>支持单张 5m 以内图片上传</p>
-                                            <p style={{
-                                                marginTop: 40,
-                                                fontSize: 12,
-                                                color: '#7D7D7D'
-                                            }}>提示：请严格遵守保密法律法规，严谨在互联网上储存、处理、传输、发布泄密、违法信息</p>
-                                        </Dragger>
-                                    ) : null
-                                }
-                                {
-                                    current > -1 ? (
-                                        <Steps current={current}>
-                                            {steps.map(item => <Step key={item.title} title={item.title}/>)}
-                                        </Steps>
-                                    ) : null
-                                }
-                                {
-                                    current === 0 ? (
-                                        <div style={{marginTop: 50}}>
-                                            <Form onSubmit={this.handleSubmit}>
-                                                <Row>
-                                                    <Col span={12}>
-                                                        <FormItem
-                                                        >
-                                                            {getFieldDecorator('tasteCover', {
-                                                                valuePropName: 'fileList',
-                                                                getValueFromEvent: this.normFile,
-                                                                rules: [{required: true, message: '图片不能为空!'}],
-                                                                initialValue: fileList
-                                                            })(
-                                                                <Upload
-                                                                    action={restUrl.UPLOAD}
-                                                                    listType="picture-card"
-                                                                    onPreview={this.handlePreview}
-                                                                    onChange={this.handleChange}
-                                                                >
-                                                                    {fileList.length >= 1 ? null : uploadButton}
-                                                                </Upload>
-                                                            )}
-                                                        </FormItem>
-                                                    </Col>
-                                                    <Col span={12}>
-                                                        <FormItem
-                                                        >
-                                                            {getFieldDecorator('tasteBrief', {})(
-                                                                <TextArea rows={4} placeholder="请输入图片标题或心情"/>
-                                                            )}
-                                                        </FormItem>
-                                                    </Col>
-                                                </Row>
-                                                <div style={{textAlign: 'center'}}>
-                                                    <Button loading={submitLoading} htmlType="submit"
-                                                            className='zui-btn'>上传美图</Button>
+            <div>
+                <div className="page-content">
+                    <div style={{backgroundColor: '#fff'}}>
+                        <div className='clearfix'
+                             style={{width: 1200, height: 92, margin: '0 auto', lineHeight: '92px'}}>
+                            <div className='zui-pull-left' style={{color: '#170202', fontSize: 20}}>图片展示 / 兴趣圈</div>
+                            <div className='zui-pull-right'>
+                                <Button type="primary" icon="rocket" className="zui-btn"
+                                        onClick={() => this.showPublishModal()}>我要发布</Button>
+                                <Modal
+                                    visible={visible}
+                                    title="发布美图"
+                                    width={720}
+                                    wrapClassName='zui-modal'
+                                    maskStyle={{
+                                        background: 'rgba(237,236,234, 0.5373)'
+                                    }}
+                                    destroyOnClose
+                                    onOk={this.handleOk}
+                                    onCancel={this.handleCancel}
+                                    footer={null}
+                                >
+                                    {
+                                        current === -1 ? (
+                                            <Dragger
+                                                action={restUrl.UPLOAD}
+                                                listType="picture-card"
+                                                onChange={this.handleChange}
+                                            >
+                                                <p className="ant-upload-drag-icon">
+                                                    <Button className='zui-btn'>上传美图</Button>
+                                                </p>
+                                                <p style={{
+                                                    marginTop: 24,
+                                                    fontSize: 14,
+                                                    color: '#170202'
+                                                }}>也可拖拽图片到该区域上传</p>
+                                                <p style={{
+                                                    marginTop: 11,
+                                                    fontSize: 12,
+                                                    color: '#7D7D7D'
+                                                }}>支持单张 5m 以内图片上传</p>
+                                                <p style={{
+                                                    marginTop: 40,
+                                                    fontSize: 12,
+                                                    color: '#7D7D7D'
+                                                }}>提示：请严格遵守保密法律法规，严谨在互联网上储存、处理、传输、发布泄密、违法信息</p>
+                                            </Dragger>
+                                        ) : null
+                                    }
+                                    {
+                                        current > -1 ? (
+                                            <Steps current={current}>
+                                                {steps.map(item => <Step key={item.title} title={item.title}/>)}
+                                            </Steps>
+                                        ) : null
+                                    }
+                                    {
+                                        current === 0 ? (
+                                            <div style={{marginTop: 50}}>
+                                                <Form onSubmit={this.handleSubmit}>
+                                                    <Row>
+                                                        <Col span={12}>
+                                                            <FormItem
+                                                            >
+                                                                {getFieldDecorator('tasteCover', {
+                                                                    valuePropName: 'fileList',
+                                                                    getValueFromEvent: this.normFile,
+                                                                    rules: [{required: true, message: '图片不能为空!'}],
+                                                                    initialValue: fileList
+                                                                })(
+                                                                    <Upload
+                                                                        action={restUrl.UPLOAD}
+                                                                        listType="picture-card"
+                                                                        onPreview={this.handlePreview}
+                                                                        onChange={this.handleChange}
+                                                                    >
+                                                                        {fileList.length >= 1 ? null : uploadButton}
+                                                                    </Upload>
+                                                                )}
+                                                            </FormItem>
+                                                        </Col>
+                                                        <Col span={12}>
+                                                            <FormItem
+                                                            >
+                                                                {getFieldDecorator('tasteBrief', {})(
+                                                                    <TextArea rows={4} placeholder="请输入图片标题或心情"/>
+                                                                )}
+                                                            </FormItem>
+                                                        </Col>
+                                                    </Row>
+                                                    <div style={{textAlign: 'center'}}>
+                                                        <Button loading={submitLoading} htmlType="submit"
+                                                                className='zui-btn'>上传美图</Button>
+                                                    </div>
+                                                </Form>
+                                            </div>
+                                        ) : null
+                                    }
+                                    {
+                                        current === 1 ? (
+                                            <div style={{
+                                                marginTop: 50,
+                                                textAlign: 'center',
+                                                color: '#11A00A',
+                                                fontSize: 18
+                                            }}>
+                                                <Icon type="check-circle-o"
+                                                      style={{fontSize: 24, verticalAlign: 'text-bottom'}}/> 上传成功！
+                                            </div>
+                                        ) : null
+                                    }
+                                </Modal>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="page-content bg-gray">
+                    <div className="content bg-ghost">
+                        <div style={{width: 1200, margin: '0 auto', padding: '15px 0 50px'}}>
+                            <Spin spinning={loading} size="large">
+                                <div className="grid" id="container">
+                                    {
+                                        dataSource.map((item, index) => {
+                                            return (
+                                                <div key={index} className="grid-item">
+                                                    <img src={restUrl.BASE_HOST + item.tasteCover.filePath}/>
+                                                    <div className='info'>
+                                                        <div className='creator'>
+                                                            <Row type="flex" justify="space-between">
+                                                                <Col span={11} offset={1}>
+                                                                    <Avatar style={{
+                                                                        marginRight: 5,
+                                                                        verticalAlign: '-7px',
+                                                                    }} size="small"
+                                                                            src={restUrl.BASE_HOST + item.avatar.filePath}
+                                                                    /> {item.creatorName}
+                                                                </Col>
+                                                                <Col span={11}>
+                                                                    <div
+                                                                        className="date">{shifitDate(item.create_time)}</div>
+                                                                </Col>
+                                                                <Col span={1}/>
+                                                            </Row>
+                                                        </div>
+                                                        <div className='extra'>
+                                                            <Row>
+                                                                <Col span={8} offset={1}>
+                                                                    <Tooltip placement="top"
+                                                                             title={item.isLike ? "点击取消收藏" : "点击收藏"}>
+                                                                        <Icon
+                                                                            type={item.isLike ? "heart" : "heart-o"}
+                                                                            onClick={() => this.collect(item, index)}
+                                                                            style={{
+                                                                                cursor: 'pointer',
+                                                                                color: item.isLike ? '#FF7979' : ''
+                                                                            }}
+                                                                        />
+                                                                    </Tooltip>
+                                                                    <span>{item.likeNum}</span>
+                                                                </Col>
+                                                                <Col span={8}>
+                                                                    <Tooltip placement="top"
+                                                                             title="查看评论">
+                                                                        <Icon type="message"
+                                                                              onClick={() => this.comment(item)}
+                                                                              style={{
+                                                                                  cursor: 'pointer',
+                                                                              }}
+                                                                        />
+                                                                    </Tooltip>
+                                                                    <span>{item.commentNum}</span>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </Form>
-                                        </div>
-                                    ) : null
-                                }
-                                {
-                                    current === 1 ? (
-                                        <div style={{
-                                            marginTop: 50,
-                                            textAlign: 'center',
-                                            color: '#11A00A',
-                                            fontSize: 18
-                                        }}>
-                                            <Icon type="check-circle-o"
-                                                  style={{fontSize: 24, verticalAlign: 'text-bottom'}}/> 上传成功！
-                                        </div>
-                                    ) : null
-                                }
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </Spin>
+                            <Modal
+                                title="Modal"
+                                visible={visibleComment}
+                                onOk={this.hideModal}
+                                onCancel={this.handleCommentCancel}
+                                okText="确认"
+                                cancelText="取消"
+                            >
+                                <p>Bla bla ...</p>
+                                <p>Bla bla ...</p>
+                                <p>Bla bla ...</p>
                             </Modal>
                         </div>
                     </div>
                 </div>
-                <div style={{background: 'rgba(237,236,234,1)'}}>
-                    <div style={{width: 1200, margin: '0 auto', padding: '15px 0 50px'}}>
-                        <Spin spinning={loading} size="large">
-                            <div className="grid" id="container">
-                                {
-                                    dataSource.map((item, index) => {
-                                        return (
-                                            <div key={index} className="grid-item">
-                                                <img src={restUrl.BASE_HOST + item.tasteCover.filePath}/>
-                                                <div className='info'>
-                                                    <div className='creator'>
-                                                        <Row type="flex" justify="space-between">
-                                                            <Col span={11} offset={1}>
-                                                                <Avatar style={{
-                                                                    marginRight: 5,
-                                                                    verticalAlign: '-7px',
-                                                                }} size="small"
-                                                                        src={restUrl.BASE_HOST + item.avatar.filePath}
-                                                                /> {item.creatorName}
-                                                            </Col>
-                                                            <Col span={11}>
-                                                                <div
-                                                                    className="date">{shifitDate(item.create_time)}</div>
-                                                            </Col>
-                                                            <Col span={1}/>
-                                                        </Row>
-                                                    </div>
-                                                    <div className='extra'>
-                                                        <Row>
-                                                            <Col span={8} offset={1}>
-                                                                <Tooltip placement="top"
-                                                                         title={item.isLike ? "点击取消收藏" : "点击收藏"}>
-                                                                    <Icon
-                                                                        type={item.isLike ? "heart" : "heart-o"}
-                                                                        onClick={() => this.collect(item, index)}
-                                                                        style={{
-                                                                            cursor: 'pointer',
-                                                                            color: item.isLike ? '#FF7979' : ''
-                                                                        }}
-                                                                    />
-                                                                </Tooltip>
-                                                                <span>{item.likeNum}</span>
-                                                            </Col>
-                                                            <Col span={8}>
-                                                                <Tooltip placement="top"
-                                                                         title="查看评论">
-                                                                    <Icon type="message"
-                                                                          onClick={() => this.comment(item)}
-                                                                          style={{
-                                                                              cursor: 'pointer',
-                                                                          }}
-                                                                    />
-                                                                </Tooltip>
-                                                                <span>{item.commentNum}</span>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div>
-                        </Spin>
-                    </div>
-                </div>
+                <BackTop>
+                    <div className="zui-up"><Icon type="up" /></div>
+                </BackTop>
             </div>
         );
     }

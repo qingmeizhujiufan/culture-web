@@ -91,39 +91,41 @@ class ZZHeader extends React.Component {
         return (
             <Affix>
                 <header className="zui-header">
-                    <Row type="flex" justify="space-between" align="middle" style={{height: '100%'}}>
-                        <Col span={4}>
-                            <div className='logo'>湖北民俗</div>
-                        </Col>
-                        <Col span={14}>
-                            <div className='header-tabs'>
-                                {
-                                    tabs.map((item, index) => {
-                                        return (
-                                            <span
-                                                key={index}
-                                                className={`tab ${item.active ? 'tab-active' : ''}`}
-                                                onClick={() => this.changeTab(index)}
-                                            >{item.title}</span>
-                                        )
-                                    })
-                                }
-                            </div>
-                        </Col>
-                        <Col span={6} style={{textAlign: 'right'}}>
-                            <Divider type="vertical"/>
-                            <Input
-                                className="input-search"
-                                placeholder="别说话，搜我..."
-                                prefix={<Icon type="search"
-                                              style={{color: 'rgba(0,0,0,1)', fontSize: 16, fontWeight: 600}}/>}
-                                style={{width: 40}}
-                            />
-                            <Divider type="vertical"/>
-                            <Avatar style={{verticalAlign: '-6px', backgroundColor: '#666'}} size="small"
-                                    icon="user"/> 您好，请登录
-                        </Col>
-                    </Row>
+                    <div>
+                        <Row type="flex" justify="space-between" align="middle" style={{height: '100%'}}>
+                            <Col span={3}>
+                                <div className='logo'>湖北民俗</div>
+                            </Col>
+                            <Col span={15}>
+                                <div className='header-tabs'>
+                                    {
+                                        tabs.map((item, index) => {
+                                            return (
+                                                <span
+                                                    key={index}
+                                                    className={`tab ${item.active ? 'tab-active' : ''}`}
+                                                    onClick={() => this.changeTab(index)}
+                                                >{item.title}</span>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </Col>
+                            <Col span={6} style={{textAlign: 'right'}}>
+                                <Divider type="vertical"/>
+                                <Input
+                                    className="input-search"
+                                    placeholder="别说话，搜我..."
+                                    prefix={<Icon type="search"
+                                                  style={{color: 'rgba(0,0,0,1)', fontSize: 16, fontWeight: 600}}/>}
+                                    style={{width: 40}}
+                                />
+                                <Divider type="vertical"/>
+                                <Avatar style={{verticalAlign: '-6px', backgroundColor: '#666'}} size="small"
+                                        icon="user"/> 您好，请登录
+                            </Col>
+                        </Row>
+                    </div>
                 </header>
             </Affix>
         );

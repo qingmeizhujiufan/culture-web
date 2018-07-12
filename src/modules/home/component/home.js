@@ -86,7 +86,7 @@ class Index extends React.Component {
                     </Col>
                 </Row>
                 <BackTop>
-                    <div className="ant-back-top-inner"><Icon type="up" /></div>
+                    <div className="zui-up"><Icon type="up" /></div>
                 </BackTop>
             </div>
         );

@@ -1,0 +1,45 @@
+.page-news {
+
+    .news-bg {
+        width: 100%;
+        height: 160px;
+        background-image: url('../../assets/img/news-bg.jpg');
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+
+    .ant-list {
+        margin: 40px 0;
+    }
+
+    .ant-list-item {
+        padding: 40px;
+
+        &:hover {
+            cursor: pointer;
+            box-shadow: 0 0 11px #CDCDCD;
+        }
+    }
+
+    .ant-list-vertical .ant-list-item-meta-avatar {
+        display: block;
+    }
+
+    .ant-list-vertical .ant-list-item-meta {
+        margin-bottom: 0;
+    }
+
+    .ant-list-item-extra {
+        position: relative;
+
+        .anticon {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            font-size: 18px;
+            color: #E3E3E3;
+            transform: translateY(-50%);
+        }
+    }
+}
