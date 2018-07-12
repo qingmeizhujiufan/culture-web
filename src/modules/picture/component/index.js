@@ -47,6 +47,7 @@ class Picture extends React.Component {
 
         this.state = {
             dataSource: [],
+            pageNumber: 1,
             loading: false,
             submitLoading: false,
             current: -1,
@@ -96,7 +97,7 @@ class Picture extends React.Component {
     queryList = (callback) => {
         const param = {};
         param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
-        param.pageNumber = 1;
+        param.pageNumber = this.state.pageNumber;
         param.pageSize = 20;
         ajax.getJSON(queryListUrl, param, data => {
             if (data.success) {
@@ -108,13 +109,11 @@ class Picture extends React.Component {
     }
 
     handleInfiniteOnLoad = () => {
-        console.log('handleInfiniteOnLoad ====');
         let dataSource = this.state.dataSource;
         this.setState({
             loading: true,
         });
         if (dataSource.length > 30) {
-            message.warning('Infinite List loaded all');
             this.setState({
                 hasMore: false,
                 loading: false,
@@ -212,7 +211,7 @@ class Picture extends React.Component {
     render() {
         const {dataSource, visible, current, fileList, hasMore, loading, submitLoading} = this.state;
         const {getFieldDecorator} = this.props.form;
-        console.log('dataSource === ', dataSource);
+
         return (
             <div>
                 <div className="page-content">
