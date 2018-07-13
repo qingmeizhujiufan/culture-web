@@ -6,8 +6,6 @@ import _ from 'lodash';
 import menuTree from './menu';
 import './zzLeftSide.less';
 
-import crh from 'Img/crh.png';
-
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -81,7 +79,7 @@ class ZZLeftSide extends React.Component {
         collapsed={collapsed}
         className="left-side"
       >
-        <div className="logo"><img src={crh} /></div>
+        <div className="logo"></div>
         <Scrollbars style={{ width: collapsed ? 80 : 200, height: 'calc(100vh - 50px)'}}>
           <Menu 
             theme="dark" 

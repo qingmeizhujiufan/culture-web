@@ -25,19 +25,20 @@ import User from '../modules/user/component/';
 import Login from '../modules/login/component/login';
 
 module.exports = (
-    <Router path="/" history={hashHistory}>
-        <IndexRedirect to="frame"/>
-        <Route path="frame" component={Frame}>
-            <IndexRoute component={Home} />
-            <Route path="home" component={Home}/>
-            <Route path="culture/show" component={Culture}/>
-            <Route path="news/list" component={News}/>
-            <Route path="news/detail/:id" component={NewsDetail}/>
-            <Route path="picture/show" component={Picture}/>
-            <Route path="video/show" component={Video}/>
-            <Route path="contractus" component={ContractUs}/>
-            <Route path="personal" component={User}/>
+    <Router history={hashHistory}>
+        <Route path="/" component={App}>
+            <IndexRedirect to="frame"/>
+            <Route path="frame" component={Frame}>
+                <IndexRoute component={Home}/>
+                <route path="culture/show" component={Culture}/>
+                <route path="news/list" component={News}/>
+                <route path="news/detail/:id" component={NewsDetail}/>
+                <route path="picture/show" component={Picture}/>
+                <route path="video/show" component={Video}/>
+                <route path="contractus" component={ContractUs}/>
+                <route path="personal" component={User}/>
+            </Route>
+            <Route path="login" component={Login}/>
         </Route>
-        <Route path="login" component={Login}/>
     </Router>
 );

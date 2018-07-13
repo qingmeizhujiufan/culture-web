@@ -48,6 +48,7 @@ class Picture extends React.Component {
         this.state = {
             dataSource: [],
             pageNumber: 1,
+            total: 0,
             loading: false,
             submitLoading: false,
             current: -1,
@@ -61,13 +62,14 @@ class Picture extends React.Component {
     }
 
     componentDidMount() {
-        // this.queryList(data => {
-        //     this.setState({
-        //         dataSource: data.backData
-        //     });
-        //
-        //     this.imagesLoad();
-        // });
+        this.queryList(data => {
+            this.setState({
+                dataSource: data.backData,
+                total: data.total
+            });
+
+            this.imagesLoad();
+        });
     }
 
     imagesLoad = () => {
@@ -98,7 +100,7 @@ class Picture extends React.Component {
         const param = {};
         param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
         param.pageNumber = this.state.pageNumber;
-        param.pageSize = 20;
+        param.pageSize = 10;
         ajax.getJSON(queryListUrl, param, data => {
             if (data.success) {
                 if (typeof callback === 'function') callback(data);
@@ -109,25 +111,30 @@ class Picture extends React.Component {
     }
 
     handleInfiniteOnLoad = () => {
-        let dataSource = this.state.dataSource;
-        this.setState({
-            loading: true,
-        });
-        if (dataSource.length > 30) {
+        let {dataSource, pageNumber, total} = this.state;
+
+        if (dataSource.length >= total) {
             this.setState({
                 hasMore: false,
                 loading: false,
             });
-            return;
-        }
-        this.queryList((data) => {
-            const _data = dataSource.concat(data.backData);
-            this.setState({
-                dataSource: _data,
-                loading: false,
-            });
 
-            this.imagesLoad();
+            return false;
+        }
+
+        this.setState({
+            loading: true,
+            pageNumber: ++pageNumber
+        }, () => {
+            this.queryList((data) => {
+                const _data = dataSource.concat(data.backData);
+                this.setState({
+                    dataSource: _data,
+                    loading: false,
+                });
+
+                this.imagesLoad();
+            });
         });
     }
 
@@ -331,82 +338,87 @@ class Picture extends React.Component {
                     </div>
                 </div>
                 <div className="page-content bg-gray">
-                    <div className="content bg-ghost">
-                        <div style={{width: 1200, margin: '0 auto', padding: '15px 0 50px'}}>
-                            <InfiniteScroll
-                                pageStart={0}
-                                loadMore={() => this.handleInfiniteOnLoad()}
-                                hasMore={!loading && hasMore}
-                            >
-                                <div className="grid" id="container">
-                                    {
-                                        dataSource.map((item, index) => {
-                                            return (
-                                                <div key={item.id + index} className="grid-item">
-                                                    <img src={restUrl.BASE_HOST + item.tasteCover.filePath}/>
-                                                    <div className='info'>
-                                                        <div className='creator'>
-                                                            <Row type="flex" justify="space-between">
-                                                                <Col span={11} offset={1}>
-                                                                    <Avatar style={{
-                                                                        marginRight: 5,
-                                                                        verticalAlign: '-7px',
-                                                                    }} size="small"
-                                                                            src={restUrl.BASE_HOST + item.avatar.filePath}
-                                                                    /> {item.creatorName}
-                                                                </Col>
-                                                                <Col span={11}>
-                                                                    <div
-                                                                        className="date">{shifitDate(item.create_time)}</div>
-                                                                </Col>
-                                                                <Col span={1}/>
-                                                            </Row>
-                                                        </div>
-                                                        <div className='extra'>
-                                                            <Row>
-                                                                <Col span={8} offset={1}>
-                                                                    <Tooltip placement="top"
-                                                                             title={item.isLike ? "点击取消收藏" : "点击收藏"}>
-                                                                        <Icon
-                                                                            type={item.isLike ? "heart" : "heart-o"}
-                                                                            onClick={() => this.collect(item, index)}
-                                                                            style={{
-                                                                                cursor: 'pointer',
-                                                                                color: item.isLike ? '#FF7979' : ''
-                                                                            }}
-                                                                        />
-                                                                    </Tooltip>
-                                                                    <span>{item.likeNum}</span>
-                                                                </Col>
-                                                                <Col span={8}>
-                                                                    <Tooltip placement="top"
-                                                                             title="查看评论">
-                                                                        <Icon type="message"
-                                                                              onClick={() => this.comment(item)}
-                                                                              style={{
-                                                                                  cursor: 'pointer',
-                                                                              }}
-                                                                        />
-                                                                    </Tooltip>
-                                                                    <span>{item.commentNum}</span>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
+                    <div className="content bg-ghost" style={{paddingTop: 15}}>
+                        <InfiniteScroll
+                            initialLoad={false}
+                            pageStart={0}
+                            loadMore={() => this.handleInfiniteOnLoad()}
+                            hasMore={!loading && hasMore}
+                            threshold={250}
+                        >
+                            <div className="grid" id="container">
+                                {
+                                    dataSource.map((item, index) => {
+                                        return (
+                                            <div key={item.id + index} className="grid-item">
+                                                <img src={restUrl.BASE_HOST + item.tasteCover.filePath}/>
+                                                <div className='info'>
+                                                    <div className='creator'>
+                                                        <Row type="flex" justify="space-between">
+                                                            <Col span={11} offset={1}>
+                                                                <Avatar style={{
+                                                                    marginRight: 5,
+                                                                    verticalAlign: '-7px',
+                                                                }} size="small"
+                                                                        src={restUrl.BASE_HOST + item.avatar.filePath}
+                                                                /> {item.creatorName}
+                                                            </Col>
+                                                            <Col span={11}>
+                                                                <div
+                                                                    className="date">{shifitDate(item.create_time)}</div>
+                                                            </Col>
+                                                            <Col span={1}/>
+                                                        </Row>
+                                                    </div>
+                                                    <div className='extra'>
+                                                        <Row>
+                                                            <Col span={8} offset={1}>
+                                                                <Tooltip placement="top"
+                                                                         title={item.isLike ? "点击取消收藏" : "点击收藏"}>
+                                                                    <Icon
+                                                                        type={item.isLike ? "heart" : "heart-o"}
+                                                                        onClick={() => this.collect(item, index)}
+                                                                        style={{
+                                                                            cursor: 'pointer',
+                                                                            color: item.isLike ? '#FF7979' : ''
+                                                                        }}
+                                                                    />
+                                                                </Tooltip>
+                                                                <span>{item.likeNum}</span>
+                                                            </Col>
+                                                            <Col span={8}>
+                                                                <Tooltip placement="top"
+                                                                         title="查看评论">
+                                                                    <Icon type="message"
+                                                                          onClick={() => this.comment(item)}
+                                                                          style={{
+                                                                              cursor: 'pointer',
+                                                                          }}
+                                                                    />
+                                                                </Tooltip>
+                                                                <span>{item.commentNum}</span>
+                                                            </Col>
+                                                        </Row>
                                                     </div>
                                                 </div>
-                                            )
-                                        })
-                                    }
-                                    {
-                                        this.state.loading && this.state.hasMore && (
-                                            <div className="loading-container">
-                                                <Spin/>
                                             </div>
                                         )
-                                    }
-                                </div>
-                            </InfiniteScroll>
-                        </div>
+                                    })
+                                }
+                                {
+                                    loading && hasMore && (
+                                        <div className="loading-container">
+                                            <Spin/>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                        </InfiniteScroll>
+                        {
+                            !hasMore && (
+                                <div className="no-more">你已经刷到底线了~</div>
+                            )
+                        }
                     </div>
                 </div>
                 <BackTop>
