@@ -138,6 +138,7 @@ img {
 
 ul.zui-unstyled, ol.zui-unstyled {
     margin-left: 0;
+    margin-bottom: 0;
     list-style: none;
 }
 
@@ -178,6 +179,17 @@ ul.inline > li, ol.inline > li {
     bottom: 100px !important;
 }
 
+.ant-btn {
+    height: 40px !important;
+    padding: 0 20px !important;
+}
+
+.ant-btn:hover, .ant-btn:focus {
+    color: #b98860 !important;
+    background-color: #fff;
+    border-color: #b98860 !important;
+}
+
 .zui-up {
     width: 50px;
     height: 50px;
@@ -203,6 +215,31 @@ ul.inline > li, ol.inline > li {
         background-color: #b98860 !important;
         border-color: #b98860 !important;
     }
+}
+
+.ant-input-search {
+    .ant-btn-primary {
+        width: 92px;
+        font-size: 14px;
+        color: #fff !important;
+        background-color: #FFA600 !important;
+        border-color: #FFA600 !important;
+
+        &:hover,
+        &:focus {
+            color: #fff !important;
+            background-color: #ffb429 !important;
+            border-color: #ffb429 !important;
+        }
+    }
+}
+
+.logo {
+    font-family: "楷体";
+    font-size: 24px;
+    color: #262523;
+    line-height: 24px;
+    font-weight: 600;
 }
 
 .ibox {

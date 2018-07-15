@@ -12,29 +12,38 @@
         margin: 0 auto;
     }
 
-    .logo {
-        font-family: "楷体";
-        font-size: 24px;
-        color: #262523;
-        line-height: 24px;
-        font-weight: 600;
-    }
-
     .header-tabs {
         height: 24px;
         list-style-type: none;
 
         .tab {
+            position: relative;
             display: inline-block;
             margin-right: 50px;
             font-size: 16px;
-            color: #47340B;
+            color: #262626;
             line-height: 24px;
             cursor: pointer;
+            transition: color .2s ease-in;
+
+            &:after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                width: 0;
+                height: 3px;
+                background-color: #9E5C29;
+                transform: translateX(-50%);
+                transition: width .15s ease-in;
+            }
 
             &.tab-active {
                 color: #9E5C29;
-                font-size: 18px;
+
+                &:after {
+                    width: 32px;
+                }
             }
         }
     }

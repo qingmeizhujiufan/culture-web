@@ -1,105 +1,99 @@
 import React from 'react';
-import { Form, Icon, Row, Col, Input, Button, Checkbox, message } from 'antd';
+import {Link} from 'react-router';
+import {Form, Icon, Row, Col, message} from 'antd';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
 import '../login.less';
 
-import loginBg from 'Img/login-bg.png';
+import loginLeft from 'Img/login-left.png';
+import followPublic from 'Img/followPublic.png';
+
 const FormItem = Form.Item;
 
 const loginUrl = restUrl.ADDR + 'server/login';
 
 class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    
-    this.state = {
-      loading: false
-    };
-  }
+    constructor(props) {
+        super(props);
 
-  componentDidMount = () => {
-  }
-
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        this.setState({
-          loading: true
-        });
-        console.log('Received values of form: ', values);
-        let param = {};
-        param.user_name = values.userName;
-        param.user_pwd = values.password;
-        ajax.postJSON(loginUrl, JSON.stringify(param), (data) => {
-          if(data.success){
-            localStorage.token = data.token;
-            localStorage.userId = data.userId;
-            this.context.router.push('/frame/home');
-          }else {
-            message.error(data.backMsg);
-          }  
-          this.setState({
+        this.state = {
             loading: false
-          });
+        };
+    }
+
+    componentDidMount = () => {
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                this.setState({
+                    loading: true
+                });
+                console.log('Received values of form: ', values);
+                let param = {};
+                param.user_name = values.userName;
+                param.user_pwd = values.password;
+                ajax.postJSON(loginUrl, JSON.stringify(param), (data) => {
+                    if (data.success) {
+                        localStorage.token = data.token;
+                        localStorage.userId = data.userId;
+                        this.context.router.push('/frame/home');
+                    } else {
+                        message.error(data.backMsg);
+                    }
+                    this.setState({
+                        loading: false
+                    });
+                });
+            }
         });
-      }
-    });
-  }
+    }
 
-  render() {
-    const { getFieldDecorator } = this.props.form;
+    render() {
+        const {getFieldDecorator} = this.props.form;
 
-    return (
-      <div className="login">
-        <img src={loginBg} className="login-bg" />
-        <div className="login-box">
-          <Row>
-            <Col span={13} style={{height: '400px', backgroundColor: 'rgba(101, 116, 154, .65)'}}>
-              <div style={{margin: '85px 0 40px', textAlign: 'center'}}>
-                <Icon type="windows" style={{fontSize: 90, color: '#fff'}} />
-              </div>
-              <div style={{paddingTop: 30, textAlign: 'center', fontSize: 20, color: '#fff'}}>民俗文化生活平台</div>
-            </Col>
-            <Col span={11} style={{height: '400px', padding: '20px 35px', backgroundColor: '#fff'}}>
-              <Form onSubmit={this.handleSubmit} className="login-form">
-                <FormItem>
-                  <h1 style={{margin: '15px 0 0 0'}}>欢迎登录</h1>
-                  <p style={{margin: '0', color: '#999'}}>Welcome!</p>
-                </FormItem>
-                <FormItem>
-                  {getFieldDecorator('userName', {
-                    rules: [{ required: true, message: '请输入您的用户名!' }],
-                  })(
-                    <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} className="login-input" placeholder="用户名" />
-                  )}
-                </FormItem>
-                <FormItem>
-                  {getFieldDecorator('password', {
-                    rules: [{ required: true, message: '请输入您的密码!' }],
-                  })(
-                    <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" className="login-input" placeholder="密码" />
-                  )}
-                </FormItem>
-                <FormItem>
-                  <Button type="primary" htmlType="submit" className="login-form-button"  loading={this.state.loading}>
-                    登录
-                  </Button>
-                </FormItem>
-              </Form>
-            </Col>
-          </Row>
-        </div>
-      </div>
-    );
-  }
+        return (
+            <div className="login">
+                <div className="page-content">
+                    <div className="content login-header">
+                        <div className="logo zui-pull-left">湖北民俗</div>
+                        <div className="back zui-pull-right"><Link to='frame'>返回首页</Link></div>
+                    </div>
+                </div>
+                <div className="page-content login-content">
+                    <Row type="flex" justify="center" align="middle" style={{height: '100%'}}>
+                        <Col span={6} style={{marginTop: '-7%'}}>
+                            <img src={loginLeft}/>
+                        </Col>
+                        <Col span={6} style={{marginTop: '-7%'}}>
+                            <div className="login-box">
+                                <h1>
+                                    <span className='left-dot'></span>
+                                    <span>微信登录</span>
+                                    <span className='right-dot'></span>
+                                </h1>
+                                <div className='qrcode'>
+                                    <img src={followPublic}/>
+                                </div>
+                                <div className='tip'><Icon type="wechat" /> 扫一扫，微信账号登录</div>
+                            </div>
+                        </Col>
+                    </Row>
+                </div>
+                <div className="login-box">
+
+                </div>
+            </div>
+        );
+    }
 }
 
 const WrappedLogin = Form.create()(Login);
 
-Login.contextTypes = {  
-     router:React.PropTypes.object  
-} 
+Login.contextTypes = {
+    router: React.PropTypes.object
+}
 
-export default  WrappedLogin;
+export default WrappedLogin;
