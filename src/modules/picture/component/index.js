@@ -215,6 +215,10 @@ class Picture extends React.Component {
         })
     }
 
+    showDetail = id => {
+        this.context.router.push('/frame/picture/detail/' + id);
+    }
+
     render() {
         const {dataSource, visible, current, fileList, hasMore, loading, submitLoading} = this.state;
         const {getFieldDecorator} = this.props.form;
@@ -350,7 +354,8 @@ class Picture extends React.Component {
                                 {
                                     dataSource.map((item, index) => {
                                         return (
-                                            <div key={item.id + index} className="grid-item">
+                                            <div key={item.id + index} className="grid-item"
+                                                 onClick={() => this.showDetail(item.id)}>
                                                 <img src={restUrl.BASE_HOST + item.tasteCover.filePath}/>
                                                 <div className='info'>
                                                     <div className='creator'>

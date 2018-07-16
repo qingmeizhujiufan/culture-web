@@ -13,6 +13,7 @@ import News from '../modules/news/component/';
 import NewsDetail from '../modules/news/component/detail';
 /* 图片展示 */
 import Picture from '../modules/picture/component/';
+import PictureDetail from '../modules/picture/component/detail';
 /* 在线视频 */
 import Video from '../modules/video/component/';
 /* VR视频 */
@@ -34,6 +35,7 @@ module.exports = (
                 <route path="news/list" component={News}/>
                 <route path="news/detail/:id" component={NewsDetail}/>
                 <route path="picture/show" component={Picture}/>
+                <route path="picture/detail/:id" component={PictureDetail}/>
                 <route path="video/show" component={Video}/>
                 <route path="contractus" component={ContractUs}/>
                 <route path="personal" component={User}/>

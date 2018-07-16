@@ -51,6 +51,10 @@ a {
     text-decoration: none;
     -webkit-transition: 0.25s;
     transition: 0.25s;
+
+    &:hover {
+        color: @theme_color !important;
+    }
 }
 
 a:visited,
@@ -188,6 +192,34 @@ ul.inline > li, ol.inline > li {
     color: #b98860 !important;
     background-color: #fff;
     border-color: #b98860 !important;
+}
+
+/* 分页样式 */
+.ant-pagination-item {
+    min-width: 22px !important;
+    height: 22px !important;
+    line-height: 22px !important;
+    border: none !important;
+}
+
+.ant-pagination-item-active {
+
+    border-color: @theme_color !important;
+    background-color: @theme_color !important;
+
+    a {
+        color: #fff !important;
+    }
+}
+
+.ant-pagination-prev .ant-pagination-item-link, .ant-pagination-next .ant-pagination-item-link {
+    border: none !important;
+}
+
+.ant-pagination-prev, .ant-pagination-next, .ant-pagination-jump-prev, .ant-pagination-jump-next {
+    min-width: 22px !important;
+    height: 22px !important;
+    line-height: 22px !important;
 }
 
 .zui-up {

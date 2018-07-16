@@ -22,38 +22,7 @@ import '../index.less';
 
 const Search = Input.Search;
 const queryListUrl = restUrl.ADDR + 'news/queryList';
-
-const cityList = [
-    {
-        id: '1',
-        name: '湖北'
-    },
-    {
-        id: '2',
-        name: '武汉市'
-    },
-    {
-        id: '3',
-        name: '宜昌市'
-    },
-    {
-        id: '4',
-        name: '孝感市'
-    },
-    {
-        id: '5',
-        name: '荆门市'
-    },
-    {
-        id: '6',
-        name: '鄂州市'
-    },
-    {
-        id: '7',
-        name: '黄冈市'
-    },
-
-];
+const queryCityListUrl = restUrl.ADDR + 'city/queryList';
 
 class Index extends React.Component {
     constructor(props) {
@@ -64,9 +33,13 @@ class Index extends React.Component {
             loading: false,
             loadingMore: false,
             showLoadingMore: true,
+            cityList: [{
+                id: '',
+                cityName: '湖北'
+            }],
             listData: [],
             conditionText: '',
-            activeCity: '1'
+            activeCity: ''
         };
     }
 
@@ -81,20 +54,47 @@ class Index extends React.Component {
                 loading: false
             });
         });
+        this.getCityList();
+    }
+
+    getCityList = () => {
+        let param = {};
+        ajax.getJSON(queryCityListUrl, param, data => {
+            if (data.success) {
+                let cityList = [...this.state.cityList].concat(data.backData);
+                this.setState({
+                    cityList,
+                });
+            }
+        });
     }
 
     onChangeCity = id => {
+        const {cityList, activeCity} = this.state;
         const city = _.find(cityList, {id: id});
-        if(this.state.activeCity === city) return;
-        this.setState({activeCity: id});
+        if (activeCity === city) return;
+        this.setState({
+            loading: true,
+            pageNumber: 1,
+            activeCity: id,
+            conditionText: ''
+        }, () => {
+            this.getList(data => {
+                this.setState({
+                    listData: data.backData,
+                    loading: false
+                });
+            });
+        });
     }
 
     getList = callback => {
-        const {pageNumber, conditionText} = this.state;
+        const {pageNumber, conditionText, activeCity} = this.state;
         let param = {};
         param.pageNumber = pageNumber;
         param.pageSize = 10;
         param.conditionText = conditionText;
+        param.cityId = activeCity;
         ajax.getJSON(queryListUrl, param, data => {
             if (data.success) {
                 if (typeof callback === 'function') callback(data);
@@ -123,7 +123,7 @@ class Index extends React.Component {
 
     onSearch = value => {
         const {conditionText} = this.state;
-        if(value === conditionText) return;
+        if (value === conditionText) return;
 
         this.setState({
             loading: true,
@@ -144,7 +144,7 @@ class Index extends React.Component {
     }
 
     render() {
-        const {loading, showLoadingMore, loadingMore, listData, activeCity} = this.state;
+        const {loading, showLoadingMore, loadingMore, listData, activeCity, cityList} = this.state;
         const loadMore = showLoadingMore ? (
             <div style={{textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px'}}>
                 {loadingMore && <Spin/>}
@@ -180,7 +180,8 @@ class Index extends React.Component {
                             {
                                 cityList.map(item => {
                                     return (
-                                        <li key={item.id} className={item.id === activeCity ? 'active' : null} onClick={() => this.onChangeCity(item.id)}>{item.name}</li>
+                                        <li key={item.id} className={item.id === activeCity ? 'active' : null}
+                                            onClick={() => this.onChangeCity(item.id)}>{item.cityName}</li>
                                     )
                                 })
                             }
@@ -232,7 +233,7 @@ class Index extends React.Component {
                                                 to={'/frame/news/detail/' + item.id}>{item.newsTitle}</Link>}
                                             description={<div>
                                                 <p>{item.newsBrief}</p>
-                                                <p className='read-info'><Icon type="eye-o" /> {127}人</p>
+                                                <p className='read-info'><Icon type="eye-o"/> {127}人</p>
                                             </div>}
                                         />
                                     </List.Item>
