@@ -25,45 +25,87 @@ export function shifitDate(dateStr) {
     const day = 1000 * 60 * 60 * 24;
     const month = 1000 * 60 * 60 * 24 * 30;
     if (diffMillisecond <= second) return '刚刚';
-    else if(diffMillisecond < 3 * second) return '1秒前';
-    else if(diffMillisecond < 5 * second) return '3秒前';
-    else if(diffMillisecond < 10 * second) return '5秒前';
-    else if(diffMillisecond < 30 * second) return '10秒前';
-    else if(diffMillisecond < 60 * second) return '30秒前';
-    else if(diffMillisecond < 3 * minute) return '1分钟前';
-    else if(diffMillisecond < 5 * minute) return '3分钟前';
-    else if(diffMillisecond < 10 * minute) return '5分钟前';
-    else if(diffMillisecond < 30 * minute) return '10分钟前';
-    else if(diffMillisecond < 60 * minute) return '30分钟前';
-    else if(diffMillisecond < 2 * hour) return '1小时前';
-    else if(diffMillisecond < 3 * hour) return '2小时前';
-    else if(diffMillisecond < 4 * hour) return '3小时前';
-    else if(diffMillisecond < 5 * hour) return '4小时前';
-    else if(diffMillisecond < 6 * hour) return '5小时前';
-    else if(diffMillisecond < 7 * hour) return '6小时前';
-    else if(diffMillisecond < 8 * hour) return '7小时前';
-    else if(diffMillisecond < 9 * hour) return '8小时前';
-    else if(diffMillisecond < 10 * hour) return '9小时前';
-    else if(diffMillisecond < 11 * hour) return '10小时前';
-    else if(diffMillisecond < 12 * hour) return '11小时前';
-    else if(diffMillisecond < 13 * hour) return '12小时前';
-    else if(diffMillisecond < 14 * hour) return '13小时前';
-    else if(diffMillisecond < 15 * hour) return '14小时前';
-    else if(diffMillisecond < 16 * hour) return '15小时前';
-    else if(diffMillisecond < 17 * hour) return '16小时前';
-    else if(diffMillisecond < 18 * hour) return '17小时前';
-    else if(diffMillisecond < 19 * hour) return '18小时前';
-    else if(diffMillisecond < 20 * hour) return '19小时前';
-    else if(diffMillisecond < 21 * hour) return '20小时前';
-    else if(diffMillisecond < 22 * hour) return '21小时前';
-    else if(diffMillisecond < 23 * hour) return '22小时前';
-    else if(diffMillisecond < 24 * hour) return '23小时前';
-    else if(diffMillisecond < 3 * day) return '1天前';
-    else if(diffMillisecond < 7 * day) return '3天前';
-    else if(diffMillisecond < 15 * day) return '1周前';
-    else if(diffMillisecond < 30 * day) return '半个月前';
-    else if(diffMillisecond < 3 * month) return '1个月前';
-    else if(diffMillisecond < 6 * month) return '3个月前';
-    else if(diffMillisecond < 12 * month) return '半年前';
+    else if (diffMillisecond < 3 * second) return '1秒前';
+    else if (diffMillisecond < 5 * second) return '3秒前';
+    else if (diffMillisecond < 10 * second) return '5秒前';
+    else if (diffMillisecond < 30 * second) return '10秒前';
+    else if (diffMillisecond < 60 * second) return '30秒前';
+    else if (diffMillisecond < 3 * minute) return '1分钟前';
+    else if (diffMillisecond < 5 * minute) return '3分钟前';
+    else if (diffMillisecond < 10 * minute) return '5分钟前';
+    else if (diffMillisecond < 30 * minute) return '10分钟前';
+    else if (diffMillisecond < 60 * minute) return '30分钟前';
+    else if (diffMillisecond < 2 * hour) return '1小时前';
+    else if (diffMillisecond < 3 * hour) return '2小时前';
+    else if (diffMillisecond < 4 * hour) return '3小时前';
+    else if (diffMillisecond < 5 * hour) return '4小时前';
+    else if (diffMillisecond < 6 * hour) return '5小时前';
+    else if (diffMillisecond < 7 * hour) return '6小时前';
+    else if (diffMillisecond < 8 * hour) return '7小时前';
+    else if (diffMillisecond < 9 * hour) return '8小时前';
+    else if (diffMillisecond < 10 * hour) return '9小时前';
+    else if (diffMillisecond < 11 * hour) return '10小时前';
+    else if (diffMillisecond < 12 * hour) return '11小时前';
+    else if (diffMillisecond < 13 * hour) return '12小时前';
+    else if (diffMillisecond < 14 * hour) return '13小时前';
+    else if (diffMillisecond < 15 * hour) return '14小时前';
+    else if (diffMillisecond < 16 * hour) return '15小时前';
+    else if (diffMillisecond < 17 * hour) return '16小时前';
+    else if (diffMillisecond < 18 * hour) return '17小时前';
+    else if (diffMillisecond < 19 * hour) return '18小时前';
+    else if (diffMillisecond < 20 * hour) return '19小时前';
+    else if (diffMillisecond < 21 * hour) return '20小时前';
+    else if (diffMillisecond < 22 * hour) return '21小时前';
+    else if (diffMillisecond < 23 * hour) return '22小时前';
+    else if (diffMillisecond < 24 * hour) return '23小时前';
+    else if (diffMillisecond < 3 * day) return '1天前';
+    else if (diffMillisecond < 7 * day) return '3天前';
+    else if (diffMillisecond < 15 * day) return '1周前';
+    else if (diffMillisecond < 30 * day) return '半个月前';
+    else if (diffMillisecond < 3 * month) return '1个月前';
+    else if (diffMillisecond < 6 * month) return '3个月前';
+    else if (diffMillisecond < 12 * month) return '半年前';
     else return '一年前';
+}
+
+/**
+ * @param list 转 tree
+ */
+export function listToTree(list) {
+    if (list.length === 0) return;
+    const _list = [];
+    list.map(item => _list.push(_.assign({}, item)));
+    let arr = [];
+    //首先状态顶层节点
+    _list.map(item => {
+        if (!item.pId) {
+            arr.push(item);
+        }
+    });
+    let toDo = [];
+    arr.map(item => {
+        toDo.push(item);
+    });
+    while (toDo.length) {
+        let node = toDo.shift();
+        for (let i = 0; i < _list.length; i++) {
+            let row = _list[i];
+            if (node.id === row.pId) {
+                if (node.children) {
+                    node.children.push(row);
+                } else {
+                    node.children = [row];
+                }
+                toDo.push(row);
+            }
+        }
+    }
+
+    function sortNumber(a, b) {
+        return new Date(a.create_time).getTime() - new Date(b.create_time).getTime()
+    }
+
+    arr.sort(sortNumber);
+
+    return arr;
 }
