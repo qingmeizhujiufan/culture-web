@@ -14,7 +14,7 @@ export function shiftThousands(val) {
 /**
  * @param 显示特定日期形式
  */
-export function shifitDate(dateStr) {
+export function shiftDate(dateStr) {
     if (typeof  dateStr !== 'string') return null;
     const now = new Date().getTime();
     const date = new Date(dateStr).getTime();

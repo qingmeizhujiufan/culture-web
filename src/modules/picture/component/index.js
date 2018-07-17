@@ -22,7 +22,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import _ from 'lodash';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
-import {shifitDate} from "Utils/util";
+import {shiftDate} from "Utils/util";
 import '../index.less';
 
 const Dragger = Upload.Dragger;
@@ -370,7 +370,7 @@ class Picture extends React.Component {
                                                             </Col>
                                                             <Col span={11}>
                                                                 <div
-                                                                    className="date">{shifitDate(item.create_time)}</div>
+                                                                    className="date">{shiftDate(item.create_time)}</div>
                                                             </Col>
                                                             <Col span={1}/>
                                                         </Row>

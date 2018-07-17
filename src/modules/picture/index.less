@@ -98,7 +98,7 @@
             padding: 30px 0 15px 30px;
 
             .title {
-                height:25px;
+                height: 25px;
                 margin-bottom: 25px;
                 font-size: 18px;
                 color: #170202;
@@ -112,10 +112,21 @@
         }
 
         .comment-list {
-            border-top: 1px solid #D9D9D9;
+            border-top: 1px solid #e8e8e8;
 
             .ant-list-item {
-                padding-left: 30px;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                &.top-item {
+                    padding-left: 30px;
+
+                    &:last-child {
+                        border-bottom: 1px solid #e8e8e8;
+                    }
+                }
 
                 .ant-list-item-meta-title {
                     a {
