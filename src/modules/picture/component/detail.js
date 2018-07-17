@@ -143,7 +143,7 @@ class Detail extends React.Component {
 
         const renderSubItem = (item, subItem) => (
             <List
-                itemLayout="horizontal"
+                itemLayout="vertical"
                 dataSource={subItem}
                 renderItem={subItem => (
                     <List.Item>
@@ -158,13 +158,6 @@ class Detail extends React.Component {
                                     <a onClick={() => this.openReply(subItem.id)}>{subItem.openReply ? '取消' : '回复'}</a>
                                 </div>
                                 {
-                                    subItem.children && subItem.children.length > 0 ? (<div style={{marginTop: 15}}>
-                                        <div style={{marginTop: 15}}>
-                                            {renderSubItem(subItem, subItem.children)}
-                                        </div>
-                                    </div>) : null
-                                }
-                                {
                                     subItem.openReply ? (<div style={{marginTop: 15}}>
                                                                                 <TextArea rows={5} value={commentText}
                                                                                           onChange={this.saveCommentText}/>
@@ -176,6 +169,13 @@ class Detail extends React.Component {
                                 }
                             </div>}
                         />
+                        {
+                            subItem.children && subItem.children.length > 0 ? (<div style={{marginTop: 15}}>
+                                <div style={{marginTop: 15}}>
+                                    {renderSubItem(subItem, subItem.children)}
+                                </div>
+                            </div>) : null
+                        }
                     </List.Item>
                 )}
             />

@@ -21,7 +21,8 @@ import ajax from 'Utils/ajax';
 import '../index.less';
 
 const Search = Input.Search;
-const queryListUrl = restUrl.ADDR + 'news/queryList';
+const queryListUrl = restUrl.ADDR + 'culture/queryList';
+const queryCityListUrl = restUrl.ADDR + 'city/queryList';
 
 class Index extends React.Component {
     constructor(props) {
@@ -32,8 +33,13 @@ class Index extends React.Component {
             loading: false,
             loadingMore: false,
             showLoadingMore: true,
+            cityList: [{
+                id: '',
+                cityName: '湖北'
+            }],
             listData: [],
-            conditionText: ''
+            conditionText: '',
+            activeCity: ''
         };
     }
 
@@ -48,14 +54,47 @@ class Index extends React.Component {
                 loading: false
             });
         });
+        this.getCityList();
+    }
+
+    getCityList = () => {
+        let param = {};
+        ajax.getJSON(queryCityListUrl, param, data => {
+            if (data.success) {
+                let cityList = [...this.state.cityList].concat(data.backData);
+                this.setState({
+                    cityList,
+                });
+            }
+        });
+    }
+
+    onChangeCity = id => {
+        const {cityList, activeCity} = this.state;
+        const city = _.find(cityList, {id: id});
+        if (activeCity === city) return;
+        this.setState({
+            loading: true,
+            pageNumber: 1,
+            activeCity: id,
+            conditionText: ''
+        }, () => {
+            this.getList(data => {
+                this.setState({
+                    listData: data.backData,
+                    loading: false
+                });
+            });
+        });
     }
 
     getList = callback => {
-        const {pageNumber, conditionText} = this.state;
+        const {pageNumber, conditionText, activeCity} = this.state;
         let param = {};
         param.pageNumber = pageNumber;
         param.pageSize = 10;
         param.conditionText = conditionText;
+        param.cityId = activeCity;
         ajax.getJSON(queryListUrl, param, data => {
             if (data.success) {
                 if (typeof callback === 'function') callback(data);
@@ -84,7 +123,7 @@ class Index extends React.Component {
 
     onSearch = value => {
         const {conditionText} = this.state;
-        if(value === conditionText) return;
+        if (value === conditionText) return;
 
         this.setState({
             loading: true,
@@ -105,7 +144,7 @@ class Index extends React.Component {
     }
 
     render() {
-        const {loading, showLoadingMore, loadingMore, listData} = this.state;
+        const {loading, showLoadingMore, loadingMore, listData, activeCity, cityList} = this.state;
         const loadMore = showLoadingMore ? (
             <div style={{textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px'}}>
                 {loadingMore && <Spin/>}
@@ -136,8 +175,21 @@ class Index extends React.Component {
                         </Col>
                     </Row>
                 </div>
-                <div className="page-content">
-                    <div className="content">
+                <div className="page-content city-section">
+                    <div className="content clearfix">
+                        <ul className='zui-unstyled inline zui-pull-left city-list'>
+                            {
+                                cityList.map(item => {
+                                    return (
+                                        <li key={item.id} className={item.id === activeCity ? 'active' : null}
+                                            onClick={() => this.onChangeCity(item.id)}>{item.cityName}</li>
+                                    )
+                                })
+                            }
+                        </ul>
+                        <div className='zui-pull-right'>
+                            <span>更多</span>
+                        </div>
                     </div>
                 </div>
                 <div className="page-content">
