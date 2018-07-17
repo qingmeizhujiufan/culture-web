@@ -354,9 +354,9 @@ class Picture extends React.Component {
                                 {
                                     dataSource.map((item, index) => {
                                         return (
-                                            <div key={item.id + index} className="grid-item"
-                                                 onClick={() => this.showDetail(item.id)}>
-                                                <img src={restUrl.BASE_HOST + item.tasteCover.filePath}/>
+                                            <div key={item.id + index} className="grid-item">
+                                                <img src={restUrl.BASE_HOST + item.tasteCover.filePath}
+                                                     onClick={() => this.showDetail(item.id)}/>
                                                 <div className='info'>
                                                     <div className='creator'>
                                                         <Row type="flex" justify="space-between">

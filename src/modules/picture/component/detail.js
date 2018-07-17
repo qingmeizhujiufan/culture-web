@@ -245,7 +245,7 @@ class Detail extends React.Component {
                                     <div style={{textAlign: 'right'}}>
                                         <span style={{marginRight: 30}}><Avatar
                                             src={data.avatar ? restUrl.BASE_HOST + data.avatar.filePath : ''}/> {data.creatorName}</span>
-                                        <span style={{marginRight: 30}}><Icon type="message"/> {data.commentNum}</span>
+                                        <span style={{marginRight: 30}}><Icon type="message"/> {commentList.length}</span>
                                         <span><Icon type="heart-o"/> {data.likeNum}</span>
                                     </div>
                                 </Col>
