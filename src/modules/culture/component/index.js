@@ -140,7 +140,7 @@ class Index extends React.Component {
     }
 
     detailrouter = id => {
-        this.context.router.push(`/frame/news/detail/${id}`);
+        this.context.router.push(`/frame/culture/detail/${id}`);
     }
 
     render() {
@@ -229,10 +229,10 @@ class Index extends React.Component {
                                     >
                                         <List.Item.Meta
                                             avatar={<img style={{width: 232, height: 180}}
-                                                         src={restUrl.BASE_HOST + item.newsCover.filePath}/>}
+                                                         src={restUrl.BASE_HOST + item.cultureCover.filePath}/>}
                                             title={<Link
-                                                to={'/frame/news/detail/' + item.id}>{item.newsTitle}</Link>}
-                                            description={<div><p>{item.newsBrief}</p></div>}
+                                                to={'/frame/culture/detail/' + item.id}>{item.cultureTitle}</Link>}
+                                            description={<div><p>{item.cultureBrief}</p></div>}
                                         />
                                     </List.Item>
                                 )}
