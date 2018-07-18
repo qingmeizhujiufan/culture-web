@@ -232,7 +232,10 @@ class Index extends React.Component {
                                                          src={restUrl.BASE_HOST + item.cultureCover.filePath}/>}
                                             title={<Link
                                                 to={'/frame/culture/detail/' + item.id}>{item.cultureTitle}</Link>}
-                                            description={<div><p>{item.cultureBrief}</p></div>}
+                                            description={<div>
+                                                <p>{item.cultureBrief.length > 100 ? `${item.cultureBrief.substring(0, 100)}...` : item.cultureBrief}</p>
+                                                <p className='read-info'><Icon type="eye-o"/> {127}人<span style={{marginLeft: 35}}><Icon type="star-o" /> {25}人</span></p>
+                                            </div>}
                                         />
                                     </List.Item>
                                 )}

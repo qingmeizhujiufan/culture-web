@@ -105,7 +105,7 @@
                 font-size: 24px;
 
                 & > a {
-                    color: #2D2D2D;
+                    color: #2D2D2D !important;
 
                     &:hover {
                         color: #2D2D2D;
@@ -117,6 +117,10 @@
                 font-size: 16px;
                 color: #7B7B7B;
                 line-height: 32px;
+
+                p {
+                    word-break: break-all;
+                }
             }
         }
 
@@ -145,22 +149,25 @@
             }
         }
     }
+}
+
+.page-culture-detail {
 
     .top5 {
         width: 240px;
         height: 350px;
-        margin-top: 50px;
         border: 1px solid #EFEFEF;
+        background-color: #fff;
         box-shadow: 0px 0px 5px 4px rgba(239, 239, 239, 0.5);
 
         .title {
-            height:50px;
+            height: 50px;
             margin: 0;
             color: #fff;
             font-size: 14px;
             line-height: 50px;
             text-align: center;
-            background:rgba(158,125,107,1);
+            background: rgba(158, 125, 107, 1);
         }
     }
 }

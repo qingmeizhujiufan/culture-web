@@ -1,15 +1,18 @@
 import React from 'react';
 import {Link} from 'react-router';
-import {Row, Col, Icon, Badge, notification, Spin} from 'antd';
+import {Row, Col, Icon, Badge, message, Spin, Affix} from 'antd';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
 import '../index.less';
-import {shiftDate} from "Utils/util";
+import {listToTree, shiftDate} from "Utils/util";
 import top5 from 'Img/top5.png';
+import ZZComment from 'Comps/zzComment/';
 
 const queryDetailUrl = restUrl.ADDR + 'culture/queryDetail';
+const queryCommentListUrl = restUrl.ADDR + 'culture/queryCommentList';
+const addUrl = restUrl.ADDR + 'culture/add';
 
 class Detail extends React.Component {
     constructor(props) {
@@ -28,7 +31,7 @@ class Detail extends React.Component {
         this.queryDetail();
     }
 
-    //获取球馆详情
+    //获取文化详情
     queryDetail = () => {
         let param = {};
         param.id = this.props.params.id;
@@ -59,7 +62,7 @@ class Detail extends React.Component {
         const {loading, data} = this.state;
 
         return (
-            <div className='page-culture'>
+            <div className='page-culture-detail'>
                 <Spin spinning={loading} size={"large"}>
                     <div className="page-content" style={{borderBottom: '1px solid #EAEAEA'}}>
                         <div className="content">
@@ -96,16 +99,24 @@ class Detail extends React.Component {
                     </div>
                     <div className="page-content">
                         <div className="content">
-                            <Row type='flex' justify="space-between" align="top">
+                            <Row type='flex' justify="space-between" align="top" style={{marginTop: 50}}>
                                 <Col style={{width: 900}}>
                                     <div className="wrap-html">
                                         <div dangerouslySetInnerHTML={{__html: data.contentHtml}}></div>
                                     </div>
+                                    <ZZComment
+                                        avatar={data.avatar ? restUrl.BASE_HOST + data.avatar.filePath : null}
+                                        queryUrl={queryCommentListUrl}
+                                        saveUrl={addUrl}
+                                        params={{cultureId: this.props.params.id}}
+                                    />
                                 </Col>
                                 <Col>
-                                    <div className='top5'>
-                                        <h1 className='title'><img src={top5}/></h1>
-                                    </div>
+                                    <Affix offsetTop={100}>
+                                        <div className='top5'>
+                                            <h1 className='title'><img src={top5}/></h1>
+                                        </div>
+                                    </Affix>
                                 </Col>
                             </Row>
                         </div>
