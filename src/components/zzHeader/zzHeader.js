@@ -14,7 +14,7 @@ const tabs = [{
 }, {
     active: false,
     title: '文化展示',
-    link: '/frame/culture/show'
+    link: '/frame/culture/list'
 }, {
     active: false,
     title: '新闻资讯',
@@ -22,11 +22,11 @@ const tabs = [{
 }, {
     active: false,
     title: '图片展示',
-    link: '/frame/picture/show'
+    link: '/frame/picture/list'
 }, {
     active: false,
     title: '在线视频',
-    link: '/frame/video/show'
+    link: '/frame/video/list'
 }, {
     active: false,
     title: 'VR视频',
@@ -122,7 +122,7 @@ class ZZHeader extends React.Component {
                                 />
                                 <Divider type="vertical"/>
                                 <Avatar style={{verticalAlign: '-6px', backgroundColor: '#666'}} size="small"
-                                        icon="user"/> 您好，请登录
+                                        icon="user"/> 您好，请<Link to="login">登录</Link>
                             </Col>
                         </Row>
                     </div>

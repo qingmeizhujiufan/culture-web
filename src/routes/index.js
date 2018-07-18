@@ -8,6 +8,7 @@ import Frame from '../modules/Frame';
 import Home from '../modules/home/component/home';
 /* 文化展示 */
 import Culture from '../modules/culture/component/';
+import CultureDetail from '../modules/culture/component/detail';
 /* 新闻资讯 */
 import News from '../modules/news/component/';
 import NewsDetail from '../modules/news/component/detail';
@@ -31,12 +32,13 @@ module.exports = (
             <IndexRedirect to="frame"/>
             <Route path="frame" component={Frame}>
                 <IndexRoute component={Home}/>
-                <route path="culture/show" component={Culture}/>
+                <route path="culture/list" component={Culture}/>
+                <route path="culture/detail/:id" component={CultureDetail}/>
                 <route path="news/list" component={News}/>
                 <route path="news/detail/:id" component={NewsDetail}/>
-                <route path="picture/show" component={Picture}/>
+                <route path="picture/list" component={Picture}/>
                 <route path="picture/detail/:id" component={PictureDetail}/>
-                <route path="video/show" component={Video}/>
+                <route path="video/list" component={Video}/>
                 <route path="contractus" component={ContractUs}/>
                 <route path="personal" component={User}/>
             </Route>
