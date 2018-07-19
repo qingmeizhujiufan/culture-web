@@ -30,8 +30,15 @@
             border-color: #9E5C29;
         }
 
-        .ant-list-vertical .ant-list-item-meta-avatar {
-            display: block;
+        .ant-list-vertical {
+            .ant-list-item-meta-avatar {
+                display: block;
+            }
+
+            .ant-list-item-meta-title {
+                margin-bottom: 4px;
+                font-size: 14px;
+            }
         }
 
         .ant-list-item {
@@ -49,7 +56,10 @@
             }
 
             &:not(.top-item) {
-                padding: 0;
+
+                &:last-child{
+                    padding-bottom: 0;
+                }
 
                 .ant-list-item-meta {
                     position: relative;

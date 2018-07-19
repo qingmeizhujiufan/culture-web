@@ -18,40 +18,64 @@ class ZZComment extends React.Component {
             commentList: [],
             commentTree: [],
             commentText: '',
-            loading: false
+            replyText: '',
+            loading: false,
+            commentLoading: false,
+            replyLoading: false
         };
     }
 
     componentDidMount = () => {
-        this.queryCommentList();
+        this.queryCommentList(this.props.queryParams, 'init');
     }
 
-    componentWillReceiveProps = (nextProps) => {
-        const {editorState} = nextProps;
-        if (editorState) {
-            this.setState({editorState});
+    componentWillReceiveProps(nextProps) {
+        if (JSON.stringify(nextProps.queryParams) !== JSON.stringify(this.props.queryParams)) {
+            this.queryCommentList(nextProps.queryParams);
         }
     }
 
+    treeToList = tree => {
+        return tree.reduce((keys, item) => {
+            keys.push(item);
+            if (item.children) {
+                return keys.concat(this.treeToList(item.children));
+            }
+            return keys;
+        }, []);
+    }
+
+    buildCommentTree = (commentList, init) => {
+        const commentTree = listToTree(commentList).sort(sort);
+        commentTree.map(item => {
+            if (item.children) {
+                item.children = this.treeToList(item.children);
+            }
+            if (init) {
+                item.create_time = shiftDate(item.create_time);
+                item.openReply = false;
+                item.collapsed = false;
+            }
+        });
+        console.log('buildCommentTree === ', commentTree);
+        return commentTree;
+    }
+
     //获取评论列表
-    queryCommentList = () => {
-        const {params, queryUrl} = this.props;
-        const param = _.assign({}, params);
+    queryCommentList = (queryParams, init) => {
+        const {queryUrl} = this.props;
+        const param = _.assign({}, queryParams);
         this.setState({
             loading: true
         });
         ajax.getJSON(queryUrl, param, (data) => {
             if (data.success) {
                 const commentList = data.backData;
-                commentList.map(item => {
-                    item.create_time = shiftDate(item.create_time);
-                    item.openReply = false;
-                    item.collapsed = false;
-                });
+                const commentTree = this.buildCommentTree(commentList, init);
                 this.setState({
                     loading: false,
                     commentList,
-                    commentTree: listToTree(commentList).sort(sort)
+                    commentTree
                 });
 
                 if ('commentList' in this.props) {
@@ -73,90 +97,106 @@ class ZZComment extends React.Component {
         });
     }
 
-    openReply = id => {
-        const {commentList} = this.state;
-        commentList.map(item => {
-            if (item.id === id) {
-                item.openReply = !item.openReply;
-            }
-        });
-
+    saveReplyText = value => {
         this.setState({
-            commentList,
-            commentTree: listToTree(commentList).sort(sort)
+            replyText: value.target.value
         });
     }
 
-    openReplyList = id => {
-        const {commentList} = this.state;
-        commentList.map(item => {
-            if (item.id === id) {
-                item.collapsed = !item.collapsed;
+    openReply = (item, index, subItem, subIndex) => {
+        const {commentTree} = this.state;
+        let activeOpenReply;
+        if (!subItem && !subIndex) activeOpenReply = [...commentTree][index].openReply;
+        else activeOpenReply = [...commentTree][index].children[subIndex].openReply;
+        commentTree.map((comment, commentIndex) => {
+            commentTree[commentIndex].openReply = false;
+            if (commentTree[commentIndex].children) {
+                commentTree[commentIndex].children.map((subComment, subCommentIndex) => {
+                    commentTree[commentIndex].children[subCommentIndex].openReply = false;
+                });
             }
         });
+        if (!subItem && !subIndex) {
+            commentTree[index].openReply = !activeOpenReply;
+        } else {
+            commentTree[index].children[subIndex].openReply = !activeOpenReply;
+        }
 
-        this.setState({
-            commentList,
-            commentTree: listToTree(commentList).sort(sort)
-        });
+        this.setState({commentTree});
+    }
+
+    openReplyList = (item, index) => {
+        const {commentTree} = this.state;
+        commentTree[index].collapsed = !commentTree[index].collapsed;
+
+        this.setState({commentTree});
     }
 
 
     addComment = (pId) => {
-        const {params, saveUrl} = this.props;
-        const param = _.assign({}, params);
+        const {queryParams, saveUrl} = this.props;
+        const {commentText, replyText} = this.state;
+        const param = _.assign({}, queryParams);
         param.pId = pId;
         param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
-        param.comment = this.state.commentText;
+        param.comment = pId ? replyText : commentText;
+        if (!pId) this.setState({commentLoading: true});
+        else this.setState({replyLoading: true});
         ajax.postJSON(saveUrl, JSON.stringify(param), data => {
             if (data.success) {
                 this.setState({
-                    commentText: ''
+                    commentText: '',
+                    replyText: '',
+                    commentLoading: false,
+                    replyLoading: false
                 });
-                this.queryCommentList();
+                this.queryCommentList(this.props.queryParams);
             }
         });
     }
 
-    renderItem = item => {
-        const {commentText} = this.state;
-
-        const renderSubItem = (item, subItem) => (
+    renderItem = (item, index) => {
+        const {replyText, replyLoading} = this.state;
+        const renderSubItem = (item, index, subItem) => (
             <List
                 itemLayout="vertical"
                 dataSource={subItem}
-                renderItem={subItem => (
+                renderItem={(subItem, subIndex) => (
                     <List.Item>
                         <List.Item.Meta
                             avatar={<Avatar
                                 icon="user"
                                 src={(subItem.avatar && subItem.avatar.filePath) ? restUrl.BASE_HOST + subItem.avatar.filePath : null}/>}
-                            title={
-                                <a>{`${subItem.userName}  ${subItem.create_time}`}</a>}
+                            title={<a>{`${subItem.userName}  ${subItem.create_time}`}</a>}
                             description={<div>
-                                <div>{subItem.comment}//<a>@{item.userName}: </a><span>{item.comment}</span>
+                                <div>{subItem.comment}
+                                    {
+                                        (subItem.parents ? subItem.parents : []).map(i => {
+                                            return (
+                                                <span key={i.id}>
+                                                    <a>//@{i.userName}: </a>
+                                                    <span>{i.comment}</span>
+                                                </span>
+                                            )
+                                        })
+                                    }
                                 </div>
                                 <div>
-                                    <a onClick={() => this.openReply(subItem.id)}>{subItem.openReply ? '取消' : '回复'}</a>
+                                    <a onClick={() => this.openReply(item, index, subItem, subIndex)}>{subItem.openReply ? '取消' : '回复'}</a>
                                 </div>
                                 {
                                     subItem.openReply ? (<div style={{marginTop: 16}}>
-                                                                                <TextArea rows={5} value={commentText}
-                                                                                          onChange={this.saveCommentText}/>
+                                        <TextArea rows={5} value={replyText}
+                                                  onChange={this.saveReplyText}/>
                                         <div style={{marginTop: 16, textAlign: 'right'}}>
                                             <Button
+                                                loading={replyLoading}
                                                 onClick={() => this.addComment(subItem.id)}>回复评论</Button>
                                         </div>
                                     </div>) : null
                                 }
                             </div>}
                         />
-                        {
-                            subItem.children && subItem.children.length > 0 ? (
-                                <div style={{marginTop: 16}}>
-                                    {renderSubItem(subItem, subItem.children)}
-                                </div>) : null
-                        }
                     </List.Item>
                 )}
             />
@@ -173,12 +213,12 @@ class ZZComment extends React.Component {
                     description={<div>
                         <div>{item.comment}</div>
                         <div>
-                            <a onClick={() => this.openReply(item.id)}>{item.openReply ? '取消' : '回复'}</a>
+                            <a onClick={() => this.openReply(item, index)}>{item.openReply ? '取消' : '回复'}</a>
                             {
                                 item.children && item.children.length > 0 ? (
                                     <span>
                                         <Divider type="vertical"/>
-                                        <a onClick={() => this.openReplyList(item.id)}>
+                                        <a onClick={() => this.openReplyList(item, index)}>
                                             {item.children.length}条回复 <Icon
                                             type={item.collapsed ? 'up' : 'down'}/>
                                         </a>
@@ -188,15 +228,16 @@ class ZZComment extends React.Component {
                         </div>
                         {
                             item.collapsed ? (
-                                <div style={{marginTop: 16}}>
-                                    {renderSubItem(item, item.children)}
+                                <div>
+                                    {renderSubItem(item, index, item.children)}
                                 </div>) : null
                         }
                         {
                             item.openReply ? (<div style={{marginTop: 10}}>
-                                <TextArea rows={5} value={commentText} onChange={this.saveCommentText}/>
+                                <TextArea rows={5} value={replyText} onChange={this.saveReplyText}/>
                                 <div style={{marginTop: 16, textAlign: 'right'}}>
                                     <Button
+                                        loading={replyLoading}
                                         onClick={() => this.addComment(item.id)}>回复评论</Button>
                                 </div>
                             </div>) : null
@@ -208,7 +249,7 @@ class ZZComment extends React.Component {
     }
 
     render() {
-        const {loading, avatar, commentList, commentTree, commentText} = this.state;
+        const {loading, avatar, commentList, commentTree, commentText, commentLoading} = this.state;
 
         return (
             <div className='comment-box'>
@@ -227,7 +268,7 @@ class ZZComment extends React.Component {
                         </Col>
                     </Row>
                     <div style={{marginTop: 16, textAlign: 'right'}}>
-                        <Button onClick={() => this.addComment(null, 1)}>评论</Button>
+                        <Button loading={commentLoading} onClick={() => this.addComment(null, 1)}>评论</Button>
                     </div>
                 </div>
                 <div className='comment-list'>
@@ -236,7 +277,7 @@ class ZZComment extends React.Component {
                             itemLayout="horizontal"
                             dataSource={commentTree}
                             pagination
-                            renderItem={item => this.renderItem(item)}
+                            renderItem={(item, index) => this.renderItem(item, index)}
                         />
                     </Spin>
                 </div>
