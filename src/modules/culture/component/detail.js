@@ -108,7 +108,7 @@ class Detail extends React.Component {
                                         avatar={data.avatar ? restUrl.BASE_HOST + data.avatar.filePath : null}
                                         queryUrl={queryCommentListUrl}
                                         saveUrl={addUrl}
-                                        params={{cultureId: this.props.params.id}}
+                                        queryParams={{cultureId: this.props.params.id}}
                                     />
                                 </Col>
                                 <Col>

@@ -18,6 +18,7 @@ import {
 import _ from 'lodash';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
+import ZZList from 'Comps/zzList/';
 import '../index.less';
 
 const Search = Input.Search;
@@ -139,18 +140,54 @@ class Index extends React.Component {
         });
     }
 
+    renderItem = item => {
+        return (
+            <List.Item
+                key={item.id}
+                extra={<div className='extra'>
+                    <Row type="flex" justify="space-between" align="middle">
+                        <Col span={6}>
+                            <Divider type='vertical'/>
+                        </Col>
+                        <Col span={12}>
+                            <div>
+                                <div style={{
+                                    fontSize: 22,
+                                    color: '#2D2D2D'
+                                }}>{item.create_time.substring(5, 10)}</div>
+                                <div style={{
+                                    fontSize: 14,
+                                    color: '#7B7B7B'
+                                }}>{item.create_time.substring(0, 4)}</div>
+                            </div>
+                        </Col>
+                        <Col span={6} style={{textAlign: 'right'}}>
+                            <Icon type="right"/>
+                        </Col>
+                    </Row>
+                </div>}
+                onClick={() => this.detailrouter(item.id)}
+            >
+                <List.Item.Meta
+                    avatar={<img style={{width: 232, height: 180}}
+                                 src={restUrl.BASE_HOST + item.newsCover.filePath}/>}
+                    title={<Link
+                        to={'/frame/news/detail/' + item.id}>{item.newsTitle}</Link>}
+                    description={<div>
+                        <p>{item.newsBrief.length > 100 ? `${item.newsBrief.substring(0, 100)}...` : item.newsBrief}</p>
+                        <p className='read-info'><Icon type="eye-o"/> {127}人</p>
+                    </div>}
+                />
+            </List.Item>
+        )
+    }
+
     detailrouter = id => {
         this.context.router.push(`/frame/news/detail/${id}`);
     }
 
     render() {
-        const {loading, showLoadingMore, loadingMore, listData, activeCity, cityList} = this.state;
-        const loadMore = showLoadingMore ? (
-            <div style={{textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px'}}>
-                {loadingMore && <Spin/>}
-                {!loadingMore && <Button onClick={this.onLoadMore}><Icon type="plus"/> 加载更多</Button>}
-            </div>
-        ) : null;
+        const {conditionText, activeCity, cityList} = this.state;
 
         return (
             <div className='page-news'>
@@ -193,53 +230,14 @@ class Index extends React.Component {
                 </div>
                 <div className="page-content">
                     <div className="content">
-                        <Spin spinning={loading} size={"large"}>
-                            <List
-                                itemLayout="vertical"
-                                size="large"
-                                loadMore={loadMore}
-                                dataSource={listData}
-                                renderItem={item => (
-                                    <List.Item
-                                        key={item.id}
-                                        extra={<div className='extra'>
-                                            <Row type="flex" justify="space-between" align="middle">
-                                                <Col span={6}>
-                                                    <Divider type='vertical'/>
-                                                </Col>
-                                                <Col span={12}>
-                                                    <div>
-                                                        <div style={{
-                                                            fontSize: 22,
-                                                            color: '#2D2D2D'
-                                                        }}>{item.create_time.substring(5, 10)}</div>
-                                                        <div style={{
-                                                            fontSize: 14,
-                                                            color: '#7B7B7B'
-                                                        }}>{item.create_time.substring(0, 4)}</div>
-                                                    </div>
-                                                </Col>
-                                                <Col span={6} style={{textAlign: 'right'}}>
-                                                    <Icon type="right"/>
-                                                </Col>
-                                            </Row>
-                                        </div>}
-                                        onClick={() => this.detailrouter(item.id)}
-                                    >
-                                        <List.Item.Meta
-                                            avatar={<img style={{width: 232, height: 180}}
-                                                         src={restUrl.BASE_HOST + item.newsCover.filePath}/>}
-                                            title={<Link
-                                                to={'/frame/news/detail/' + item.id}>{item.newsTitle}</Link>}
-                                            description={<div>
-                                                <p>{item.newsBrief.length > 100 ? `${item.newsBrief.substring(0, 100)}...` : item.newsBrief}</p>
-                                                <p className='read-info'><Icon type="eye-o"/> {127}人</p>
-                                            </div>}
-                                        />
-                                    </List.Item>
-                                )}
-                            />
-                        </Spin>
+                        <ZZList
+                            renderItem={this.renderItem}
+                            queryUrl={queryListUrl}
+                            queryParams={{
+                                conditionText: conditionText,
+                                cityId: activeCity
+                            }}
+                        />
                     </div>
                 </div>
                 <BackTop>

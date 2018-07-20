@@ -7,21 +7,19 @@ import {
     Icon,
     List,
     Divider,
-    Breadcrumb,
-    Badge,
-    notification,
-    Spin,
-    message,
-    Button,
+    Card,
     BackTop
 } from 'antd';
 import _ from 'lodash';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
+import ZZList from 'Comps/zzList/';
+import ZZCardList from "Comps/zzCardList";
 import '../index.less';
 
 const Search = Input.Search;
 const queryListUrl = restUrl.ADDR + 'culture/queryList';
+const queryArtListUrl = restUrl.ADDR + 'art/queryList';
 const queryCityListUrl = restUrl.ADDR + 'city/queryList';
 
 class Index extends React.Component {
@@ -29,15 +27,12 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
-            pageNumber: 1,
             loading: false,
-            loadingMore: false,
-            showLoadingMore: true,
+            type: 1,
             cityList: [{
                 id: '',
                 cityName: '湖北'
             }],
-            listData: [],
             conditionText: '',
             activeCity: ''
         };
@@ -47,13 +42,6 @@ class Index extends React.Component {
     }
 
     componentDidMount = () => {
-        this.setState({loading: true});
-        this.getList(data => {
-            this.setState({
-                listData: data.backData,
-                loading: false
-            });
-        });
         this.getCityList();
     }
 
@@ -69,55 +57,17 @@ class Index extends React.Component {
         });
     }
 
+    onChangeType = type => {
+        this.setState({type});
+    }
+
     onChangeCity = id => {
         const {cityList, activeCity} = this.state;
         const city = _.find(cityList, {id: id});
         if (activeCity === city) return;
         this.setState({
-            loading: true,
-            pageNumber: 1,
             activeCity: id,
             conditionText: ''
-        }, () => {
-            this.getList(data => {
-                this.setState({
-                    listData: data.backData,
-                    loading: false
-                });
-            });
-        });
-    }
-
-    getList = callback => {
-        const {pageNumber, conditionText, activeCity} = this.state;
-        let param = {};
-        param.pageNumber = pageNumber;
-        param.pageSize = 10;
-        param.conditionText = conditionText;
-        param.cityId = activeCity;
-        ajax.getJSON(queryListUrl, param, data => {
-            if (data.success) {
-                if (typeof callback === 'function') callback(data);
-
-            } else {
-                message.error(data.backMsg);
-            }
-        });
-    }
-
-    onLoadMore = () => {
-        let {listData, pageNumber, total} = this.state;
-        this.setState({
-            loadingMore: true,
-            pageNumber: ++pageNumber
-        }, () => {
-            this.getList((data) => {
-                const _data = listData.concat(data.backData);
-                this.setState({
-                    listData: _data,
-                    loadingMore: false,
-                });
-            });
         });
     }
 
@@ -127,15 +77,7 @@ class Index extends React.Component {
 
         this.setState({
             loading: true,
-            pageNumber: 1,
             conditionText: value
-        }, () => {
-            this.getList(data => {
-                this.setState({
-                    listData: data.backData,
-                    loading: false
-                });
-            });
         });
     }
 
@@ -143,14 +85,69 @@ class Index extends React.Component {
         this.context.router.push(`/frame/culture/detail/${id}`);
     }
 
-    render() {
-        const {loading, showLoadingMore, loadingMore, listData, activeCity, cityList} = this.state;
-        const loadMore = showLoadingMore ? (
-            <div style={{textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px'}}>
-                {loadingMore && <Spin/>}
-                {!loadingMore && <Button onClick={this.onLoadMore}><Icon type="plus"/> 加载更多</Button>}
+    renderItem = item => {
+        return (
+            <List.Item
+                key={item.id}
+                extra={<div className='extra'>
+                    <Row type="flex" justify="space-between" align="middle">
+                        <Col span={6}>
+                            <Divider type='vertical'/>
+                        </Col>
+                        <Col span={12}>
+                            <div>
+                                <div style={{
+                                    fontSize: 22,
+                                    color: '#2D2D2D'
+                                }}>{item.create_time.substring(5, 10)}</div>
+                                <div style={{
+                                    fontSize: 14,
+                                    color: '#7B7B7B'
+                                }}>{item.create_time.substring(0, 4)}</div>
+                            </div>
+                        </Col>
+                        <Col span={6} style={{textAlign: 'right'}}>
+                            <Icon type="right"/>
+                        </Col>
+                    </Row>
+                </div>}
+                onClick={() => this.detailrouter(item.id)}
+            >
+                <List.Item.Meta
+                    avatar={<img style={{width: 232, height: 180}}
+                                 src={restUrl.BASE_HOST + item.cultureCover.filePath}/>}
+                    title={<Link
+                        to={'/frame/culture/detail/' + item.id}>{item.cultureTitle}</Link>}
+                    description={<div>
+                        <p>{item.cultureBrief.length > 100 ? `${item.cultureBrief.substring(0, 100)}...` : item.cultureBrief}</p>
+                        <p className='read-info'><Icon type="eye-o"/> {127}人<span style={{marginLeft: 35}}><Icon
+                            type="star-o"/> {25}人</span></p>
+                    </div>}
+                />
+            </List.Item>
+        );
+    }
+
+    renderArtItem = item => {
+        return (
+            <div key={item.id} className='zui-card-item'>
+                <div className='zui-card-item-header'>
+                    <img src={item.artCover ? (restUrl.BASE_HOST + item.artCover.filePath) : null}/>
+                </div>
+                <div className='zui-card-item-content'>
+                    <div>{'武汉民俗特色书架（特色实木书 架子纯色款）'}</div>
+                    <div className='price'>{`¥${'19.00'}`}</div>
+                </div>
+                <div className='zui-card-item-footer'>
+                    <span><Icon type="eye-o"/> {127}人</span>
+                    <span style={{marginLeft: 35}}><Icon type="star-o"/> {25}人</span>
+                </div>
             </div>
-        ) : null;
+        );
+    }
+
+    render() {
+        const {conditionText, activeCity, cityList, type} = this.state;
 
         return (
             <div className='page-culture'>
@@ -160,8 +157,10 @@ class Index extends React.Component {
                             <Row type="flex" justify="center" align="middle" style={{paddingTop: 30}}>
                                 <Col>
                                     <div style={{marginBottom: 15}}>
-                                        <span style={{marginRight: 30, fontSize: 20, color: '#FFA600'}}>旅游</span>
-                                        <span style={{marginRight: 30, fontSize: 20, color: '#fff'}}>艺术品</span>
+                                        <span style={{marginRight: 30, fontSize: 20, color: '#FFA600'}}
+                                              onClick={() => this.onChangeType(1)}>旅游</span>
+                                        <span style={{marginRight: 30, fontSize: 20, color: '#fff'}}
+                                              onClick={() => this.onChangeType(2)}>艺术品</span>
                                     </div>
                                     <Search
                                         placeholder="请输入搜索的内容"
@@ -194,53 +193,27 @@ class Index extends React.Component {
                 </div>
                 <div className="page-content">
                     <div className="content">
-                        <Spin spinning={loading} size={"large"}>
-                            <List
-                                itemLayout="vertical"
-                                size="large"
-                                loadMore={loadMore}
-                                dataSource={listData}
-                                renderItem={item => (
-                                    <List.Item
-                                        key={item.id}
-                                        extra={<div className='extra'>
-                                            <Row type="flex" justify="space-between" align="middle">
-                                                <Col span={6}>
-                                                    <Divider type='vertical'/>
-                                                </Col>
-                                                <Col span={12}>
-                                                    <div>
-                                                        <div style={{
-                                                            fontSize: 22,
-                                                            color: '#2D2D2D'
-                                                        }}>{item.create_time.substring(5, 10)}</div>
-                                                        <div style={{
-                                                            fontSize: 14,
-                                                            color: '#7B7B7B'
-                                                        }}>{item.create_time.substring(0, 4)}</div>
-                                                    </div>
-                                                </Col>
-                                                <Col span={6} style={{textAlign: 'right'}}>
-                                                    <Icon type="right"/>
-                                                </Col>
-                                            </Row>
-                                        </div>}
-                                        onClick={() => this.detailrouter(item.id)}
-                                    >
-                                        <List.Item.Meta
-                                            avatar={<img style={{width: 232, height: 180}}
-                                                         src={restUrl.BASE_HOST + item.cultureCover.filePath}/>}
-                                            title={<Link
-                                                to={'/frame/culture/detail/' + item.id}>{item.cultureTitle}</Link>}
-                                            description={<div>
-                                                <p>{item.cultureBrief.length > 100 ? `${item.cultureBrief.substring(0, 100)}...` : item.cultureBrief}</p>
-                                                <p className='read-info'><Icon type="eye-o"/> {127}人<span style={{marginLeft: 35}}><Icon type="star-o" /> {25}人</span></p>
-                                            </div>}
-                                        />
-                                    </List.Item>
-                                )}
-                            />
-                        </Spin>
+                        {
+                            type === 1 ? (
+                                <ZZList
+                                    renderItem={this.renderItem}
+                                    queryUrl={queryListUrl}
+                                    queryParams={{
+                                        conditionText: conditionText,
+                                        cityId: activeCity
+                                    }}
+                                />
+                            ) : (
+                                <ZZCardList
+                                    renderItem={this.renderArtItem}
+                                    queryUrl={queryArtListUrl}
+                                    queryParams={{
+                                        conditionText: conditionText,
+                                        cityId: activeCity
+                                    }}
+                                />
+                            )
+                        }
                     </div>
                 </div>
                 <BackTop>

@@ -9,6 +9,26 @@ import ajax from "Utils/ajax";
 const {TextArea} = Input;
 const sort = (a, b) => new Date(a.create_time).getTime() < new Date(b.create_time).getTime();
 
+function buildParents(list) {
+    function getParents(item) {
+        if(!item.parents) item.parents = [];
+        if(item.pId === "") return [];
+        for (let i = 0; i < list.length; i++) {
+            if(item.pId === list[i].id){
+                item.parents.push(list[i]);
+                if(list[i].pId === "") return item.parents;
+                else return item.parents.concat(getParents(list[i]));
+            }
+        }
+    }
+    for (let i = 0; i < list.length; i++) {
+        list[i].create_time = shiftDate(list[i].create_time);
+        list[i].parents = Array.from(new Set(getParents(list[i])));
+    }
+
+    return list;
+}
+
 class ZZComment extends React.Component {
     constructor(props) {
         super(props);
@@ -46,13 +66,14 @@ class ZZComment extends React.Component {
     }
 
     buildCommentTree = (commentList, init) => {
-        const commentTree = listToTree(commentList).sort(sort);
+        const _commentList = buildParents(commentList);
+        console.log('_commentList === ', _commentList);
+        const commentTree = listToTree(_commentList).sort(sort);
         commentTree.map(item => {
             if (item.children) {
                 item.children = this.treeToList(item.children);
             }
             if (init) {
-                item.create_time = shiftDate(item.create_time);
                 item.openReply = false;
                 item.collapsed = false;
             }
@@ -171,7 +192,7 @@ class ZZComment extends React.Component {
                             description={<div>
                                 <div>{subItem.comment}
                                     {
-                                        (subItem.parents ? subItem.parents : []).map(i => {
+                                        subItem.parents.map(i => {
                                             return (
                                                 <span key={i.id}>
                                                     <a>//@{i.userName}: </a>

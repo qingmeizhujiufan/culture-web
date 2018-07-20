@@ -136,7 +136,7 @@ class Detail extends React.Component {
                                 fontSize: 16,
                                 color: '#666',
                                 lineHeight: '66px',
-                                borderBottom: '1px solid #A3A3A3',
+                                borderBottom: '1px solid #dedede',
                                 textAlign: 'center'
                             }}>他最近的其他发布
                             </div>
