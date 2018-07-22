@@ -10,6 +10,7 @@ import {
 import restUrl from 'RestUrl';
 import ZZCardList from "Comps/zzCardList";
 import '../index.less';
+import videoLogo from 'Img/video-logo.png';
 
 const Search = Input.Search;
 const queryArtListUrl = restUrl.ADDR + 'art/queryList';
@@ -64,22 +65,18 @@ class Index extends React.Component {
         return (
             <div className='page-culture'>
                 <div className="page-content culture-bg">
-                    <Row>
-                        <Col span={10} offset={7}>
-                            <Row type="flex" justify="center" align="middle" style={{paddingTop: 60}}>
-                                <Col>
-                                    <span style={{marginRight: 30, fontSize: 22, color: '#fff'}}>民俗视频</span>
-                                </Col>
-                                <Col>
-                                    <Search
-                                        placeholder="请输入搜索的内容"
-                                        enterButton={<span><Icon type="search"/> 搜索</span>}
-                                        size="large"
-                                        onSearch={value => this.onSearch(value)}
-                                        style={{width: 600}}
-                                    />
-                                </Col>
-                            </Row>
+                    <Row type="flex" justify="center" align="middle" style={{paddingTop: 60}}>
+                        <Col>
+                            <span style={{marginRight: 15}}><img src={videoLogo}/></span>
+                        </Col>
+                        <Col>
+                            <Search
+                                placeholder="请输入搜索的内容"
+                                enterButton={<span><Icon type="search"/> 搜索</span>}
+                                size="large"
+                                onSearch={value => this.onSearch(value)}
+                                style={{width: 600}}
+                            />
                         </Col>
                     </Row>
                 </div>

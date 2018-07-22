@@ -1,5 +1,5 @@
 import React from 'react';
-import {Layout} from 'antd';
+import {Layout, Icon, BackTop} from 'antd';
 import ZZHeader from '../containers/zzHeader';
 import ZZFooter from 'Comps/zzFooter/zzFooter';
 
@@ -14,6 +14,9 @@ export default class App extends React.Component {
                 <ZZHeader/>
                 {this.props.children}
                 <ZZFooter/>
+                <BackTop>
+                    <div className="zui-up"><Icon type="up" /></div>
+                </BackTop>
             </Layout>
         );
     }

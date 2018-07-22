@@ -67,7 +67,6 @@ class ZZComment extends React.Component {
 
     buildCommentTree = (commentList, init) => {
         const _commentList = buildParents(commentList);
-        console.log('_commentList === ', _commentList);
         const commentTree = listToTree(_commentList).sort(sort);
         commentTree.map(item => {
             if (item.children) {
@@ -78,7 +77,6 @@ class ZZComment extends React.Component {
                 item.collapsed = false;
             }
         });
-        console.log('buildCommentTree === ', commentTree);
         return commentTree;
     }
 
@@ -168,11 +166,15 @@ class ZZComment extends React.Component {
                 this.setState({
                     commentText: '',
                     replyText: '',
-                    commentLoading: false,
-                    replyLoading: false
                 });
                 this.queryCommentList(this.props.queryParams);
+            }else {
+                message.error(data.backMsg);
             }
+            this.setState({
+                commentLoading: false,
+                replyLoading: false
+            });
         });
     }
 

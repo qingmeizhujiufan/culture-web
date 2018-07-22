@@ -1,6 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router';
 import {Row, Col, Affix, Icon, Input, Dropdown, Menu, Avatar, Divider, notification} from 'antd';
+import _ from 'lodash';
+import pathToRegexp from 'path-to-regexp';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
 import './zzHeader.less';
@@ -8,7 +10,7 @@ import './zzHeader.less';
 const logoutUrl = restUrl.ADDR + 'server/LoginOut';
 
 const tabs = [{
-    active: true,
+    active: false,
     title: '首页',
     link: ''
 }, {
@@ -30,7 +32,7 @@ const tabs = [{
 }, {
     active: false,
     title: 'VR视频',
-    link: ''
+    link: '/frame/vr/list'
 }, {
     active: false,
     title: '联系我们',
@@ -52,6 +54,36 @@ class ZZHeader extends React.Component {
         this.state = {
             tabs,
         };
+    }
+
+    componentWillMount = () => {
+        const {tabs} = this.state;
+        const router = this.context.router;
+        const pathname = router.location.pathname;
+        const path = pathname.split('/');
+        console.log('path == ', path);
+        if(path[2] === '' || path[2] === 'home'){
+            this.setActiveTab(0);
+            return;
+        }
+        const regexp = '/frame/' + path[2];
+        _.forEach(tabs, (item, index) => {
+            if(item.link !== '' && item.link.indexOf(regexp) > -1) {
+                this.setActiveTab(index);
+                return;
+            }
+        });
+    }
+
+    setActiveTab = index => {
+        const {tabs} = this.state;
+        tabs.map(tab => {
+            tab.active = false;
+        });
+        tabs[index].active = true;
+
+        this.setState({tabs});
+
     }
 
     changeTab = index => {

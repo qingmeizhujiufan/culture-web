@@ -160,7 +160,7 @@ ul.inline > li, ol.inline > li {
 .page-content {
 
     & > .content {
-        width: 1200px;
+        max-width: 1200px;
         margin: 0 auto;
         background-color: #fff;
     }
@@ -186,12 +186,18 @@ ul.inline > li, ol.inline > li {
 .ant-btn {
     height: 40px !important;
     padding: 0 20px !important;
+    color: @theme_color !important;
+    border-color: @theme_color !important;
 }
 
 .ant-btn:hover, .ant-btn:focus {
     color: #b98860 !important;
     background-color: #fff;
     border-color: #b98860 !important;
+}
+
+a.ant-btn {
+    line-height: 40px !important;
 }
 
 /* 分页样式 */

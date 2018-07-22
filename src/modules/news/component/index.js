@@ -12,14 +12,14 @@ import {
     notification,
     Spin,
     message,
-    Button,
-    BackTop
+    Button
 } from 'antd';
 import _ from 'lodash';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
 import ZZList from 'Comps/zzList/';
 import '../index.less';
+import newsLogo from 'Img/news-logo.png';
 
 const Search = Input.Search;
 const queryListUrl = restUrl.ADDR + 'news/queryList';
@@ -192,22 +192,18 @@ class Index extends React.Component {
         return (
             <div className='page-news'>
                 <div className="page-content news-bg">
-                    <Row>
-                        <Col span={10} offset={7}>
-                            <Row type="flex" justify="center" align="middle" style={{paddingTop: 60}}>
-                                <Col>
-                                    <span style={{marginRight: 30, fontSize: 22, color: '#fff'}}>民俗新闻</span>
-                                </Col>
-                                <Col>
-                                    <Search
-                                        placeholder="请输入搜索的内容"
-                                        enterButton={<span><Icon type="search"/> 搜索</span>}
-                                        size="large"
-                                        onSearch={value => this.onSearch(value)}
-                                        style={{width: 600}}
-                                    />
-                                </Col>
-                            </Row>
+                    <Row type="flex" justify="center" align="middle" style={{paddingTop: 60}}>
+                        <Col>
+                            <span style={{marginRight: 15}}><img src={newsLogo}/></span>
+                        </Col>
+                        <Col>
+                            <Search
+                                placeholder="请输入搜索的内容"
+                                enterButton={<span><Icon type="search"/> 搜索</span>}
+                                size="large"
+                                onSearch={value => this.onSearch(value)}
+                                style={{width: 600}}
+                            />
                         </Col>
                     </Row>
                 </div>
@@ -240,9 +236,6 @@ class Index extends React.Component {
                         />
                     </div>
                 </div>
-                <BackTop>
-                    <div className="zui-up"><Icon type="up"/></div>
-                </BackTop>
             </div>
         );
     }

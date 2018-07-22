@@ -1,5 +1,5 @@
 import React from 'react';
-import {Layout, Menu, Icon, Row, Col, Steps, Carousel, Progress, List, Card, BackTop} from 'antd';
+import {Layout, Menu, Icon, Row, Col, Steps, Carousel, Progress, List, Card} from 'antd';
 import '../home.less';
 import banner1 from 'Img/test/banner1.jpg';
 import news from 'Img/test/news.jpg';
@@ -85,9 +85,6 @@ class Index extends React.Component {
                         <img src={part3} />
                     </Col>
                 </Row>
-                <BackTop>
-                    <div className="zui-up"><Icon type="up" /></div>
-                </BackTop>
             </div>
         );
     }

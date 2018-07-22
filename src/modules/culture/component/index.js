@@ -28,7 +28,7 @@ class Index extends React.Component {
 
         this.state = {
             loading: false,
-            type: 1,
+            type: this.props.params.type ? parseInt(this.props.params.type) : 1,
             cityList: [{
                 id: '',
                 cityName: '湖北'
@@ -131,17 +131,19 @@ class Index extends React.Component {
     renderArtItem = item => {
         return (
             <div key={item.id} className='zui-card-item'>
-                <div className='zui-card-item-header'>
-                    <img src={item.artCover ? (restUrl.BASE_HOST + item.artCover.filePath) : null}/>
-                </div>
-                <div className='zui-card-item-content'>
-                    <div>{'武汉民俗特色书架（特色实木书 架子纯色款）'}</div>
-                    <div className='price'>{`¥${'19.00'}`}</div>
-                </div>
-                <div className='zui-card-item-footer'>
-                    <span><Icon type="eye-o"/> {127}人</span>
-                    <span style={{marginLeft: 35}}><Icon type="star-o"/> {25}人</span>
-                </div>
+                <Link to={'frame/culture/artDetail/' + item.id}>
+                    <div className='zui-card-item-header'>
+                        <img src={item.artCover ? (restUrl.BASE_HOST + item.artCover[0].filePath) : null}/>
+                    </div>
+                    <div className='zui-card-item-content'>
+                        <div>{item.artTitle}</div>
+                        <div className='price'>{`¥${item.artMoney.toFixed(2)}`}</div>
+                    </div>
+                    <div className='zui-card-item-footer'>
+                        <span><Icon type="eye-o"/> {127}人</span>
+                        <span style={{marginLeft: 35}}><Icon type="star-o"/> {25}人</span>
+                    </div>
+                </Link>
             </div>
         );
     }
@@ -154,12 +156,12 @@ class Index extends React.Component {
                 <div className="page-content culture-bg">
                     <Row>
                         <Col span={10} offset={7}>
-                            <Row type="flex" justify="center" align="middle" style={{paddingTop: 30}}>
+                            <Row type="flex" justify="center" align="middle" style={{paddingTop: 36}}>
                                 <Col>
-                                    <div style={{marginBottom: 15}}>
-                                        <span style={{marginRight: 30, fontSize: 20, color: '#FFA600'}}
+                                    <div className='type-group'>
+                                        <span className={type === 1 ? 'type-active' : null}
                                               onClick={() => this.onChangeType(1)}>旅游</span>
-                                        <span style={{marginRight: 30, fontSize: 20, color: '#fff'}}
+                                        <span className={type === 2 ? 'type-active' : null}
                                               onClick={() => this.onChangeType(2)}>艺术品</span>
                                     </div>
                                     <Search
