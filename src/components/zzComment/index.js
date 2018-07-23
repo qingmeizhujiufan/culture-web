@@ -294,16 +294,20 @@ class ZZComment extends React.Component {
                         <Button loading={commentLoading} onClick={() => this.addComment(null, 1)}>评论</Button>
                     </div>
                 </div>
-                <div className='comment-list'>
-                    <Spin spinning={loading}>
-                        <List
-                            itemLayout="horizontal"
-                            dataSource={commentTree}
-                            pagination
-                            renderItem={(item, index) => this.renderItem(item, index)}
-                        />
-                    </Spin>
-                </div>
+                {
+                    commentTree.length > 0 ? (
+                        <div className='comment-list'>
+                            <Spin spinning={loading}>
+                                <List
+                                    itemLayout="horizontal"
+                                    dataSource={commentTree}
+                                    pagination
+                                    renderItem={(item, index) => this.renderItem(item, index)}
+                                />
+                            </Spin>
+                        </div>
+                    ) : null
+                }
             </div>
         );
     }
