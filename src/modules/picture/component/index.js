@@ -13,8 +13,7 @@ import {
     Avatar,
     Steps,
     Form,
-    Tooltip,
-    BackTop
+    Tooltip
 } from 'antd';
 import imagesLoaded from 'imagesLoaded';
 import Masonry from 'masonry-layout';
@@ -38,7 +37,7 @@ const steps = [{
 }, {
     title: '上传成功',
 }, {
-    title: '审核发布',
+    title: '等待审核',
 }];
 
 class Picture extends React.Component {
@@ -55,6 +54,8 @@ class Picture extends React.Component {
             fileList: [],
             visible: false,
             hasMore: true,
+            previewVisible: false,
+            previewImage: '',
         };
     }
 
@@ -144,7 +145,20 @@ class Picture extends React.Component {
         });
     }
 
+    handlePreview = (file) => {
+        this.setState({
+            previewImage: file.url || file.thumbUrl,
+            previewVisible: true,
+        });
+    }
+
     handleChange = ({fileList}) => {
+        console.log('fileList ==== ', fileList);
+        if (fileList.length === 0) {
+            this.setState({
+                fileList
+            });
+        }
         if (fileList && fileList[0].status === "done") {
             this.setState({
                 fileList,
@@ -189,6 +203,8 @@ class Picture extends React.Component {
         this.setState({visible: false});
     }
 
+    handlePreviewCancel = () => this.setState({previewVisible: false})
+
     collect = (obj, index) => {
         const param = {};
         param.tasteId = obj.id;
@@ -220,11 +236,12 @@ class Picture extends React.Component {
     }
 
     render() {
-        const {dataSource, visible, current, fileList, hasMore, loading, submitLoading} = this.state;
-        const {getFieldDecorator} = this.props.form;
+        const {dataSource, visible, current, fileList, hasMore, loading, submitLoading, previewImage, previewVisible} = this.state;
+        const {getFieldDecorator, getFieldsValue} = this.props.form;
+        const value = getFieldsValue();
 
         return (
-            <div>
+            <div className='page-picture-list'>
                 <div className="page-content">
                     <div style={{backgroundColor: '#fff'}}>
                         <div className='clearfix'
@@ -235,13 +252,13 @@ class Picture extends React.Component {
                                         onClick={() => this.showPublishModal()}>我要发布</Button>
                                 <Modal
                                     visible={visible}
-                                    title="发布美图"
+                                    title="发布流程"
                                     width={720}
                                     wrapClassName='zui-modal'
                                     maskStyle={{
                                         background: 'rgba(237,236,234, 0.5373)'
                                     }}
-                                    destroyOnClose
+                                    destroyOnClose={true}
                                     onOk={this.handleOk}
                                     onCancel={this.handleCancel}
                                     footer={null}
@@ -286,7 +303,7 @@ class Picture extends React.Component {
                                             <div style={{marginTop: 50}}>
                                                 <Form onSubmit={this.handleSubmit}>
                                                     <Row>
-                                                        <Col span={12}>
+                                                        <Col span={10}>
                                                             <FormItem
                                                             >
                                                                 {getFieldDecorator('tasteCover', {
@@ -300,17 +317,28 @@ class Picture extends React.Component {
                                                                         listType="picture-card"
                                                                         onPreview={this.handlePreview}
                                                                         onChange={this.handleChange}
+                                                                        className='zui-upload-picture-card'
                                                                     >
-                                                                        {fileList.length >= 1 ? null : uploadButton}
+                                                                        {fileList.length >= 1 ? null : (<div>
+                                                                            <Icon type="plus"/>
+                                                                            <div className="ant-upload-text">重新上传
+                                                                            </div>
+                                                                        </div>)}
                                                                     </Upload>
                                                                 )}
                                                             </FormItem>
                                                         </Col>
-                                                        <Col span={12}>
+                                                        <Col span={14}>
+                                                            <FormItem
+                                                            >
+                                                                {getFieldDecorator('tasteTitle', {})(
+                                                                    <Input placeholder="请输入标题"/>
+                                                                )}
+                                                            </FormItem>
                                                             <FormItem
                                                             >
                                                                 {getFieldDecorator('tasteBrief', {})(
-                                                                    <TextArea rows={4} placeholder="请输入图片标题或心情"/>
+                                                                    <TextArea rows={6} placeholder="请输入心情"/>
                                                                 )}
                                                             </FormItem>
                                                         </Col>
@@ -325,14 +353,56 @@ class Picture extends React.Component {
                                     }
                                     {
                                         current === 1 ? (
-                                            <div style={{
-                                                marginTop: 50,
-                                                textAlign: 'center',
-                                                color: '#11A00A',
-                                                fontSize: 18
-                                            }}>
-                                                <Icon type="check-circle-o"
-                                                      style={{fontSize: 24, verticalAlign: 'text-bottom'}}/> 上传成功！
+                                            <div>
+                                                <div style={{
+                                                    margin: '48px 0',
+                                                    padding: 18,
+                                                    border: '1px solid #DCDCDC',
+                                                    borderRadius: 2
+                                                }}>
+                                                    <Row type='flex' justify="space-between" align="middle">
+                                                        <Col span={10}>
+                                                            <div>
+                                                                <img src={value.tasteCover[0].thumbUrl} width={90}
+                                                                     height={80} style={{float: 'left'}}/>
+                                                                <div style={{marginLeft: 100, overflow: 'hidden'}}>
+                                                                    <div
+                                                                        style={{color: '#170202'}}>{value.tasteCover[0].name}</div>
+                                                                    <div style={{color: '#7D7D7D', fontSize: 12}}>{value.tasteCover[0].lastModified}</div>
+                                                                    <div style={{color: '#7D7D7D', fontSize: 12}}>{'大小: ' + (value.tasteCover[0].size / 1024).toFixed(2) + 'KB'}</div>
+                                                                </div>
+                                                            </div>
+                                                        </Col>
+                                                        <Col span={10}>
+                                                            <div style={{
+                                                                fontSize: 14,
+                                                                color: '#170202'
+                                                            }}>{value.tasteTitle}</div>
+                                                            <div>{value.tasteBrief}</div>
+                                                        </Col>
+                                                    </Row>
+                                                </div>
+                                                <div style={{fontSize: 18, color: '#170202', textAlign: 'center'}}>
+                                                    <div>您上传的美图正在进行审核</div>
+                                                    <div>（请到“我的发布查看审核结果）</div>
+                                                    <Button type='primary' className='zui-btn'
+                                                            href={'/#/frame/personal'}
+                                                            style={{marginTop: 38}}>查看我的发布</Button>
+                                                </div>
+                                                <p style={{
+                                                    marginTop: 40,
+                                                    fontSize: 12,
+                                                    color: '#7D7D7D'
+                                                }}>提示：请严格遵守保密法律法规，严谨在互联网上储存、处理、传输、发布泄密、违法信息</p>
+                                                {/*<div style={{*/}
+                                                {/*marginTop: 50,*/}
+                                                {/*textAlign: 'center',*/}
+                                                {/*color: '#11A00A',*/}
+                                                {/*fontSize: 18*/}
+                                                {/*}}>*/}
+                                                {/*<Icon type="check-circle-o"*/}
+                                                {/*style={{fontSize: 24, verticalAlign: 'text-bottom'}}/> 上传成功！*/}
+                                                {/*</div>*/}
                                             </div>
                                         ) : null
                                     }
@@ -426,9 +496,9 @@ class Picture extends React.Component {
                         }
                     </div>
                 </div>
-                <BackTop>
-                    <div className="zui-up"><Icon type="up"/></div>
-                </BackTop>
+                <Modal visible={previewVisible} footer={null} onCancel={this.handlePreviewCancel}>
+                    <img style={{width: '100%'}} src={previewImage}/>
+                </Modal>
             </div>
         );
     }

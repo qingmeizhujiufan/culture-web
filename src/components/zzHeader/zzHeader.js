@@ -6,6 +6,7 @@ import pathToRegexp from 'path-to-regexp';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
 import './zzHeader.less';
+import logo from 'Img/logo.png';
 
 const logoutUrl = restUrl.ADDR + 'server/LoginOut';
 
@@ -126,7 +127,7 @@ class ZZHeader extends React.Component {
                     <div>
                         <Row type="flex" justify="space-between" align="middle" style={{height: '100%'}}>
                             <Col span={3}>
-                                <div className='logo'>湖北民俗</div>
+                                <div className='logo'><img src={logo}/></div>
                             </Col>
                             <Col span={15}>
                                 <div className='header-tabs'>

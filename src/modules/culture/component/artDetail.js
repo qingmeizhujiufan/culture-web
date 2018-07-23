@@ -211,7 +211,7 @@ class ArtDetail extends React.Component {
                                                                     <div className='zui-card-item-content'>
                                                                         <div>{item.artTitle}</div>
                                                                         <div
-                                                                            className='price'>{`¥${item.artMoney.toFixed(2)}`}</div>
+                                                                            className='price'>{item.artMoney ? `¥${item.artMoney.toFixed(2)}` : '¥--'}</div>
                                                                     </div>
                                                                     <div className='zui-card-item-footer'>
                                                                         <span><Icon type="eye-o"/> {127}人</span>

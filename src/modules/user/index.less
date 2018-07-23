@@ -44,4 +44,90 @@
         height: 120px;
         background-color: #fff;
     }
+
+    .ant-tabs-bar {
+        margin: 0;
+    }
+
+    .ant-tabs-tabpane {
+        background-color: #FAFAFA;
+    }
+
+    .state-group {
+        padding: 20px 60px;
+        font-size: 14px;
+        background-color: #fff;
+        color: #242121;
+
+        span {
+            margin-right: 30px;
+            cursor: pointer;
+
+            &:first-child {
+                margin-right: 40px;
+                color: #999999;
+            }
+
+            &.active-state {
+                color: #CB855F;
+            }
+        }
+    }
+
+    .ant-card {
+        border: none;
+        background: transparent !important;
+
+        .ant-card-wider-padding .ant-card-body {
+            padding: 24px 37px;
+        }
+    }
+
+    .zui-card-item {
+        float: left;
+        width: 217px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        box-shadow: 0px 0px 3px 0px rgba(144, 144, 144, 0.5);
+        border: 1px solid rgba(239, 239, 239, 1);
+
+        &:nth-child(5n + 5) {
+            margin-right: 0;
+        }
+
+        .zui-card-item-header {
+            width: 100%;
+            height: 170px;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .zui-card-item-content {
+            padding: 10px;
+            font-size: 12px;
+            color: #7D7D7D;
+            line-height: 25px;
+            background-color: #fff;
+        }
+
+        .zui-card-item-footer {
+            position: relative;
+            height: 45px;
+            padding: 10px;
+            line-height: 24px;
+            border-top: 1px solid #DEDEDE;
+            background-color: #FAFAFA;
+
+            .delete {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+            }
+        }
+    }
 }
