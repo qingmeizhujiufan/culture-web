@@ -1,14 +1,3 @@
-### 用友建筑公有云-应用商店
-* react15.6.1 react-router3 antd-mobile2 webpack3 superagent
-
-### 这里是你自己的项目说明（不写，打死）
-
-### 版本提升说明V0.0.1
-
-
-* V0.0.1 2017-10-19 by whh
-* V0.0.1 2017-11-14 by whh 【初始化】
-
 ### 启动/构建说明
 ```shell
 npm i
