@@ -7,10 +7,14 @@ import ajax from 'Utils/ajax';
 import '../index.less';
 import defaultUser from 'Img/default-user.jpg';
 import {shiftDate} from "../../../util/util";
+import empty from 'Img/personal-empty.png';
 
 const TabPane = Tabs.TabPane;
 const Search = Input.Search;
 const queryListUrl = restUrl.ADDR + 'taste/queryUserPic';
+const queryLikeTotalUrl = restUrl.ADDR + 'taste/queryLikeTotal';
+const queryUserCollectArtUrl = restUrl.ADDR + 'art/queryUserCollectArt';
+const queryUserCollectCultureUrl = restUrl.ADDR + 'culture/queryUserCollectCulture';
 const deleteUrl = restUrl.ADDR + 'taste/delete';
 
 class Index extends React.Component {
@@ -37,7 +41,9 @@ class Index extends React.Component {
                 label: '未通过'
             }],
             myPic: [],
-            collectArt: []
+            collectArt: [],
+            collectCulture: [],
+            likeTotal: 0
         };
     }
 
@@ -46,6 +52,9 @@ class Index extends React.Component {
 
     componentDidMount = () => {
         this.getMyPic();
+        this.queryLikeTotal();
+        this.queryUserCollectArt();
+        this.queryUserCollectCulture();
     }
 
     getMyPic = () => {
@@ -58,6 +67,56 @@ class Index extends React.Component {
 
                 this.setState({
                     myPic: backData
+                });
+            } else {
+                message.error(data.backMsg);
+            }
+            this.setState({loading: false});
+        });
+    }
+
+    queryUserCollectArt = () => {
+        let param = {};
+        param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
+        this.setState({loading: true});
+        ajax.getJSON(queryUserCollectArtUrl, param, data => {
+            if (data.success) {
+                let backData = data.backData;
+
+                this.setState({
+                    collectArt: backData
+                });
+            } else {
+                message.error(data.backMsg);
+            }
+            this.setState({loading: false});
+        });
+    }
+
+    queryLikeTotal = () => {
+        let param = {};
+        param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
+        ajax.getJSON(queryLikeTotalUrl, param, data => {
+            if (data.success) {
+                this.setState({
+                    likeTotal: data.total
+                });
+            } else {
+                message.error(data.backMsg);
+            }
+        });
+    }
+
+    queryUserCollectCulture = () => {
+        let param = {};
+        param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
+        this.setState({loading: true});
+        ajax.getJSON(queryUserCollectCultureUrl, param, data => {
+            if (data.success) {
+                let backData = data.backData;
+
+                this.setState({
+                    collectCulture: backData
                 });
             } else {
                 message.error(data.backMsg);
@@ -102,11 +161,10 @@ class Index extends React.Component {
     }
 
     render() {
-        const {loading, myPic, stateList} = this.state;
+        const {loading, myPic, collectArt, collectCulture, likeTotal, stateList} = this.state;
         const activeState = _.find(stateList, {active: true}).state;
         const filterPic = activeState !== null ? myPic.filter(item => item.state === activeState) : myPic;
-        console.log('activeState === ', activeState);
-        console.log('filterPic === ', filterPic);
+
         return (
             <div className='page-user bg-gray' style={{padding: '50px 0 30px'}}>
                 <div className="page-content">
@@ -125,7 +183,7 @@ class Index extends React.Component {
                                             fontSize: 20,
                                             lineHeight: '28px',
                                             fontWeight: 600
-                                        }}>{12}</h1>
+                                        }}>{likeTotal}</h1>
                                         <p style={{color: '#7B7B7B', fontSize: 14}}>点赞</p>
                                     </li>
                                     <li style={{width: 100, textAlign: 'center'}}>
@@ -134,7 +192,7 @@ class Index extends React.Component {
                                             fontSize: 20,
                                             lineHeight: '28px',
                                             fontWeight: 600
-                                        }}>{22}</h1>
+                                        }}>{collectArt.length + collectCulture.length}</h1>
                                         <p style={{color: '#7B7B7B', fontSize: 14}}>收藏</p>
                                     </li>
                                 </ul>
@@ -145,7 +203,7 @@ class Index extends React.Component {
                 <div className="page-content" style={{marginTop: 20}}>
                     <div className="content">
                         <Tabs>
-                            <TabPane tab="我的发布" key="1" style={{minHeight: 300}}>
+                            <TabPane tab="我的发布" key="1" style={{minHeight: 225}}>
                                 <div className='state-group'>
                                     <span>状态</span>
                                     {
@@ -168,6 +226,9 @@ class Index extends React.Component {
                                                                 <img
                                                                     src={item.tasteCover ? (restUrl.BASE_HOST + item.tasteCover.filePath) : null}/>
                                                             </Link>
+                                                            {
+                                                                item.state === 0 ? <span className='state-tip'>等待审核</span> : null
+                                                            }
                                                         </div>
                                                         <div className='zui-card-item-content'>
                                                             <div>{item.tasteTitle}</div>
@@ -187,8 +248,72 @@ class Index extends React.Component {
                                     </div>
                                 </Card>
                             </TabPane>
-                            <TabPane tab="我收藏的优品" key="2" style={{minHeight: 300}}></TabPane>
-                            <TabPane tab="我收藏的民俗" key="3" style={{minHeight: 300}}></TabPane>
+                            <TabPane tab="我收藏的优品" key="2" style={{minHeight: 225}}>
+                                {
+                                    collectArt.length > 0 ? collectArt.map(item => {
+                                        return (
+                                            <div key={item.id} className='zui-card-item'>
+                                                <div className='zui-card-item-header'>
+                                                    <Link to={'frame/picture/tasteDetail/' + item.id}>
+                                                        <img
+                                                            src={item.tasteCover ? (restUrl.BASE_HOST + item.tasteCover.filePath) : null}/>
+                                                    </Link>
+                                                    {
+                                                        item.state === 0 ? <span className='state-tip'>等待审核</span> : null
+                                                    }
+                                                </div>
+                                                <div className='zui-card-item-content'>
+                                                    <div>{item.tasteTitle}</div>
+                                                    <div className='date'>{shiftDate(item.create_time)}</div>
+                                                </div>
+                                                <div className='zui-card-item-footer'>
+                                                    <span><Icon type="star-o"/> {item.likeNum}</span>
+                                                    <span style={{marginLeft: 35}}><Icon
+                                                        type="message"/> {item.commentNum}</span>
+                                                    <a className='delete'
+                                                       onClick={() => this.onDelete(item.id)}>删除</a>
+                                                </div>
+                                            </div>
+                                        )
+                                    }) : (<div style={{marginTop: 65, textAlign: 'center'}}>
+                                        <img src={empty}/>
+                                        <p style={{marginTop: 26, fontSize: 12, color: '#7B7B7B'}}>当前没有收藏，快去收藏吧~</p>
+                                    </div>)
+                                }
+                            </TabPane>
+                            <TabPane tab="我收藏的民俗" key="3" style={{minHeight: 225}}>
+                                {
+                                    collectCulture.length > 0 ? collectArt.map(item => {
+                                        return (
+                                            <div key={item.id} className='zui-card-item'>
+                                                <div className='zui-card-item-header'>
+                                                    <Link to={'frame/picture/tasteDetail/' + item.id}>
+                                                        <img
+                                                            src={item.tasteCover ? (restUrl.BASE_HOST + item.tasteCover.filePath) : null}/>
+                                                    </Link>
+                                                    {
+                                                        item.state === 0 ? <span className='state-tip'>等待审核</span> : null
+                                                    }
+                                                </div>
+                                                <div className='zui-card-item-content'>
+                                                    <div>{item.tasteTitle}</div>
+                                                    <div className='date'>{shiftDate(item.create_time)}</div>
+                                                </div>
+                                                <div className='zui-card-item-footer'>
+                                                    <span><Icon type="star-o"/> {item.likeNum}</span>
+                                                    <span style={{marginLeft: 35}}><Icon
+                                                        type="message"/> {item.commentNum}</span>
+                                                    <a className='delete'
+                                                       onClick={() => this.onDelete(item.id)}>删除</a>
+                                                </div>
+                                            </div>
+                                        )
+                                    }) : (<div style={{marginTop: 65, textAlign: 'center'}}>
+                                        <img src={empty}/>
+                                        <p style={{marginTop: 26, fontSize: 12, color: '#7B7B7B'}}>当前没有收藏，快去收藏吧~</p>
+                                    </div>)
+                                }
+                            </TabPane>
                         </Tabs>
                     </div>
                 </div>
