@@ -1,12 +1,13 @@
 import React from 'react';
 import {Link} from 'react-router';
-import {Row, Col, Affix, Icon, Input, Dropdown, Menu, Avatar, Divider, notification} from 'antd';
+import {Row, Col, Affix, Icon, Input, Dropdown, Menu, Avatar, Divider, notification, Badge} from 'antd';
 import _ from 'lodash';
 import pathToRegexp from 'path-to-regexp';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
 import './zzHeader.less';
 import logo from 'Img/logo.png';
+import defaultUser from 'Img/default-user.jpg';
 
 const logoutUrl = restUrl.ADDR + 'server/LoginOut';
 
@@ -63,13 +64,13 @@ class ZZHeader extends React.Component {
         const pathname = router.location.pathname;
         const path = pathname.split('/');
         console.log('path == ', path);
-        if(path[2] === '' || path[2] === 'home'){
+        if (path[2] === '' || path[2] === 'home') {
             this.setActiveTab(0);
             return;
         }
         const regexp = '/frame/' + path[2];
         _.forEach(tabs, (item, index) => {
-            if(item.link !== '' && item.link.indexOf(regexp) > -1) {
+            if (item.link !== '' && item.link.indexOf(regexp) > -1) {
                 this.setActiveTab(index);
                 return;
             }
@@ -155,7 +156,21 @@ class ZZHeader extends React.Component {
                                 />
                                 <Divider type="vertical"/>
                                 <Avatar style={{verticalAlign: '-6px', backgroundColor: '#666'}} size="small"
-                                        icon="user"/> 您好，请<Link to="login">登录</Link>
+                                        src={defaultUser}/>
+                                <Badge count={5}>
+                                    <Dropdown overlay={(
+                                        <Menu>
+                                            <Menu.Item>
+                                                <Link to="frame/personal">个人中心</Link>
+                                            </Menu.Item>
+                                        </Menu>
+                                    )}>
+                                        <a className="ant-dropdown-link" href="#">
+                                            青梅煮酒 
+                                        </a>
+                                    </Dropdown>
+
+                                </Badge>
                             </Col>
                         </Row>
                     </div>
