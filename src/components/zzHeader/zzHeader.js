@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
-import {Row, Col, Affix, Icon, Input, Dropdown, Menu, Avatar, Divider, notification, Badge} from 'antd';
+import {Row, Col, Affix, Icon, Input, Dropdown, Menu, Avatar, Divider, notification, Badge, Select} from 'antd';
 import _ from 'lodash';
 import pathToRegexp from 'path-to-regexp';
 import restUrl from 'RestUrl';
@@ -10,6 +10,7 @@ import logo from 'Img/logo.png';
 import defaultUser from 'Img/default-user.jpg';
 
 const logoutUrl = restUrl.ADDR + 'server/LoginOut';
+const Option = Select.Option;
 
 const tabs = [{
     active: false,
@@ -55,6 +56,7 @@ class ZZHeader extends React.Component {
 
         this.state = {
             tabs,
+            openSearch: false
         };
     }
 
@@ -64,7 +66,7 @@ class ZZHeader extends React.Component {
         const pathname = router.location.pathname;
         const path = pathname.split('/');
         console.log('path == ', path);
-        if (path[2] === '' || path[2] === 'home') {
+        if (!path[2] || path[2] === '' || path[2] === 'home') {
             this.setActiveTab(0);
             return;
         }
@@ -120,17 +122,24 @@ class ZZHeader extends React.Component {
         });
     }
 
+    onSearch = (value, event) => {
+        this.setState({
+            openSearch: !this.state.openSearch
+        });
+    }
+
     render() {
+        const {openSearch} = this.state;
 
         return (
             <Affix>
                 <header className="zui-header">
                     <div>
                         <Row type="flex" justify="space-between" align="middle" style={{height: '100%'}}>
-                            <Col span={3}>
+                            <Col style={{width: 162}}>
                                 <div className='logo'><img src={logo}/></div>
                             </Col>
-                            <Col span={15}>
+                            <Col style={{width: 705}}>
                                 <div className='header-tabs'>
                                     {
                                         tabs.map((item, index) => {
@@ -145,32 +154,53 @@ class ZZHeader extends React.Component {
                                     }
                                 </div>
                             </Col>
-                            <Col span={6} style={{textAlign: 'right'}}>
-                                <Divider type="vertical"/>
-                                <Input
-                                    className="input-search"
-                                    placeholder="别说话，搜我..."
-                                    prefix={<Icon type="search"
-                                                  style={{color: 'rgba(0,0,0,1)', fontSize: 16, fontWeight: 600}}/>}
-                                    style={{width: 40}}
-                                />
-                                <Divider type="vertical"/>
-                                <Avatar style={{verticalAlign: '-6px', backgroundColor: '#666'}} size="small"
-                                        src={defaultUser}/>
-                                <Badge count={5}>
-                                    <Dropdown overlay={(
-                                        <Menu>
-                                            <Menu.Item>
-                                                <Link to="frame/personal">个人中心</Link>
-                                            </Menu.Item>
-                                        </Menu>
-                                    )}>
-                                        <a className="ant-dropdown-link" href="#">
-                                            青梅煮酒 
-                                        </a>
-                                    </Dropdown>
-
-                                </Badge>
+                            <Col style={{width: 433, textAlign: 'right'}}>
+                                <Row type="flex" justify="space-between" align="middle">
+                                    <Col style={{width: 240, height: 32}}>
+                                        <Divider type="vertical"/>
+                                        {
+                                            openSearch ? (
+                                                <div style={{display: 'inline-block'}}>
+                                                    <Select defaultValue="culture" style={{width: 82}}>
+                                                        <Option value="culture">文化</Option>
+                                                        <Option value="news">新闻</Option>
+                                                        <Option value="picture">图片</Option>
+                                                        <Option value="video">视频</Option>
+                                                    </Select>
+                                                    <Divider type="vertical"/>
+                                                </div>
+                                            ) : null
+                                        }
+                                        <Input.Search
+                                            className="input-search"
+                                            placeholder={openSearch ? "请输入搜索内容" : ""}
+                                            style={{
+                                                width: openSearch ? 155 : 45,
+                                                transition: 'width 0.2s ease-in'
+                                            }}
+                                            onSearch={(value, event) => this.onSearch(value, event)}
+                                        />
+                                        <Divider type="vertical"/>
+                                    </Col>
+                                    <Col style={{width: 60, textAlign: 'center'}}>
+                                        <Badge count={5}>
+                                            <Icon type="bell" className='fontsize-20 message'/>
+                                        </Badge>
+                                    </Col>
+                                    <Col style={{width: 130}}>
+                                        <Avatar size="small" src={defaultUser}
+                                                style={{marginRight: 10, verticalAlign: -7}}/>
+                                        <Dropdown overlay={(
+                                            <Menu>
+                                                <Menu.Item>
+                                                    <Link to="frame/personal">个人中心</Link>
+                                                </Menu.Item>
+                                            </Menu>
+                                        )}>
+                                            <a className="ant-dropdown-link">青梅煮酒 <Icon type="down"/></a>
+                                        </Dropdown>
+                                    </Col>
+                                </Row>
                             </Col>
                         </Row>
                     </div>

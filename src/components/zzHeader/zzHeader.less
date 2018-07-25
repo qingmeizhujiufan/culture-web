@@ -3,6 +3,7 @@
 }
 
 .zui-header {
+    line-height: 24px;
     background-color: #fff;
     border-bottom: 1px solid #eee;
 
@@ -19,12 +20,16 @@
         .tab {
             position: relative;
             display: inline-block;
-            margin-right: 50px;
+            margin-right: 45px;
             font-size: 16px;
             color: #262626;
             line-height: 24px;
             cursor: pointer;
             transition: color .2s ease-in;
+
+            &:last-child {
+                margin-right: 0;
+            }
 
             &:after {
                 content: '';
@@ -48,6 +53,12 @@
         }
     }
 
+    .ant-divider, .ant-divider-vertical {
+        height: 22px;
+        margin: 0;
+        background: #979591;
+    }
+
     .input-search {
 
         input {
@@ -57,6 +68,21 @@
                 border: none;
                 box-shadow: none;
             }
+        }
+
+        .ant-input-suffix {
+            margin-top: 2px;
+            font-size: 20px;
+        }
+    }
+    
+    .message {
+        color: rgba(0, 0, 0, 0.45);
+        transition: color ease-in .2s;
+        cursor: pointer;
+        
+        &:hover {
+            color: #000;
         }
     }
 }

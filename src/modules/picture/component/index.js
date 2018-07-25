@@ -216,10 +216,10 @@ class Picture extends React.Component {
                 dataSource[index].isLike = !isLike;
                 if (isLike) {
                     dataSource[index].likeNum -= 1;
-                    message.success('已取消收藏');
+                    message.success('已取消点赞');
                 } else {
                     dataSource[index].likeNum += 1;
-                    message.success('收藏成功!');
+                    message.success('成功点赞!');
                 }
 
                 this.setState({
@@ -368,8 +368,14 @@ class Picture extends React.Component {
                                                                 <div style={{marginLeft: 100, overflow: 'hidden'}}>
                                                                     <div
                                                                         style={{color: '#170202'}}>{value.tasteCover[0].name}</div>
-                                                                    <div style={{color: '#7D7D7D', fontSize: 12}}>{value.tasteCover[0].lastModified}</div>
-                                                                    <div style={{color: '#7D7D7D', fontSize: 12}}>{'大小: ' + (value.tasteCover[0].size / 1024).toFixed(2) + 'KB'}</div>
+                                                                    <div style={{
+                                                                        color: '#7D7D7D',
+                                                                        fontSize: 12
+                                                                    }}>{value.tasteCover[0].lastModified}</div>
+                                                                    <div style={{
+                                                                        color: '#7D7D7D',
+                                                                        fontSize: 12
+                                                                    }}>{'大小: ' + (value.tasteCover[0].size / 1024).toFixed(2) + 'KB'}</div>
                                                                 </div>
                                                             </div>
                                                         </Col>
@@ -449,7 +455,7 @@ class Picture extends React.Component {
                                                         <Row>
                                                             <Col span={8} offset={1}>
                                                                 <Tooltip placement="top"
-                                                                         title={item.isLike ? "点击取消收藏" : "点击收藏"}>
+                                                                         title={item.isLike ? "取消点赞" : "点赞"}>
                                                                     <Icon
                                                                         type={item.isLike ? "heart" : "heart-o"}
                                                                         onClick={() => this.collect(item, index)}
@@ -462,15 +468,7 @@ class Picture extends React.Component {
                                                                 <span>{item.likeNum}</span>
                                                             </Col>
                                                             <Col span={8}>
-                                                                <Tooltip placement="top"
-                                                                         title="查看评论">
-                                                                    <Icon type="message"
-                                                                          onClick={() => this.comment(item)}
-                                                                          style={{
-                                                                              cursor: 'pointer',
-                                                                          }}
-                                                                    />
-                                                                </Tooltip>
+                                                                <Icon type="message"/>
                                                                 <span>{item.commentNum}</span>
                                                             </Col>
                                                         </Row>

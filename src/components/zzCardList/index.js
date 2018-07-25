@@ -1,9 +1,9 @@
 import React from 'react';
-import {Row, Col, Icon, Button, message, Spin, List} from 'antd';
-import restUrl from 'RestUrl';
+import {Row, Col, Icon, Button, message, Spin} from 'antd';
 import _ from 'lodash';
 import './index.less';
 import ajax from "Utils/ajax";
+import empty from 'Img/empty.jpg';
 
 class ZZCardList extends React.Component {
     constructor(props) {
@@ -48,7 +48,7 @@ class ZZCardList extends React.Component {
         this.setState({loading: true});
         ajax.getJSON(queryUrl, param, data => {
             if (data.success) {
-                if(typeof callback === 'function') callback(data);
+                if (typeof callback === 'function') callback(data);
             } else {
                 message.error(data.backMsg);
             }
@@ -75,7 +75,7 @@ class ZZCardList extends React.Component {
     render() {
         const {renderItem} = this.props;
         const {loading, showLoadingMore, loadingMore, listData} = this.state;
-        const loadMore = showLoadingMore ? (
+        const loadMore = listData.length > 0 && showLoadingMore ? (
             <div style={{textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px'}}>
                 {loadingMore && <Spin/>}
                 {!loadingMore && <Button onClick={this.onLoadMore}><Icon type="plus"/> 加载更多</Button>}
@@ -86,7 +86,11 @@ class ZZCardList extends React.Component {
             <div className='zui-zzCardList'>
                 <Spin spinning={loading} size={"large"}>
                     {
-                        listData.map(renderItem)
+                        listData.length > 0 ? listData.map(renderItem) :
+                            (<div style={{marginTop: 65, textAlign: 'center'}}>
+                                <img src={empty}/>
+                                <p style={{marginTop: 26, fontSize: 12, color: '#7B7B7B'}}>暂无数据</p>
+                            </div>)
                     }
                 </Spin>
                 {

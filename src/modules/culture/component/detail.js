@@ -1,18 +1,18 @@
 import React from 'react';
 import {Link} from 'react-router';
-import {Row, Col, Icon, Badge, message, Spin, Affix} from 'antd';
+import {Row, Col, Icon, message, Spin, Affix} from 'antd';
 import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
 import '../index.less';
-import {listToTree, shiftDate} from "Utils/util";
+import {shiftDate} from "Utils/util";
 import top5 from 'Img/top5.png';
 import ZZComment from 'Comps/zzComment/';
 
 const queryDetailUrl = restUrl.ADDR + 'culture/queryDetail';
 const queryCommentListUrl = restUrl.ADDR + 'culture/queryCommentList';
 const addUrl = restUrl.ADDR + 'culture/add';
+const collectUrl = restUrl.ADDR + 'culture/collect';
 
 class Detail extends React.Component {
     constructor(props) {
@@ -58,6 +58,30 @@ class Detail extends React.Component {
         });
     }
 
+    collect = () => {
+        const param = {};
+        param.cultureId = this.props.params.id;
+        param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
+        ajax.postJSON(collectUrl, JSON.stringify(param), data => {
+            if (data.success) {
+                const data = this.state.data;
+                const isCollect = data.isCollect;
+                data.isCollect = !isCollect;
+                if (isCollect) {
+                    message.success('已取消收藏');
+                } else {
+                    message.success('已收藏');
+                }
+
+                this.setState({
+                    data
+                });
+            } else {
+                message.error(data.backMsg);
+            }
+        })
+    }
+
     render() {
         const {loading, data} = this.state;
 
@@ -84,13 +108,16 @@ class Detail extends React.Component {
                                                 verticalAlign: 'sub'
                                             }}/>评论
                                         </span>
-                                        <span style={{verticalAlign: 'sub'}}>
-                                            <Icon type="star-o" style={{
-                                                marginRight: 10,
-                                                fontSize: 24,
-                                                color: '#FFA600',
-                                                verticalAlign: 'sub'
-                                            }}/>收藏
+                                        <span style={{verticalAlign: 'sub', cursor: 'pointer'}}
+                                              onClick={() => this.collect()}>
+                                            <Icon
+                                                type={data.isCollect ? "star" : "star-o"}
+                                                style={{
+                                                    marginRight: 10,
+                                                    fontSize: 24,
+                                                    color: '#FFA600',
+                                                    verticalAlign: 'sub'
+                                                }}/>收藏
                                         </span>
                                     </div>
                                 </Col>

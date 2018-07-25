@@ -12,6 +12,7 @@ const queryDetailUrl = restUrl.ADDR + 'art/queryDetail';
 const queryCommentListUrl = restUrl.ADDR + 'art/queryCommentList';
 const addUrl = restUrl.ADDR + 'art/add';
 const queryRecommendTop3Url = restUrl.ADDR + 'art/queryRecommendTop3';
+const collectUrl = restUrl.ADDR + 'art/collect';
 
 class ArtDetail extends React.Component {
     constructor(props) {
@@ -85,7 +86,7 @@ class ArtDetail extends React.Component {
 
     onChangePreview = (item, index) => {
         let {data, currentPreview} = this.state;
-        if(item.active) return;
+        if (item.active) return;
         data.artCover.map(i => {
             i.active = false;
         });
@@ -96,6 +97,30 @@ class ArtDetail extends React.Component {
             data,
             currentPreview
         });
+    }
+
+    collect = () => {
+        const param = {};
+        param.artId = this.props.params.id;
+        param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
+        ajax.postJSON(collectUrl, JSON.stringify(param), data => {
+            if (data.success) {
+                const data = this.state.data;
+                const isCollect = data.isCollect;
+                data.isCollect = !isCollect;
+                if (isCollect) {
+                    message.success('已取消收藏');
+                } else {
+                    message.success('已收藏');
+                }
+
+                this.setState({
+                    data
+                });
+            } else {
+                message.error(data.backMsg);
+            }
+        })
     }
 
     render() {
@@ -111,7 +136,8 @@ class ArtDetail extends React.Component {
                                     <div className='clearfix'>
                                         <div className='preview'>
                                             <div className='preview-active'>
-                                                <img src={currentPreview.filePath ? (restUrl.BASE_HOST + currentPreview.filePath) : null}/>
+                                                <img
+                                                    src={currentPreview.filePath ? (restUrl.BASE_HOST + currentPreview.filePath) : null}/>
                                             </div>
                                             <Row type='flex' justify="space-between" align="center"
                                                  className='preview-list'>
@@ -156,7 +182,7 @@ class ArtDetail extends React.Component {
                                                 color: '#313131',
                                                 lineHeight: '24px'
                                             }}>
-                                                <span style={{marginRight: 40, verticalAlign: 'sub'}}>
+                                                <span style={{marginRight: 40}}>
                                                     <Icon type="form" style={{
                                                         marginRight: 10,
                                                         fontSize: 24,
@@ -164,13 +190,16 @@ class ArtDetail extends React.Component {
                                                         verticalAlign: 'sub'
                                                     }}/>评论
                                                 </span>
-                                                <span style={{verticalAlign: 'sub'}}>
-                                                    <Icon type="star-o" style={{
-                                                        marginRight: 10,
-                                                        fontSize: 24,
-                                                        color: '#FFA600',
-                                                        verticalAlign: 'sub'
-                                                    }}/>收藏
+                                                <span style={{verticalAlign: 'sub', cursor: 'pointer'}}
+                                                      onClick={() => this.collect()}>
+                                                    <Icon
+                                                        type={data.isCollect ? "star" : "star-o"}
+                                                        style={{
+                                                            marginRight: 10,
+                                                            fontSize: 24,
+                                                            color: '#FFA600',
+                                                            verticalAlign: 'sub'
+                                                        }}/>收藏
                                                 </span>
                                             </div>
                                             <Button icon='shop' href={data.buyUrl} target='_blank'>去商城查看</Button>

@@ -1,9 +1,9 @@
 import React from 'react';
 import {Row, Col, Icon, Button, message, Spin, List} from 'antd';
-import restUrl from 'RestUrl';
 import _ from 'lodash';
 import './index.less';
 import ajax from "Utils/ajax";
+import empty from 'Img/empty.jpg';
 
 class ZZList extends React.Component {
     constructor(props) {
@@ -75,7 +75,7 @@ class ZZList extends React.Component {
     render() {
         const {grid, renderItem} = this.props;
         const {loading, showLoadingMore, loadingMore, listData} = this.state;
-        const loadMore = showLoadingMore ? (
+        const loadMore = listData.length > 0 && showLoadingMore ? (
             <div style={{textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px'}}>
                 {loadingMore && <Spin/>}
                 {!loadingMore && <Button onClick={this.onLoadMore}><Icon type="plus"/> 加载更多</Button>}
@@ -92,6 +92,12 @@ class ZZList extends React.Component {
                         loadMore={loadMore}
                         dataSource={listData}
                         renderItem={renderItem}
+                        locale={{
+                            emptyText: (<div style={{marginTop: 65, textAlign: 'center'}}>
+                                <img src={empty}/>
+                                <p style={{marginTop: 26, fontSize: 12, color: '#7B7B7B'}}>暂无数据</p>
+                            </div>)
+                        }}
                     />
                 </Spin>
             </div>
