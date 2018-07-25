@@ -19,6 +19,7 @@
     "masonry-layout": "^4.2.1",
     "path-to-regexp": "^2.2.1",
     "rc-form": "^2.1.7",
+    "react-amap": "^1.2.7",
     "react-custom-scrollbars": "^4.2.1",
     "react-draft-wysiwyg": "^1.12.13",
     "react-infinite-scroller": "^1.2.0",
