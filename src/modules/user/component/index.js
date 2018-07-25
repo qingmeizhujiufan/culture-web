@@ -17,7 +17,7 @@ const queryUserCollectArtUrl = restUrl.ADDR + 'art/queryUserCollectArt';
 const queryUserCollectCultureUrl = restUrl.ADDR + 'culture/queryUserCollectCulture';
 const deleteUrl = restUrl.ADDR + 'taste/delete';
 const delete2Url = restUrl.ADDR + 'art/delete';
-const delete3Url = restUrl.ADDR + 'culture/delete';
+const delete3Url = restUrl.ADDR + 'culture/delete2';
 
 class Index extends React.Component {
     constructor(props) {
@@ -148,16 +148,25 @@ class Index extends React.Component {
             cancelText: '取消',
             onOk: () => {
                 let url;
-                if(type === 'taste') url = deleteUrl;
-                else if(type === 'art') url = delete2Url;
-                else if(type === 'culture') url = delete3Url;
+                if (type === 'taste') url = deleteUrl;
+                else if (type === 'art') url = delete2Url;
+                else if (type === 'culture') url = delete3Url;
                 const param = {};
                 param.id = id;
                 ajax.postJSON(url, JSON.stringify(param), data => {
                     if (data.success) {
                         message.success('删除成功！');
-                        const myPic = [...this.state.myPic].filter(item => item.id !== id);
-                        this.setState({myPic});
+                        if (type === 'taste') {
+                            const myPic = [...this.state.myPic].filter(item => item.id !== id);
+                            this.setState({myPic});
+                        } else if (type === 'art') {
+                            const collectArt = [...this.state.collectArt].filter(item => item.id !== id);
+                            this.setState({collectArt});
+                        } else if (type === 'culture') {
+                            const collectCulture = [...this.state.collectCulture].filter(item => item.id !== id);
+                            this.setState({collectCulture});
+                        }
+
                     } else {
                         message.error(data.backMsg);
                     }
@@ -256,38 +265,42 @@ class Index extends React.Component {
                                 </Card>
                             </TabPane>
                             <TabPane tab="我收藏的优品" key="2" style={{minHeight: 225}}>
-                                {
-                                    collectArt.length > 0 ? collectArt.map(item => {
-                                        return (
-                                            <div key={item.id} className='zui-card-item'>
-                                                <div className='zui-card-item-header'>
-                                                    <Link to={'frame/picture/tasteDetail/' + item.id}>
-                                                        <img
-                                                            src={item.tasteCover ? (restUrl.BASE_HOST + item.tasteCover.filePath) : null}/>
-                                                    </Link>
-                                                    {
-                                                        item.state === 0 ?
-                                                            <span className='state-tip'>等待审核</span> : null
-                                                    }
-                                                </div>
-                                                <div className='zui-card-item-content'>
-                                                    <div>{item.tasteTitle}</div>
-                                                    <div className='date'>{shiftDate(item.create_time)}</div>
-                                                </div>
-                                                <div className='zui-card-item-footer'>
-                                                    <span><Icon type="star-o"/> {item.likeNum}</span>
-                                                    <span style={{marginLeft: 35}}><Icon
-                                                        type="message"/> {item.commentNum}</span>
-                                                    <a className='delete'
-                                                       onClick={() => this.onDelete(item.id)}>删除</a>
-                                                </div>
-                                            </div>
-                                        )
-                                    }) : (<div style={{marginTop: 65, textAlign: 'center'}}>
-                                        <img src={empty}/>
-                                        <p style={{marginTop: 26, fontSize: 12, color: '#7B7B7B'}}>当前没有收藏，快去收藏吧~</p>
-                                    </div>)
-                                }
+                                <Card>
+                                    <div className='clearfix'>
+                                        {
+                                            collectArt.length > 0 ? collectArt.map(item => {
+                                                return (
+                                                    <div key={item.id} className='zui-card-item'>
+                                                        <div className='zui-card-item-header'>
+                                                            <Link to={'frame/culture/artDetail/' + item.id}>
+                                                                <img
+                                                                    src={item.artCover ? (restUrl.BASE_HOST + item.artCover[0].filePath) : null}/>
+                                                            </Link>
+                                                        </div>
+                                                        <div className='zui-card-item-content'>
+                                                            <div>{item.artTitle}</div>
+                                                            <div className='date'>{shiftDate(item.create_time)}</div>
+                                                        </div>
+                                                        <div className='zui-card-item-footer'>
+                                                            <span><Icon type="star-o"/> {item.likeNum}</span>
+                                                            <span style={{marginLeft: 35}}><Icon
+                                                                type="message"/> {item.commentNum}</span>
+                                                            <a className='delete'
+                                                               onClick={() => this.onDelete(item.id)}>删除</a>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }) : (<div style={{marginTop: 65, textAlign: 'center'}}>
+                                                <img src={empty}/>
+                                                <p style={{
+                                                    marginTop: 26,
+                                                    fontSize: 12,
+                                                    color: '#7B7B7B'
+                                                }}>当前没有收藏，快去收藏吧~</p>
+                                            </div>)
+                                        }
+                                    </div>
+                                </Card>
                             </TabPane>
                             <TabPane tab="我收藏的民俗" key="3" style={{minHeight: 225}}>
                                 {
@@ -299,7 +312,8 @@ class Index extends React.Component {
                                             renderItem={item => (
                                                 <List.Item
                                                     key={item.id}
-                                                    actions={[<a onClick={() => this.onDelete(item.id, 'culture')}>删除</a>]}
+                                                    actions={[<a
+                                                        onClick={() => this.onDelete(item.id, 'culture')}>删除</a>]}
                                                     style={{padding: 30, backgroundColor: '#fff'}}
                                                 >
                                                     <List.Item.Meta

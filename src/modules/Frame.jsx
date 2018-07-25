@@ -14,6 +14,12 @@ export default class App extends React.Component {
                 <ZZHeader/>
                 {this.props.children}
                 <ZZFooter/>
+                <div className='fix-music'>
+                    <div><Icon type="play-circle-o" style={{fontSize: 20}} /></div>
+                </div>
+                <div className='fix-qrcode'>
+                    <div><Icon type="appstore-o" /></div>
+                </div>
                 <BackTop>
                     <div className="zui-up"><Icon type="up" /></div>
                 </BackTop>
