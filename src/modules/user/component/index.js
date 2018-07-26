@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
-import {Row, Col, Input, Icon, Tabs, Avatar, List, Badge, Card, Spin, message, Modal} from 'antd';
+import {Row, Col, Input, Icon, Tabs, Avatar, List, Card, message, Modal} from 'antd';
 import _ from 'lodash';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
@@ -16,7 +16,7 @@ const queryLikeTotalUrl = restUrl.ADDR + 'taste/queryLikeTotal';
 const queryUserCollectArtUrl = restUrl.ADDR + 'art/queryUserCollectArt';
 const queryUserCollectCultureUrl = restUrl.ADDR + 'culture/queryUserCollectCulture';
 const deleteUrl = restUrl.ADDR + 'taste/delete';
-const delete2Url = restUrl.ADDR + 'art/delete';
+const delete2Url = restUrl.ADDR + 'art/delete2';
 const delete3Url = restUrl.ADDR + 'culture/delete2';
 
 class Index extends React.Component {
@@ -279,14 +279,11 @@ class Index extends React.Component {
                                                         </div>
                                                         <div className='zui-card-item-content'>
                                                             <div>{item.artTitle}</div>
-                                                            <div className='date'>{shiftDate(item.create_time)}</div>
+                                                            <div className='price'>{'¥' + item.artMoney.toFixed(2)}</div>
                                                         </div>
                                                         <div className='zui-card-item-footer'>
-                                                            <span><Icon type="star-o"/> {item.likeNum}</span>
-                                                            <span style={{marginLeft: 35}}><Icon
-                                                                type="message"/> {item.commentNum}</span>
                                                             <a className='delete'
-                                                               onClick={() => this.onDelete(item.id)}>删除</a>
+                                                               onClick={() => this.onDelete(item.id, 'art')}>删除</a>
                                                         </div>
                                                     </div>
                                                 )
