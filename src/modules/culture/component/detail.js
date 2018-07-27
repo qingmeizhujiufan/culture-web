@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router';
 import {Row, Col, Icon, message, Spin, Affix} from 'antd';
 import draftToHtml from 'draftjs-to-html';
 import restUrl from 'RestUrl';
@@ -44,10 +43,10 @@ class Detail extends React.Component {
                 if (data.cultureContent && data.cultureContent !== '') {
                     data.cultureContent = JSON.parse(data.cultureContent);
                     data.contentHtml = draftToHtml(data.cultureContent);
-                    this.setState({
-                        data
-                    });
                 }
+                this.setState({
+                    data
+                });
             } else {
                 message.error(data.backMsg);
             }
@@ -82,6 +81,18 @@ class Detail extends React.Component {
         })
     }
 
+    scrollToAnchor = anchorName => {
+        if (anchorName) {
+            // 找到锚点
+            let anchorElement = document.getElementById(anchorName);
+            // 如果对应id的锚点存在，就跳转到锚点
+            if(anchorElement) { anchorElement.scrollIntoView({
+                block: 'start',
+                behavior: 'smooth'
+            }); }
+        }
+    }
+
     render() {
         const {loading, data} = this.state;
 
@@ -100,12 +111,13 @@ class Detail extends React.Component {
                                 </Col>
                                 <Col span={8}>
                                     <div style={{textAlign: 'right', lineHeight: '24px'}}>
-                                        <span style={{marginRight: 75, verticalAlign: 'sub'}}>
+                                        <span style={{marginRight: 75, verticalAlign: 'sub', cursor: 'pointer'}}
+                                            onClick={() => this.scrollToAnchor('comment')}>
                                             <Icon type="form" style={{
                                                 marginRight: 10,
                                                 fontSize: 24,
                                                 color: '#FFA600',
-                                                verticalAlign: 'sub'
+                                                verticalAlign: 'sub',
                                             }}/>评论
                                         </span>
                                         <span style={{verticalAlign: 'sub', cursor: 'pointer'}}
@@ -132,6 +144,7 @@ class Detail extends React.Component {
                                         <div dangerouslySetInnerHTML={{__html: data.contentHtml}}></div>
                                     </div>
                                     <ZZComment
+                                        id='comment'
                                         avatar={data.avatar ? restUrl.BASE_HOST + data.avatar.filePath : null}
                                         queryUrl={queryCommentListUrl}
                                         saveUrl={addUrl}

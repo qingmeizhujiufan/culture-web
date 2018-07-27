@@ -21,7 +21,6 @@ import pathToRegexp from 'path-to-regexp';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
 import './zzHeader.less';
-import logo from 'Img/logo.png';
 import defaultUser from 'Img/default-user.jpg';
 import {shiftDate} from "Utils/util";
 
@@ -200,7 +199,7 @@ class ZZHeader extends React.Component {
                     <div>
                         <Row type="flex" justify="space-between" align="middle" style={{height: '100%'}}>
                             <Col style={{width: 162}}>
-                                <div className='logo'><img src={logo}/></div>
+                                <div className='logo'><span className='iconfont icon-hubeiminsu'></span></div>
                             </Col>
                             <Col style={{width: 705}}>
                                 <div className='header-tabs'>

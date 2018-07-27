@@ -28,7 +28,7 @@ export default class App extends React.Component {
                 >
                     <div className='fix-qrcode'>
                         <div>
-                            <Icon type="appstore-o"/>
+                            <span className='iconfont icon-code'></span>
                         </div>
                     </div>
                 </Popover>

@@ -123,6 +123,18 @@ class ArtDetail extends React.Component {
         })
     }
 
+    scrollToAnchor = anchorName => {
+        if (anchorName) {
+            // 找到锚点
+            let anchorElement = document.getElementById(anchorName);
+            // 如果对应id的锚点存在，就跳转到锚点
+            if(anchorElement) { anchorElement.scrollIntoView({
+                block: 'start',
+                behavior: 'smooth'
+            }); }
+        }
+    }
+
     render() {
         const {loading, recommendLoading, data, recommendList, currentPreview} = this.state;
 
@@ -182,7 +194,7 @@ class ArtDetail extends React.Component {
                                                 color: '#313131',
                                                 lineHeight: '24px'
                                             }}>
-                                                <span style={{marginRight: 40}}>
+                                                <span style={{marginRight: 40, cursor: 'pointer'}} onClick={() => this.scrollToAnchor('comment')}>
                                                     <Icon type="form" style={{
                                                         marginRight: 10,
                                                         fontSize: 24,
@@ -217,6 +229,7 @@ class ArtDetail extends React.Component {
                                         }
                                     </div>
                                     <ZZComment
+                                        id='comment'
                                         avatar={data.avatar ? restUrl.BASE_HOST + data.avatar.filePath : null}
                                         queryUrl={queryCommentListUrl}
                                         saveUrl={addUrl}

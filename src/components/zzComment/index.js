@@ -275,7 +275,7 @@ class ZZComment extends React.Component {
         const {loading, avatar, commentList, commentTree, commentText, commentLoading} = this.state;
 
         return (
-            <div className='comment-box'>
+            <div className='comment-box' id={this.props.id}>
                 <div className='comment-dialog'>
                     <div className='title'>评论（{commentList.length}）</div>
                     <Row type='flex' justify="space-between" align="middle">

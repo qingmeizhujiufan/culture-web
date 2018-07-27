@@ -13,7 +13,7 @@ import '../index.less';
 import videoLogo from 'Img/video-logo.png';
 
 const Search = Input.Search;
-const queryArtListUrl = restUrl.ADDR + 'art/queryList';
+const queryListUrl = restUrl.ADDR + 'video/queryList';
 
 class Index extends React.Component {
     constructor(props) {
@@ -42,7 +42,7 @@ class Index extends React.Component {
     }
 
     detailrouter = id => {
-        this.context.router.push(`/frame/culture/detail/${id}`);
+        this.context.router.push(`/frame/video/detail/${id}`);
     }
 
 
@@ -50,7 +50,10 @@ class Index extends React.Component {
         return (
             <div key={item.id} className='zui-card-item'>
                 <div className='zui-card-item-header'>
-                    <img src={item.artCover ? (restUrl.BASE_HOST + item.artCover.filePath) : null}/>
+                    <img src={item.artCover ? (restUrl.BASE_HOST + item.artCover[0].filePath) : null}/>
+                    <span className='title'><span className='iconfont icon-bofang'></span>{item.artTitle}</span>
+                    <span className='sub-title'>这是副标题</span>
+                    <span className='mask'></span>
                 </div>
                 <div className='zui-card-item-footer'>
                     <span><Icon type="eye-o"/> {127}人</span>
@@ -63,8 +66,8 @@ class Index extends React.Component {
         const {conditionText} = this.state;
 
         return (
-            <div className='page-culture'>
-                <div className="page-content culture-bg">
+            <div className='page-video'>
+                <div className="page-content video-bg">
                     <Row type="flex" justify="center" align="middle" style={{paddingTop: 60}}>
                         <Col>
                             <span style={{marginRight: 15}}><img src={videoLogo}/></span>
@@ -84,7 +87,7 @@ class Index extends React.Component {
                     <div className="content">
                         <ZZCardList
                             renderItem={this.renderItem}
-                            queryUrl={queryArtListUrl}
+                            queryUrl={queryListUrl}
                             queryParams={{
                                 conditionText: conditionText
                             }}
