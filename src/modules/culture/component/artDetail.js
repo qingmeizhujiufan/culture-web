@@ -182,7 +182,7 @@ class ArtDetail extends React.Component {
                                                         className="date">{data.create_time ? shiftDate(data.create_time) + '发布' : null}</span>
                                                 </Col>
                                                 <Col style={{marginLeft: 20}}>
-                                                    <span className='read-info'><Icon type="eye-o"/> {127}人</span>
+                                                    <span className='read-info'><Icon type="eye-o"/> {data.readNum}人</span>
                                                 </Col>
                                             </Row>
                                             <div className='art-title'>{data.artTitle}</div>
@@ -256,7 +256,7 @@ class ArtDetail extends React.Component {
                                                                             className='price'>{item.artMoney ? `¥${item.artMoney.toFixed(2)}` : '¥--'}</div>
                                                                     </div>
                                                                     <div className='zui-card-item-footer'>
-                                                                        <span><Icon type="eye-o"/> {127}人</span>
+                                                                        <span><Icon type="eye-o"/> {item.readNum}人</span>
                                                                         <span style={{marginLeft: 35}}><Icon
                                                                             type="star-o"/> {25}人</span>
                                                                     </div>

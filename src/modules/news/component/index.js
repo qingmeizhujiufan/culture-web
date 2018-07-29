@@ -175,7 +175,7 @@ class Index extends React.Component {
                         to={'/frame/news/detail/' + item.id}>{item.newsTitle}</Link>}
                     description={<div>
                         <p>{item.newsBrief.length > 100 ? `${item.newsBrief.substring(0, 100)}...` : item.newsBrief}</p>
-                        <p className='read-info'><Icon type="eye-o"/> {127}人</p>
+                        <p className='read-info'><Icon type="eye-o"/> {item.readNum}人</p>
                     </div>}
                 />
             </List.Item>

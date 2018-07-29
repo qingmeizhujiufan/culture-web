@@ -41,23 +41,20 @@ class Index extends React.Component {
         });
     }
 
-    detailrouter = id => {
-        this.context.router.push(`/frame/video/detail/${id}`);
-    }
-
-
     renderItem = item => {
         return (
             <div key={item.id} className='zui-card-item'>
-                <div className='zui-card-item-header'>
-                    <img src={item.artCover ? (restUrl.BASE_HOST + item.artCover[0].filePath) : null}/>
-                    <span className='title'><span className='iconfont icon-bofang'></span>{item.artTitle}</span>
-                    <span className='sub-title'>这是副标题</span>
-                    <span className='mask'></span>
-                </div>
-                <div className='zui-card-item-footer'>
-                    <span><Icon type="eye-o"/> {127}人</span>
-                </div>
+                <Link to={'frame/video/detail/' + item.id}>
+                    <div className='zui-card-item-header'>
+                        <img src={item.videoCover ? (restUrl.BASE_HOST + item.videoCover.filePath) : null}/>
+                        <span className='title'><span className='iconfont icon-bofang'></span>{item.videoTitle}</span>
+                        <span className='sub-title'>{item.videoBrief}</span>
+                        <span className='mask'></span>
+                    </div>
+                    <div className='zui-card-item-footer'>
+                        <span><Icon type="eye-o"/> {item.readNum}人</span>
+                    </div>
+                </Link>
             </div>
         );
     }

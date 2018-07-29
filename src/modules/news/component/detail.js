@@ -65,7 +65,7 @@ class Detail extends React.Component {
                                 <h1 className="title">{data.newsTitle}</h1>
                                 <p style={{marginBottom: 50}}>
                                     <span className="date">{data.create_time ? data.create_time.substring(0, 10) : null}</span>
-                                    <span><Icon type="eye-o" /> {126}人</span>
+                                    <span><Icon type="eye-o" /> {data.readNum}人</span>
                                 </p>
                                 <div dangerouslySetInnerHTML={{__html: data.contentHtml}}></div>
                             </div>

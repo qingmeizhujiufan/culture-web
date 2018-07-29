@@ -26,19 +26,26 @@ class Index extends React.Component {
     }
 
     render() {
+        const markerEvents = {
+            created: (ins) => {console.log(ins)},
+            click: e => {
+                const lnglat = e.lnglat;
+                let url = `https://uri.amap.com/marker?position=${lnglat.lng},${lnglat.lat}`;
+                window.open(url);
+            }
+        }
 
         return (
-            <div className='page-contractus' style={{padding: '50px 0 30px'}}>
+            <div className='page-contractus'>
                 <div className="page-content">
-                    <div className='content'>
-                        <Row>
+                    <div className='content wrap-box'>
+                        <Row type='flex' justify="space-around" align="middle">
                             <Col span={7}>
                                 <div style={{
-                                    height: 615,
+                                    height: 400,
                                     padding: 42,
-                                    border: '1px solid #DFDDDA',
                                     color: '#170202',
-                                    backgroundColor: 'rgba(247,246,242,1)'
+                                    backgroundColor: '#F7F6F2'
                                 }}>
                                     <h1>联系我们</h1>
                                     <p>商务合作：</p>
@@ -50,7 +57,7 @@ class Index extends React.Component {
                                 </div>
                             </Col>
                             <Col span={17}>
-                                <div style={{height: 437, marginTop: 89}}>
+                                <div style={{height: 400}}>
                                     <Map
                                         amapkey='540e9b2c0349b6a56b5c74d021aa28e5'
                                         zoom={12}
@@ -62,6 +69,8 @@ class Index extends React.Component {
                                                 longitude: 114.304063,
                                                 latitude: 30.595826
                                             }}
+                                            clickable
+                                            events={markerEvents}
                                         />
                                     </Map>
                                 </div>

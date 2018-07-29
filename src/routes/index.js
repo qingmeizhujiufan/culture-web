@@ -18,7 +18,9 @@ import Picture from '../modules/picture/component/';
 import PictureDetail from '../modules/picture/component/detail';
 /* 在线视频 */
 import Video from '../modules/video/component/';
+import VideoDetail from '../modules/video/component/detail';
 /* VR视频 */
+import VR from '../modules/vr/component/';
 /* 联系我们 */
 import ContractUs from '../modules/contractUs/component/';
 /* 个人中心 */
@@ -41,6 +43,8 @@ module.exports = (
                 <route path="picture/list" component={Picture}/>
                 <route path="picture/detail/:id" component={PictureDetail}/>
                 <route path="video/list" component={Video}/>
+                <route path="video/detail/:id" component={VideoDetail}/>
+                <route path="vr/list" component={VR}/>
                 <route path="contractus" component={ContractUs}/>
                 <route path="personal" component={User}/>
             </Route>

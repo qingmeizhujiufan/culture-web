@@ -1,7 +1,10 @@
 import React from 'react';
-import {Layout, Menu, Icon, Row, Col, Steps, Carousel, Progress, List, Card} from 'antd';
+import {Layout, Menu, Icon, Row, Col, Steps, Progress, List, Card, Carousel} from 'antd';
+import Slider from 'react-slick';
+import '../index.css';
 import '../home.less';
-import banner1 from 'Img/test/banner1.jpg';
+import banner1 from 'Img/test/banner1.png';
+import banner2 from 'Img/cover.jpg';
 import news from 'Img/test/news.jpg';
 import part1 from 'Img/test/part1.jpg';
 import part2 from 'Img/test/part2.jpg';
@@ -28,6 +31,29 @@ const data = [
     },
 ];
 
+function SampleNextArrow(props) {
+    const {className, style, onClick} = props;
+    return (
+        <div
+            className={className}
+            style={{...style, display: "block", background: "red"}}
+            onClick={onClick}
+        />
+    );
+}
+
+function SamplePrevArrow(props) {
+    const {className, style, onClick} = props;
+    return (
+        <div
+            className={className}
+            style={{...style, display: "block", background: "green"}}
+            onClick={onClick}
+        />
+    );
+}
+
+
 class Index extends React.Component {
     constructor(props) {
         super(props);
@@ -40,51 +66,116 @@ class Index extends React.Component {
 
     render() {
         return (
-            <div className="page-content home">
+            <div className="page-home">
                 <div className="slider-box">
                     <Carousel autoplay>
-                        <div><img src={banner1}/></div>
-                        <div><img src={banner1}/></div>
+                        {
+                            [1, 2, 3].map((item, index) => (
+                                <div key={index}>
+                                    <div className='banner' style={{backgroundImage: `url(${banner1})`}}>
+                                        <div className='carousel-content'>
+                                            <h1>湖北民俗文化</h1>
+                                            <p>专注名俗文化传播，传承湖北民俗文化</p>
+                                            <span className='follow'><Icon type="wechat"/> 关注公众号</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        }
                     </Carousel>
                 </div>
-                <Row style={{margin: '50px 0px 80px'}}>
-                    <Col span={7} offset={2}>
-                        <h2 style={{color: '#CB0909'}}>新闻<span style={{fontSize: 14}}>news</span></h2>
-                        <List
-                            itemLayout="horizontal"
-                            dataSource={data}
-                            renderItem={item => (
-                                <List.Item>
-                                    <List.Item.Meta
-                                        title={<a href="https://ant.design">{item.title}</a>}
-                                        description="2018-07-08"
-                                    />
-                                </List.Item>
-                            )}
-                        />
-                    </Col>
-                    <Col span={3}/>
-                    <Col span={10}>
-                        <Carousel className='news-list'>
-                            <div className='wrap-img'><img src={news}/></div>
-                        </Carousel>
-                    </Col>
-                </Row>
-                <Row style={{margin: '0px 0px 80px'}}>
-                    <Col span={20} offset={2}>
-                        <img src={part1} />
-                    </Col>
-                </Row>
-                <Row style={{margin: '0px 0px 80px'}}>
-                    <Col span={20} offset={2}>
-                        <img src={part2} />
-                    </Col>
-                </Row>
-                <Row style={{margin: '0px 0px 80px'}}>
-                    <Col span={20} offset={2}>
-                        <img src={part3} />
-                    </Col>
-                </Row>
+                <div className='page-content'>
+                    <div className='content'>
+                        <section className='plate'>
+                            <h1>民俗新闻</h1>
+                            <p>最全面、最前沿的民俗文化新闻资讯</p>
+                            <article className='box news'>
+                                <Row type="flex" justify="center" align="middle">
+                                    <Col style={{width: 464, margin: '0 52px'}}>
+                                        <List
+                                            className='news-list'
+                                            itemLayout="horizontal"
+                                            dataSource={data}
+                                            renderItem={item => (
+                                                <List.Item>
+                                                    <List.Item.Meta
+                                                        title={<a href="https://ant.design">{item.title}</a>}
+                                                        description="2018-07-08"
+                                                    />
+                                                </List.Item>
+                                            )}
+                                        />
+                                    </Col>
+                                    <Col style={{width: 600, height: 370}}>
+                                        <Carousel className='news-list-image'>
+                                            <div className='wrap-img'><img src={news}/></div>
+                                        </Carousel>
+                                    </Col>
+                                </Row>
+                            </article>
+                        </section>
+                        <section className='plate'>
+                            <h1>文化展示</h1>
+                            <p>最全面民俗旅游介绍、民俗艺术品的赏析</p>
+                            <article className='box culture'>
+                                <Carousel>
+                                    <div>
+                                        <div className='img-list'>
+                                            <Row type='flex'>
+                                                <Col className='wrap-img'>
+                                                    <img src={banner2}/>
+                                                </Col>
+                                                <Col className='wrap-img' style={{margin: '0 18px'}}>
+                                                    <img src={banner2}/>
+                                                </Col>
+                                                <Col className='wrap-img'>
+                                                    <img src={banner2}/>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div className='img-list'>
+                                            <Row type='flex'>
+                                                <Col className='wrap-img'>
+                                                    <img src={banner2}/>
+                                                </Col>
+                                                <Col className='wrap-img' style={{margin: '0 18px'}}>
+                                                    <img src={banner2}/>
+                                                </Col>
+                                                <Col className='wrap-img'>
+                                                    <img src={banner2}/>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div className='img-list'>
+                                            <Row type='flex'>
+                                                <Col className='wrap-img'>
+                                                    <img src={banner2}/>
+                                                </Col>
+                                                <Col className='wrap-img' style={{margin: '0 18px'}}>
+                                                    <img src={banner2}/>
+                                                </Col>
+                                                <Col className='wrap-img'>
+                                                    <img src={banner2}/>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </div>
+                                </Carousel>
+                            </article>
+                        </section>
+                        <section className='plate'>
+                            <h1>民俗特色</h1>
+                            <p>最全面民俗旅游介绍、民俗艺术品的赏析</p>
+                            <article className='box art'>
+
+                            </article>
+                        </section>
+                    </div>
+                </div>
             </div>
         );
     }
