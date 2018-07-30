@@ -14,7 +14,7 @@ class ZZFooter extends React.Component {
         return (
             <Footer className='page-footer'>
                 <div>
-                    <Row style={{padding: '50px 0px 20px'}}>
+                    <Row style={{padding: '27px 0px 20px'}}>
                         <Col span={12}>
                             <p>联系我们：商务合作：wuwei@tashan.com</p>
                             <p>用户反馈及帮助：wangtian@tashan.com</p>

@@ -258,7 +258,7 @@ class ArtDetail extends React.Component {
                                                                     <div className='zui-card-item-footer'>
                                                                         <span><Icon type="eye-o"/> {item.readNum}人</span>
                                                                         <span style={{marginLeft: 35}}><Icon
-                                                                            type="star-o"/> {25}人</span>
+                                                                            type="star-o"/> {item.collectNum}人</span>
                                                                     </div>
                                                                 </Link>
                                                             </div>

@@ -1,20 +1,10 @@
 import React from 'react';
-import {Layout, Menu, Icon, Row, Col, Steps, Progress, List, Card, Carousel} from 'antd';
-import Slider from 'react-slick';
+import {Layout, Menu, Icon, Row, Col, Steps, Progress, List, Button, Carousel} from 'antd';
 import '../index.css';
 import '../home.less';
 import banner1 from 'Img/test/banner1.png';
 import banner2 from 'Img/cover.jpg';
 import news from 'Img/test/news.jpg';
-import part1 from 'Img/test/part1.jpg';
-import part2 from 'Img/test/part2.jpg';
-import part3 from 'Img/test/part3.jpg';
-
-const {Header, Content, Footer, Sider} = Layout;
-const SubMenu = Menu.SubMenu;
-const Step = Steps.Step;
-const {Meta} = Card;
-
 
 const data = [
     {
@@ -31,29 +21,6 @@ const data = [
     },
 ];
 
-function SampleNextArrow(props) {
-    const {className, style, onClick} = props;
-    return (
-        <div
-            className={className}
-            style={{...style, display: "block", background: "red"}}
-            onClick={onClick}
-        />
-    );
-}
-
-function SamplePrevArrow(props) {
-    const {className, style, onClick} = props;
-    return (
-        <div
-            className={className}
-            style={{...style, display: "block", background: "green"}}
-            onClick={onClick}
-        />
-    );
-}
-
-
 class Index extends React.Component {
     constructor(props) {
         super(props);
@@ -65,10 +32,20 @@ class Index extends React.Component {
     }
 
     render() {
+        const arrowProps = {
+            currentSlide: 1,
+            slideCount: 3
+        };
+
         return (
             <div className="page-home">
                 <div className="slider-box">
-                    <Carousel autoplay>
+                    <Carousel
+                        autoplay
+                        autoplaySpeed={5000}
+                        arrows
+                        infinite
+                    >
                         {
                             [1, 2, 3].map((item, index) => (
                                 <div key={index}>
@@ -107,8 +84,19 @@ class Index extends React.Component {
                                         />
                                     </Col>
                                     <Col style={{width: 600, height: 370}}>
-                                        <Carousel className='news-list-image'>
-                                            <div className='wrap-img'><img src={news}/></div>
+                                        <Carousel autoplay className='news-list-image'>
+                                            <div className='wrap-img'>
+                                                <img src={news}/>
+                                                <div className='news-title'>武汉特色早点红遍全国，十一年品质不变，不忘初</div>
+                                            </div>
+                                            <div className='wrap-img'>
+                                                <img src={news}/>
+                                                <div className='news-title'>武汉特色早点红遍全国，十一年品质不变，不忘初</div>
+                                            </div>
+                                            <div className='wrap-img'>
+                                                <img src={news}/>
+                                                <div className='news-title'>武汉特色早点红遍全国，十一年品质不变，不忘初</div>
+                                            </div>
                                         </Carousel>
                                     </Col>
                                 </Row>
@@ -118,7 +106,7 @@ class Index extends React.Component {
                             <h1>文化展示</h1>
                             <p>最全面民俗旅游介绍、民俗艺术品的赏析</p>
                             <article className='box culture'>
-                                <Carousel>
+                                <Carousel autoplay autoplaySpeed={5000}>
                                     <div>
                                         <div className='img-list'>
                                             <Row type='flex'>

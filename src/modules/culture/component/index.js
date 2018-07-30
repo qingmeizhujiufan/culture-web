@@ -121,7 +121,7 @@ class Index extends React.Component {
                     description={<div>
                         <p>{item.cultureBrief.length > 100 ? `${item.cultureBrief.substring(0, 100)}...` : item.cultureBrief}</p>
                         <p className='read-info'><Icon type="eye-o"/> {item.readNum}人<span style={{marginLeft: 35}}><Icon
-                            type="star-o"/> {25}人</span></p>
+                            type="star-o"/> {item.collectNum}人</span></p>
                     </div>}
                 />
             </List.Item>
@@ -141,7 +141,7 @@ class Index extends React.Component {
                     </div>
                     <div className='zui-card-item-footer'>
                         <span><Icon type="eye-o"/> {item.readNum}人</span>
-                        <span style={{marginLeft: 35}}><Icon type="star-o"/> {25}人</span>
+                        <span style={{marginLeft: 35}}><Icon type="star-o"/> {item.collectNum}人</span>
                     </div>
                 </Link>
             </div>
