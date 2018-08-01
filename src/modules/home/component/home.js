@@ -5,6 +5,9 @@ import '../home.less';
 import banner1 from 'Img/test/banner1.png';
 import banner2 from 'Img/cover.jpg';
 import news from 'Img/test/news.jpg';
+import slider_1 from 'Img/slider_1.jpg';
+import slider_2 from 'Img/slider_2.jpg';
+import slider_3 from 'Img/slider_3.jpg';
 
 const data = [
     {
@@ -111,13 +114,13 @@ class Index extends React.Component {
                                         <div className='img-list'>
                                             <Row type='flex'>
                                                 <Col className='wrap-img'>
-                                                    <img src={banner2}/>
+                                                    <img src={slider_1}/>
                                                 </Col>
                                                 <Col className='wrap-img' style={{margin: '0 18px'}}>
-                                                    <img src={banner2}/>
+                                                    <img src={slider_2}/>
                                                 </Col>
                                                 <Col className='wrap-img'>
-                                                    <img src={banner2}/>
+                                                    <img src={slider_3}/>
                                                 </Col>
                                             </Row>
                                         </div>
@@ -126,13 +129,13 @@ class Index extends React.Component {
                                         <div className='img-list'>
                                             <Row type='flex'>
                                                 <Col className='wrap-img'>
-                                                    <img src={banner2}/>
+                                                    <img src={slider_1}/>
                                                 </Col>
                                                 <Col className='wrap-img' style={{margin: '0 18px'}}>
-                                                    <img src={banner2}/>
+                                                    <img src={slider_2}/>
                                                 </Col>
                                                 <Col className='wrap-img'>
-                                                    <img src={banner2}/>
+                                                    <img src={slider_3}/>
                                                 </Col>
                                             </Row>
                                         </div>
@@ -141,13 +144,13 @@ class Index extends React.Component {
                                         <div className='img-list'>
                                             <Row type='flex'>
                                                 <Col className='wrap-img'>
-                                                    <img src={banner2}/>
+                                                    <img src={slider_1}/>
                                                 </Col>
                                                 <Col className='wrap-img' style={{margin: '0 18px'}}>
-                                                    <img src={banner2}/>
+                                                    <img src={slider_2}/>
                                                 </Col>
                                                 <Col className='wrap-img'>
-                                                    <img src={banner2}/>
+                                                    <img src={slider_3}/>
                                                 </Col>
                                             </Row>
                                         </div>
