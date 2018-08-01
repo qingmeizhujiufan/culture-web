@@ -79,7 +79,7 @@ class Index extends React.Component {
                                             renderItem={item => (
                                                 <List.Item>
                                                     <List.Item.Meta
-                                                        title={<a href="https://ant.design">{item.title}</a>}
+                                                        title={<a>{item.title}</a>}
                                                         description="2018-07-08"
                                                     />
                                                 </List.Item>
