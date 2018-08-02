@@ -40,6 +40,12 @@ const steps = [{
     title: '等待审核',
 }];
 
+function getBase64(img, callback) {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => callback(reader.result));
+    reader.readAsDataURL(img);
+}
+
 class Picture extends React.Component {
     constructor(props) {
         super(props);
@@ -152,7 +158,7 @@ class Picture extends React.Component {
         });
     }
 
-    handleChange = ({fileList}) => {
+    handleChange = ({file, fileList}) => {
         console.log('fileList ==== ', fileList);
         if (fileList.length === 0) {
             this.setState({
@@ -160,9 +166,12 @@ class Picture extends React.Component {
             });
         }
         if (fileList && fileList[0].status === "done") {
-            this.setState({
-                fileList,
-                current: 0,
+            getBase64(file.originFileObj, imageUrl => {
+                fileList[0].thumbUrl = imageUrl;
+                this.setState({
+                    fileList,
+                    current: 0
+                });
             });
         }
     }
@@ -267,7 +276,6 @@ class Picture extends React.Component {
                                         current === -1 ? (
                                             <Dragger
                                                 action={restUrl.UPLOAD}
-                                                listType="picture-card"
                                                 onChange={this.handleChange}
                                             >
                                                 <p className="ant-upload-drag-icon">
