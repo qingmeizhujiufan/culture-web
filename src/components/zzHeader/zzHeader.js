@@ -63,14 +63,6 @@ class ZZHeader extends React.Component {
     constructor(props) {
         super(props);
 
-        this.menu = (
-            <Menu>
-                <Menu.Item>
-                    <span onClick={this.logout}>退出登录</span>
-                </Menu.Item>
-            </Menu>
-        );
-
         this.state = {
             tabs,
             openSearch: false,
@@ -159,15 +151,10 @@ class ZZHeader extends React.Component {
             if (data.success) {
                 localStorage.removeItem('token');
                 localStorage.removeItem('userId');
-                notification.open({
-                    message: '已安全退出！',
-                    icon: <Icon type="smile-circle" style={{color: '#108ee9'}}/>,
-                });
+                message.success('已安全退出！');
                 this.context.router.push('/login');
             } else {
-                notification.warning({
-                    message: data.backMsg
-                });
+                message.error(data.backMsg);
             }
         });
     }
@@ -296,6 +283,9 @@ class ZZHeader extends React.Component {
                                             <Menu>
                                                 <Menu.Item>
                                                     <Link to="frame/personal">个人中心</Link>
+                                                </Menu.Item>
+                                                <Menu.Item>
+                                                    <span onClick={this.logout}>退出登录</span>
                                                 </Menu.Item>
                                             </Menu>
                                         )}>

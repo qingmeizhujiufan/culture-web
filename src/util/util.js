@@ -109,3 +109,19 @@ export function listToTree(list) {
 
     return arr;
 }
+
+/**
+ * @param 时间格式化  eg：2018-08-04 14:48:01
+ */
+export function reverseToDate(time) {
+    if (typeof  time !== 'number') return null;
+    let curDate = new Date(time);
+    let year = curDate.getFullYear();
+    let month = ((curDate.getMonth() + 1) < 10 ? '0' + (curDate.getMonth() + 1) : (curDate.getMonth() + 1));
+    let day = (curDate.getDate() < 10 ? "0" + curDate.getDate() : curDate.getDate());
+    let hour = (curDate.getHours() < 10 ? '0' + curDate.getHours() : curDate.getHours());
+    let minutes = (curDate.getMinutes() < 10 ? "0" + curDate.getMinutes() : curDate.getMinutes());
+    let second = (curDate.getSeconds() < 10 ? "0" + curDate.getSeconds() : curDate.getSeconds());
+
+    return year + '-' + month +'-'+ day +' '+ hour + ':' + minutes + ':' + second;
+}

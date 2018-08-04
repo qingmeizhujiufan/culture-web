@@ -21,7 +21,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import _ from 'lodash';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
-import {shiftDate} from "Utils/util";
+import {shiftDate, reverseToDate} from "Utils/util";
 import '../index.less';
 
 const Dragger = Upload.Dragger;
@@ -379,7 +379,7 @@ class Picture extends React.Component {
                                                                     <div style={{
                                                                         color: '#7D7D7D',
                                                                         fontSize: 12
-                                                                    }}>{value.tasteCover[0].lastModified}</div>
+                                                                    }}>{reverseToDate(value.tasteCover[0].lastModified)}</div>
                                                                     <div style={{
                                                                         color: '#7D7D7D',
                                                                         fontSize: 12
@@ -388,11 +388,13 @@ class Picture extends React.Component {
                                                             </div>
                                                         </Col>
                                                         <Col span={10}>
-                                                            <div style={{
-                                                                fontSize: 14,
-                                                                color: '#170202'
-                                                            }}>{value.tasteTitle}</div>
-                                                            <div>{value.tasteBrief}</div>
+                                                            <div style={{float: 'right'}}>
+                                                                <div style={{
+                                                                    fontSize: 14,
+                                                                    color: '#170202'
+                                                                }}>{value.tasteTitle}</div>
+                                                                <div>{value.tasteBrief}</div>
+                                                            </div>
                                                         </Col>
                                                     </Row>
                                                 </div>
