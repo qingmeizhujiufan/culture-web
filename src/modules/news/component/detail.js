@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
+import PropTypes from 'prop-types';
 import {Row, Col, Icon, Badge, notification, Spin} from 'antd';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
@@ -78,7 +79,7 @@ class Detail extends React.Component {
 }
 
 Detail.contextTypes = {
-    router: React.PropTypes.object
+    router: PropTypes.object
 }
 
 export default Detail;

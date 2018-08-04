@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
+import PropTypes from 'prop-types';
 import {Row, Col, Icon, Button, message, Spin, Avatar, Input, List, Divider} from 'antd';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
@@ -193,7 +194,7 @@ class Detail extends React.Component {
 }
 
 Detail.contextTypes = {
-    router: React.PropTypes.object
+    router: PropTypes.object
 }
 
 export default Detail;

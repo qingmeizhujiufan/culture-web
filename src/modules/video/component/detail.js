@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
+import PropTypes from 'prop-types';
 import {Row, Col, Icon, Badge, message, Spin, Affix, Breadcrumb, Button} from 'antd';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
@@ -90,7 +91,7 @@ class VideoDetail extends React.Component {
 }
 
 VideoDetail.contextTypes = {
-    router: React.PropTypes.object
+    router: PropTypes.object
 }
 
 export default VideoDetail;

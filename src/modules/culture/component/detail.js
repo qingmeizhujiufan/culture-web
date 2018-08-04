@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {Row, Col, Icon, message, Spin, Affix} from 'antd';
 import draftToHtml from 'draftjs-to-html';
 import restUrl from 'RestUrl';
@@ -168,7 +169,7 @@ class Detail extends React.Component {
 }
 
 Detail.contextTypes = {
-    router: React.PropTypes.object
+    router: PropTypes.object
 }
 
 export default Detail;

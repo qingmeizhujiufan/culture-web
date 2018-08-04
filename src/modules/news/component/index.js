@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
+import PropTypes from 'prop-types';
 import {
     Row,
     Col,
@@ -242,7 +243,7 @@ class Index extends React.Component {
 }
 
 Index.contextTypes = {
-    router: React.PropTypes.object
+    router: PropTypes.object
 }
 
 export default Index;

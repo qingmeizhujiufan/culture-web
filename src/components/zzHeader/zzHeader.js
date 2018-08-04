@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
+import PropTypes from 'prop-types';
 import {
     Row,
     Col,
@@ -303,7 +304,7 @@ class ZZHeader extends React.Component {
 }
 
 ZZHeader.contextTypes = {
-    router: React.PropTypes.object
+    router: PropTypes.object
 }
 
 export default ZZHeader;

@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
+import PropTypes from 'prop-types';
 import {
     Row,
     Col,
@@ -530,7 +531,7 @@ class Picture extends React.Component {
 
 const WrappePicture = Form.create()(Picture);
 Picture.contextTypes = {
-    router: React.PropTypes.object
+    router: PropTypes.object
 }
 
 export default WrappePicture;

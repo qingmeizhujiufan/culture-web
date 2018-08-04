@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {Layout, Menu, Icon, Row, Col, Steps, Progress, List, Button, Carousel} from 'antd';
 import '../index.css';
 import '../home.less';
@@ -8,6 +9,7 @@ import news from 'Img/test/news.jpg';
 
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
+
 const queryHomeCulutreDetail = restUrl.ADDR + 'Server/queryHomeCulutreDetail';
 
 const data = [
@@ -35,22 +37,27 @@ class Index extends React.Component {
     }
 
     componentDidMount = () => {
-        this.queryHomeCulutreDetail();
+        this.queryHomeCultureDetail();
     }
 
-    queryHomeCulutreDetail = () => {
+    queryHomeCultureDetail = () => {
         ajax.getJSON(queryHomeCulutreDetail, '', (data) => {
             if (data.success) {
-                data = Object.values(data.backData);
-                /*console.log("data ===", data);*/
+                const cultureList = [];
+                data = data.backData;
+                for (let key in data) {
+                    cultureList.push(data[key]);
+                }
+
                 this.setState({
-                    cultureList: data
+                    cultureList
                 });
             } else {
                 message.error(data.backMsg);
             }
         });
     }
+
 
     render() {
         const {cultureList} = this.state;
@@ -131,19 +138,22 @@ class Index extends React.Component {
                                 <Carousel autoplay autoplaySpeed={5000}>
                                     {
                                         cultureList.map((item, index) => {
-                                            if(index % 3 === 0) {
+                                            if (index % 3 === 0) {
                                                 return (
                                                     <div key={index}>
                                                         <div className='img-list'>
                                                             <Row type='flex'>
                                                                 <Col className='wrap-img'>
-                                                                    <img src={restUrl.BASE_HOST + cultureList[index].filePath}/>
+                                                                    <img
+                                                                        src={restUrl.BASE_HOST + cultureList[index].filePath}/>
                                                                 </Col>
                                                                 <Col className='wrap-img' style={{margin: '0 18px'}}>
-                                                                    <img src={restUrl.BASE_HOST + cultureList[index+1].filePath}/>
+                                                                    <img
+                                                                        src={restUrl.BASE_HOST + cultureList[index + 1].filePath}/>
                                                                 </Col>
                                                                 <Col className='wrap-img'>
-                                                                    <img src={restUrl.BASE_HOST + cultureList[index+2].filePath}/>
+                                                                    <img
+                                                                        src={restUrl.BASE_HOST + cultureList[index + 2].filePath}/>
                                                                 </Col>
                                                             </Row>
                                                         </div>
@@ -170,7 +180,7 @@ class Index extends React.Component {
 }
 
 Index.contextTypes = {
-    router: React.PropTypes.object
+    router: PropTypes.object
 }
 
 export default Index;
