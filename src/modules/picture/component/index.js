@@ -158,6 +158,14 @@ class Picture extends React.Component {
         });
     }
 
+    beforeUpload = (file) => {
+        const isLt5M = file.size / 1024 / 1024 < 5;
+        if (!isLt5M) {
+            message.error('图片大小不能超过5M');
+        }
+        return isLt5M;
+    }
+
     handleChange = ({file, fileList}) => {
         console.log('fileList ==== ', fileList);
         if (fileList.length === 0) {
@@ -275,8 +283,10 @@ class Picture extends React.Component {
                                     {
                                         current === -1 ? (
                                             <Dragger
+                                                accept='.jpg,.jpeg,.png'
                                                 action={restUrl.UPLOAD}
                                                 onChange={this.handleChange}
+                                                beforeUpload={this.beforeUpload}
                                             >
                                                 <p className="ant-upload-drag-icon">
                                                     <Button className='zui-btn'>上传美图</Button>
@@ -321,10 +331,12 @@ class Picture extends React.Component {
                                                                     initialValue: fileList
                                                                 })(
                                                                     <Upload
+                                                                        accept='.jpg,.jpeg,.png'
                                                                         action={restUrl.UPLOAD}
                                                                         listType="picture-card"
                                                                         onPreview={this.handlePreview}
                                                                         onChange={this.handleChange}
+                                                                        beforeUpload={this.beforeUpload}
                                                                         className='zui-upload-picture-card'
                                                                     >
                                                                         {fileList.length >= 1 ? null : (<div>
@@ -339,13 +351,17 @@ class Picture extends React.Component {
                                                         <Col span={14}>
                                                             <FormItem
                                                             >
-                                                                {getFieldDecorator('tasteTitle', {})(
+                                                                {getFieldDecorator('tasteTitle', {
+                                                                    rules: [{required: true, message: '标题不能为空!'}]
+                                                                })(
                                                                     <Input placeholder="请输入标题"/>
                                                                 )}
                                                             </FormItem>
                                                             <FormItem
                                                             >
-                                                                {getFieldDecorator('tasteBrief', {})(
+                                                                {getFieldDecorator('tasteBrief', {
+                                                                    rules: [{required: true, message: '心情不能为空!'}]
+                                                                })(
                                                                     <TextArea rows={6} placeholder="请输入心情"/>
                                                                 )}
                                                             </FormItem>

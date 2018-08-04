@@ -5,9 +5,10 @@ import '../home.less';
 import banner1 from 'Img/test/banner1.png';
 import banner2 from 'Img/cover.jpg';
 import news from 'Img/test/news.jpg';
-import slider_1 from 'Img/slider_1.jpg';
-import slider_2 from 'Img/slider_2.jpg';
-import slider_3 from 'Img/slider_3.jpg';
+
+import restUrl from 'RestUrl';
+import ajax from 'Utils/ajax';
+const queryHomeCulutreDetail = restUrl.ADDR + 'Server/queryHomeCulutreDetail';
 
 const data = [
     {
@@ -28,13 +29,31 @@ class Index extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = {
+            cultureList: []
+        };
     }
 
     componentDidMount = () => {
+        this.queryHomeCulutreDetail();
+    }
+
+    queryHomeCulutreDetail = () => {
+        ajax.getJSON(queryHomeCulutreDetail, '', (data) => {
+            if (data.success) {
+                data = Object.values(data.backData);
+                /*console.log("data ===", data);*/
+                this.setState({
+                    cultureList: data
+                });
+            } else {
+                message.error(data.backMsg);
+            }
+        });
     }
 
     render() {
+        const {cultureList} = this.state;
         const arrowProps = {
             currentSlide: 1,
             slideCount: 3
@@ -110,51 +129,29 @@ class Index extends React.Component {
                             <p>最全面民俗旅游介绍、民俗艺术品的赏析</p>
                             <article className='box culture'>
                                 <Carousel autoplay autoplaySpeed={5000}>
-                                    <div>
-                                        <div className='img-list'>
-                                            <Row type='flex'>
-                                                <Col className='wrap-img'>
-                                                    <img src={slider_1}/>
-                                                </Col>
-                                                <Col className='wrap-img' style={{margin: '0 18px'}}>
-                                                    <img src={slider_2}/>
-                                                </Col>
-                                                <Col className='wrap-img'>
-                                                    <img src={slider_3}/>
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className='img-list'>
-                                            <Row type='flex'>
-                                                <Col className='wrap-img'>
-                                                    <img src={slider_1}/>
-                                                </Col>
-                                                <Col className='wrap-img' style={{margin: '0 18px'}}>
-                                                    <img src={slider_2}/>
-                                                </Col>
-                                                <Col className='wrap-img'>
-                                                    <img src={slider_3}/>
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className='img-list'>
-                                            <Row type='flex'>
-                                                <Col className='wrap-img'>
-                                                    <img src={slider_1}/>
-                                                </Col>
-                                                <Col className='wrap-img' style={{margin: '0 18px'}}>
-                                                    <img src={slider_2}/>
-                                                </Col>
-                                                <Col className='wrap-img'>
-                                                    <img src={slider_3}/>
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                    </div>
+                                    {
+                                        cultureList.map((item, index) => {
+                                            if(index % 3 === 0) {
+                                                return (
+                                                    <div key={index}>
+                                                        <div className='img-list'>
+                                                            <Row type='flex'>
+                                                                <Col className='wrap-img'>
+                                                                    <img src={restUrl.BASE_HOST + cultureList[index].filePath}/>
+                                                                </Col>
+                                                                <Col className='wrap-img' style={{margin: '0 18px'}}>
+                                                                    <img src={restUrl.BASE_HOST + cultureList[index+1].filePath}/>
+                                                                </Col>
+                                                                <Col className='wrap-img'>
+                                                                    <img src={restUrl.BASE_HOST + cultureList[index+2].filePath}/>
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })
+                                    }
                                 </Carousel>
                             </article>
                         </section>
