@@ -1,7 +1,9 @@
 import React from 'react';
 import {Layout, Icon, BackTop, Popover} from 'antd';
+import ReactPlayer from 'react-player';
 import ZZHeader from '../containers/zzHeader';
 import ZZFooter from 'Comps/zzFooter/zzFooter';
+// import Audio from '../assets/Say-Something.mp3';
 import followPublic from 'Img/followPublic.png';
 
 export default class App extends React.Component {
@@ -16,7 +18,15 @@ export default class App extends React.Component {
                 {this.props.children}
                 <ZZFooter/>
                 <div className='fix-music'>
-                    <div><Icon type="play-circle-o" style={{fontSize: 20}}/></div>
+                    <div>
+                        <Icon type="play-circle-o" style={{fontSize: 20}}/>
+                        <ReactPlayer
+                            url={'../src/assets/Say-Something.mp3'}
+                            playing
+                            width={0}
+                            height={0}
+                        />
+                    </div>
                 </div>
                 <Popover
                     placement="left"

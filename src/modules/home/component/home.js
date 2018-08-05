@@ -10,6 +10,7 @@ import news from 'Img/test/news.jpg';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
 
+const queryNewsListUrl = restUrl.ADDR + 'news/queryList';
 const queryHomeCulutreDetail = restUrl.ADDR + 'Server/queryHomeCulutreDetail';
 
 const data = [
@@ -32,12 +33,35 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
+            textNews: [],
+            pictureNews: [],
             cultureList: []
         };
     }
 
     componentDidMount = () => {
+        this.getNewsList();
         this.queryHomeCultureDetail();
+    }
+
+    getNewsList = callback => {
+        let param = {};
+        param.pageNumber = 1;
+        param.pageSize = 7;
+        param.conditionText = '';
+        param.cityId = null;
+        ajax.getJSON(queryNewsListUrl, param, data => {
+            if (data.success) {
+                data = data.backData;
+                this.setState({
+                    textNews: data.slice(0,4),
+                    pictureNews: data.slice(4)
+                });
+                console.log("data ===", data)
+            } else {
+                message.error(data.backMsg);
+            }
+        });
     }
 
     queryHomeCultureDetail = () => {
@@ -60,7 +84,7 @@ class Index extends React.Component {
 
 
     render() {
-        const {cultureList} = this.state;
+        const {cultureList, textNews, pictureNews} = this.state;
         const arrowProps = {
             currentSlide: 1,
             slideCount: 3
@@ -101,12 +125,12 @@ class Index extends React.Component {
                                         <List
                                             className='news-list'
                                             itemLayout="horizontal"
-                                            dataSource={data}
+                                            dataSource={textNews}
                                             renderItem={item => (
                                                 <List.Item>
                                                     <List.Item.Meta
-                                                        title={<a>{item.title}</a>}
-                                                        description="2018-07-08"
+                                                        title={<a>{item.newsTitle}</a>}
+                                                        description={item.create_time.slice(0,10)}
                                                     />
                                                 </List.Item>
                                             )}
@@ -114,18 +138,18 @@ class Index extends React.Component {
                                     </Col>
                                     <Col style={{width: 600, height: 370}}>
                                         <Carousel autoplay className='news-list-image'>
-                                            <div className='wrap-img'>
-                                                <img src={news}/>
-                                                <div className='news-title'>武汉特色早点红遍全国，十一年品质不变，不忘初</div>
-                                            </div>
-                                            <div className='wrap-img'>
-                                                <img src={news}/>
-                                                <div className='news-title'>武汉特色早点红遍全国，十一年品质不变，不忘初</div>
-                                            </div>
-                                            <div className='wrap-img'>
-                                                <img src={news}/>
-                                                <div className='news-title'>武汉特色早点红遍全国，十一年品质不变，不忘初</div>
-                                            </div>
+                                            {
+                                                pictureNews.map((item, index) => {
+                                                    return (
+                                                        <div key={index}>
+                                                            <div className='wrap-img'>
+                                                                <img src={restUrl.BASE_HOST + item.newsCover.filePath}/>
+                                                                <div className='news-title'>{item.newsTitle}</div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
                                         </Carousel>
                                     </Col>
                                 </Row>
