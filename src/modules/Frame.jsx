@@ -1,33 +1,78 @@
 import React from 'react';
 import {Layout, Icon, BackTop, Popover} from 'antd';
 import ReactPlayer from 'react-player';
+import restUrl from 'RestUrl';
+import ajax from 'Utils/ajax';
 import ZZHeader from '../containers/zzHeader';
 import ZZFooter from 'Comps/zzFooter/zzFooter';
-// import Audio from '../assets/Say-Something.mp3';
 import followPublic from 'Img/followPublic.png';
+
+const queryMusicUrl = restUrl.ADDR + 'Server/queryMusic';
 
 export default class App extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            data: {},
+            stop: false,
+        };
+    }
+
+    componentDidMount = () => {
+        this.queryMusicDetail();
+    }
+
+    queryMusicDetail = () => {
+        this.setState({
+            loading: true
+        });
+        let param = {};
+        ajax.getJSON(queryMusicUrl, param, data => {
+            if (data.success) {
+                if (data.music && data.music.bgMusic) {
+                    this.setState({
+                        data: data.music.bgMusic,
+                    });
+                }
+            }
+        });
+    }
+
+    controlMusic = () => {
+        this.setState({
+            stop: !this.state.stop
+        });
     }
 
     render() {
+        const {data, stop} = this.state;
+
         return (
             <Layout style={{minHeight: '100vh'}}>
                 <ZZHeader/>
                 {this.props.children}
                 <ZZFooter/>
-                <div className='fix-music'>
-                    <div>
-                        <Icon type="play-circle-o" style={{fontSize: 20}}/>
-                        <ReactPlayer
-                            url={'../src/assets/Say-Something.mp3'}
-                            playing
-                            width={0}
-                            height={0}
-                        />
+                <Popover
+                    placement="left"
+                    content={(
+                        <div>
+                            <h3>{data.fileName}</h3>
+                            <ReactPlayer
+                                url={restUrl.BASE_HOST + data.filePath}
+                                loop
+                                playing={stop}
+                                width={0}
+                                height={0}
+                            />
+                        </div>)}
+                >
+                    <div className='fix-music'>
+                        <div onClick={this.controlMusic}>
+                            <Icon type="play-circle-o" style={{fontSize: 20}}/>
+                        </div>
                     </div>
-                </div>
+                </Popover>
                 <Popover
                     placement="left"
                     content={(
