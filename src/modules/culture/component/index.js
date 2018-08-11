@@ -121,7 +121,8 @@ class Index extends React.Component {
                         to={'/frame/culture/detail/' + item.id}>{item.cultureTitle}</Link>}
                     description={<div>
                         <p>{item.cultureBrief.length > 100 ? `${item.cultureBrief.substring(0, 100)}...` : item.cultureBrief}</p>
-                        <p className='read-info'><Icon type="eye-o"/> {item.readNum}人<span style={{marginLeft: 35}}><Icon
+                        <p className='read-info'><Icon type="eye-o"/> {item.readNum}人<span
+                            style={{marginLeft: 35}}><Icon
                             type="star-o"/> {item.collectNum}人</span></p>
                     </div>}
                 />
@@ -137,7 +138,7 @@ class Index extends React.Component {
                         <img src={item.artCover ? (restUrl.BASE_HOST + item.artCover[0].filePath) : null}/>
                     </div>
                     <div className='zui-card-item-content'>
-                        <div>{item.artTitle}</div>
+                        <div className='zui-ellipsis'>{item.artTitle}</div>
                         <div className='price'>{`¥${item.artMoney.toFixed(2)}`}</div>
                     </div>
                     <div className='zui-card-item-footer'>

@@ -116,7 +116,7 @@ class ZZHeader extends React.Component {
                 this.setState({
                     messageList
                 });
-            }else {
+            } else {
                 message.error(data.backMsg);
             }
         });
@@ -233,49 +233,9 @@ class ZZHeader extends React.Component {
                                         <Divider type="vertical"/>
                                     </Col>
                                     <Col style={{width: 60, textAlign: 'center'}} onClick={this.showModal}>
-                                            <Badge count={messageList.length}>
-                                                <Icon type="bell" className='fontsize-20 message'/>
-                                            </Badge>
-                                            <Modal
-                                                title="消息列表"
-                                                wrapClassName='zui-message-modal'
-                                                maskStyle={{
-                                                    background: 'rgba(237,236,234, 0.5373)'
-                                                }}
-                                                visible={visible}
-                                                onCancel={this.hideModal}
-                                                footer={null}
-                                            >
-                                                <List
-                                                    itemLayout="vertical"
-                                                    size="large"
-                                                    dataSource={messageList}
-                                                    renderItem={item => (
-                                                        <List.Item
-                                                            key={item.id}
-                                                            actions={[<a
-                                                                onClick={() => this.onDelete(item.id)}>删除</a>]}
-                                                            style={{
-                                                                padding: 0,
-                                                                backgroundColor: '#fff'
-                                                            }}
-                                                        >
-                                                            <List.Item.Meta
-                                                                avatar={<Icon type="notification" />}
-                                                                title={(<div>
-                                                                    {item.messageTitle}
-                                                                    <span style={{
-                                                                        marginLeft: 8,
-                                                                        fontSize: 12,
-                                                                        color: '#7D7D7D'
-                                                                    }}>{shiftDate(item.create_time)}</span>
-                                                                </div>)}
-                                                                description={item.messageContent}
-                                                            />
-                                                        </List.Item>
-                                                    )}
-                                                />
-                                            </Modal>
+                                        <Badge count={messageList.length}>
+                                            <Icon type="bell" className='fontsize-20 message'/>
+                                        </Badge>
                                     </Col>
                                     <Col style={{width: 130}}>
                                         <Avatar size="small" src={defaultUser}
@@ -298,6 +258,46 @@ class ZZHeader extends React.Component {
                         </Row>
                     </div>
                 </header>
+                <Modal
+                    title="消息列表"
+                    wrapClassName='zui-message-modal'
+                    maskStyle={{
+                        background: 'rgba(237,236,234, 0.5373)'
+                    }}
+                    visible={visible}
+                    onCancel={this.hideModal}
+                    footer={null}
+                >
+                    <List
+                        itemLayout="vertical"
+                        size="large"
+                        dataSource={messageList}
+                        renderItem={item => (
+                            <List.Item
+                                key={item.id}
+                                actions={[<a
+                                    onClick={() => this.onDelete(item.id)}>删除</a>]}
+                                style={{
+                                    padding: 0,
+                                    backgroundColor: '#fff'
+                                }}
+                            >
+                                <List.Item.Meta
+                                    avatar={<Icon type="notification" />}
+                                    title={(<div>
+                                        {item.messageTitle}
+                                        <span style={{
+                                            marginLeft: 8,
+                                            fontSize: 12,
+                                            color: '#7D7D7D'
+                                        }}>{shiftDate(item.create_time)}</span>
+                                    </div>)}
+                                    description={item.messageContent}
+                                />
+                            </List.Item>
+                        )}
+                    />
+                </Modal>
             </Affix>
         );
     }

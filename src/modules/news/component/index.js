@@ -173,7 +173,9 @@ class Index extends React.Component {
                     avatar={<img style={{width: 232, height: 180}}
                                  src={restUrl.BASE_HOST + item.newsCover.filePath}/>}
                     title={<Link
-                        to={'/frame/news/detail/' + item.id}>{item.newsTitle}</Link>}
+                        to={'/frame/news/detail/' + item.id}
+                        className='zui-ellipsis-2'
+                    >{item.newsTitle}</Link>}
                     description={<div>
                         <p>{item.newsBrief.length > 100 ? `${item.newsBrief.substring(0, 100)}...` : item.newsBrief}</p>
                         <p className='read-info'><Icon type="eye-o"/> {item.readNum}人</p>

@@ -88,11 +88,30 @@
     }
 }
 
+.zui-breadcrumb {
+    .ant-breadcrumb-separator {
+        color: #000;
+    }
+
+    .ant-breadcrumb > span:last-child {
+        color: #170202;
+    }
+}
+
 .page-culture-detail {
+
+    .base-info {
+
+        .title {
+            margin-top: 13px;
+            font-size: 24px;
+            line-height: 33px;
+        }
+    }
 
     .top5 {
         width: 240px;
-        height: 350px;
+        height: 289px;
         border: 1px solid #EFEFEF;
         background-color: #fff;
         box-shadow: 0px 0px 5px 4px rgba(239, 239, 239, 0.5);
@@ -105,6 +124,15 @@
             line-height: 50px;
             text-align: center;
             background: rgba(158, 125, 107, 1);
+        }
+
+        .recommend-list {
+            padding: 22px 10px 0 38px;
+            color: #B47B4D;
+
+            & > div {
+                margin-bottom: 22px;
+            }
         }
     }
 }
@@ -155,15 +183,6 @@
     }
 
     .art-info {
-        .zui-breadcrumb {
-            .ant-breadcrumb-separator {
-                color: #000;
-            }
-
-            .ant-breadcrumb > span:last-child {
-                color: #170202;
-            }
-        }
 
         .date {
             color: #999999;

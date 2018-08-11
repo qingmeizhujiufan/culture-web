@@ -32,14 +32,20 @@ class ArtDetail extends React.Component {
     }
 
     componentDidMount() {
-        this.queryDetail();
+        this.queryDetail(this.props.params.id);
         this.queryRecommendTop3();
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.params.id !== this.props.params.id) {
+            this.queryDetail(nextProps.params.id);
+        }
+    }
+
     //获取艺术品详情
-    queryDetail = () => {
+    queryDetail = id => {
         let param = {};
-        param.id = this.props.params.id;
+        param.id = id;
         this.setState({
             loading: true
         });
@@ -252,7 +258,7 @@ class ArtDetail extends React.Component {
                                                                             src={item.artCover ? (restUrl.BASE_HOST + item.artCover[0].filePath) : null}/>
                                                                     </div>
                                                                     <div className='zui-card-item-content'>
-                                                                        <div>{item.artTitle}</div>
+                                                                        <div className='zui-ellipsis'>{item.artTitle}</div>
                                                                         <div
                                                                             className='price'>{item.artMoney ? `¥${item.artMoney.toFixed(2)}` : '¥--'}</div>
                                                                     </div>

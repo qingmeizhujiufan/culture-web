@@ -87,7 +87,7 @@ class Index extends React.Component {
                         <div>
                             <div className='banner' style={{backgroundImage: `url(${banner1})`}}>
                                 <div className='carousel-content'>
-                                    <h1>湖北民俗文化</h1>
+                                    <h1 className='iconfont icon-shouyewenzi'></h1>
                                     <p>专注名俗文化传播，传承湖北民俗文化</p>
                                 </div>
                             </div>
@@ -95,7 +95,7 @@ class Index extends React.Component {
                         <div>
                             <div className='banner' style={{backgroundImage: `url(${banner2})`}}>
                                 <div className='carousel-content'>
-                                    <h1>湖北民俗文化</h1>
+                                    <h1 className='iconfont icon-shouyewenzi'></h1>
                                     <p>专注名俗文化传播，传承湖北民俗文化</p>
                                 </div>
                             </div>
@@ -103,7 +103,7 @@ class Index extends React.Component {
                         <div>
                             <div className='banner' style={{backgroundImage: `url(${banner3})`}}>
                                 <div className='carousel-content'>
-                                    <h1>湖北民俗文化</h1>
+                                    <h1 className='iconfont icon-shouyewenzi'></h1>
                                     <p>专注名俗文化传播，传承湖北民俗文化</p>
                                 </div>
                             </div>
@@ -125,7 +125,7 @@ class Index extends React.Component {
                                             renderItem={item => (
                                                 <List.Item>
                                                     <List.Item.Meta
-                                                        title={<a>{item.newsTitle}</a>}
+                                                        title={<a className='zui-ellipsis' style={{width: 464, display: 'block'}}>{item.newsTitle}</a>}
                                                         description={item.create_time.slice(0,10)}
                                                     />
                                                 </List.Item>
@@ -133,14 +133,17 @@ class Index extends React.Component {
                                         />
                                     </Col>
                                     <Col style={{width: 600, height: 370}}>
-                                        <Carousel autoplay className='news-list-image'>
+                                        <Carousel
+                                            autoplay
+                                            className='news-list-image'
+                                        >
                                             {
                                                 pictureNews.map((item, index) => {
                                                     return (
                                                         <div key={index}>
                                                             <div className='wrap-img'>
                                                                 <img src={restUrl.BASE_HOST + item.newsCover.filePath}/>
-                                                                <div className='news-title'>{item.newsTitle}</div>
+                                                                <div className='news-title zui-ellipsis' style={{width: 600, paddingRight: 100}}>{item.newsTitle}</div>
                                                             </div>
                                                         </div>
                                                     )

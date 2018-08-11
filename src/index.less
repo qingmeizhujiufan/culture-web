@@ -242,7 +242,7 @@ a.ant-btn {
 }
 
 .ant-select-open .ant-select-selection,
-.ant-select-focused .ant-select-selection{
+.ant-select-focused .ant-select-selection {
     box-shadow: none !important;
 }
 
@@ -303,6 +303,11 @@ a.ant-btn {
     border: 1px solid #cecece;
     background-color: #fff;
     cursor: pointer;
+
+    .icon-music.spinning {
+        display: block;
+        animation: 3s linear infinite CDturn;
+    }
 }
 
 .zui-btn,
@@ -504,5 +509,33 @@ a.ant-btn {
     .read-num {
         font-size: 14px;
         color: #7F7F7F;
+    }
+}
+
+.zui-ellipsis {
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.zui-ellipsis-2 {
+    display: -webkit-box;
+    overflow: hidden;
+
+    white-space: normal !important;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+@keyframes CDturn {
+    from {
+        transform: rotate(0deg)
+    }
+    to {
+        transform: rotate(360deg)
     }
 }

@@ -69,7 +69,7 @@ export default class App extends React.Component {
                 >
                     <div className='fix-music'>
                         <div onClick={this.controlMusic}>
-                            <Icon type="play-circle-o" style={{fontSize: 20}}/>
+                            <span className={`iconfont icon-music ${stop ? 'spinning' : null}`} style={{fontSize: 26}}/>
                         </div>
                     </div>
                 </Popover>
