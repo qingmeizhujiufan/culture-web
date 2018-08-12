@@ -16,11 +16,22 @@ export default class App extends React.Component {
         this.state = {
             data: {},
             stop: false,
+            hashChange: 1
         };
     }
 
     componentDidMount = () => {
         this.queryMusicDetail();
+
+        window.addEventListener('hashchange', this.setHash);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('hashchange', this.setHash);
+    }
+
+    setHash = () => {
+        this.setState({hashChange: ++this.state.hashChange});
     }
 
     queryMusicDetail = () => {
@@ -46,11 +57,11 @@ export default class App extends React.Component {
     }
 
     render() {
-        const {data, stop} = this.state;
+        const {data, stop, hashChange} = this.state;
 
         return (
             <Layout style={{minHeight: '100vh'}}>
-                <ZZHeader/>
+                <ZZHeader hash={hashChange}/>
                 {this.props.children}
                 <ZZFooter/>
                 <Popover

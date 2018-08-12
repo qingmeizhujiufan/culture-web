@@ -73,6 +73,20 @@ class ZZHeader extends React.Component {
     }
 
     componentWillMount = () => {
+        this.selectActiveTab();
+    }
+
+    componentDidMount = () => {
+        this.queryMessageList();
+    }
+
+    componentWillReceiveProps = nextProps => {
+        if ('hash' in nextProps && nextProps.hash !== this.props.hash) {
+            this.selectActiveTab();
+        }
+    }
+
+    selectActiveTab = () => {
         const {tabs} = this.state;
         const router = this.context.router;
         const pathname = router.location.pathname;
@@ -89,10 +103,6 @@ class ZZHeader extends React.Component {
                 return;
             }
         });
-    }
-
-    componentDidMount = () => {
-        this.queryMessageList();
     }
 
     queryMessageList = () => {
@@ -283,7 +293,7 @@ class ZZHeader extends React.Component {
                                 }}
                             >
                                 <List.Item.Meta
-                                    avatar={<Icon type="notification" />}
+                                    avatar={<Icon type="notification"/>}
                                     title={(<div>
                                         {item.messageTitle}
                                         <span style={{

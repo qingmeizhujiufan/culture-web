@@ -13,6 +13,7 @@ import ZZComment from 'Comps/zzComment/';
 const queryDetailUrl = restUrl.ADDR + 'culture/queryDetail';
 const queryCommentListUrl = restUrl.ADDR + 'culture/queryCommentList';
 const queryRecommendTop5Url = restUrl.ADDR + 'culture/queryRecommendTop5';
+const queryAdsenseUrl = restUrl.ADDR + 'ad/queryAdsense';
 const addUrl = restUrl.ADDR + 'culture/add';
 const collectUrl = restUrl.ADDR + 'culture/collect';
 
@@ -23,7 +24,8 @@ class Detail extends React.Component {
         this.state = {
             loading: false,
             data: {},
-            recommendList: []
+            recommendList: [],
+            ad: {}
         };
     }
 
@@ -33,6 +35,7 @@ class Detail extends React.Component {
     componentDidMount() {
         this.queryDetail(this.props.params.id);
         this.queryRecommendTop5();
+        this.queryAdsense();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -89,6 +92,19 @@ class Detail extends React.Component {
         });
     }
 
+    //获取广告位
+    queryAdsense = () => {
+        const param = {};
+        param.adsense = 'culture_1';
+        ajax.getJSON(queryAdsenseUrl, param, data => {
+           if(data.success && data.backData){
+               this.setState({
+                   ad: data.backData
+               });
+           }
+        });
+    }
+
     collect = () => {
         const param = {};
         param.cultureId = this.props.params.id;
@@ -128,7 +144,7 @@ class Detail extends React.Component {
     }
 
     render() {
-        const {loading, data, recommendList} = this.state;
+        const {loading, data, recommendList, ad} = this.state;
 
         return (
             <div className='page-culture-detail'>
@@ -210,6 +226,12 @@ class Detail extends React.Component {
                                                     })
                                                 }
                                             </div>
+                                        </div>
+                                        {/* 广告位 */}
+                                        <div className='ad'>
+                                            <a>
+                                                <img src={(ad.adCover && ad.adCover.filePath) ? restUrl.BASE_HOST + ad.adCover.filePath : null}/>
+                                            </a>
                                         </div>
                                     </Affix>
                                 </Col>

@@ -464,11 +464,14 @@ class Picture extends React.Component {
                                                     <div className='creator'>
                                                         <Row type="flex" justify="space-between">
                                                             <Col span={11} offset={1}>
-                                                                <Avatar style={{
-                                                                    marginRight: 5,
-                                                                    verticalAlign: '-7px',
-                                                                }} size="small"
-                                                                        src={restUrl.BASE_HOST + item.avatar.filePath}
+                                                                <Avatar
+                                                                    style={{
+                                                                        marginRight: 5,
+                                                                        verticalAlign: '-7px',
+                                                                    }}
+                                                                    size="small"
+                                                                    icon='user'
+                                                                    src={(item.avatar && item.avatar.filePath) ? restUrl.BASE_HOST + item.avatar.filePath : null}
                                                                 /> {item.creatorName}
                                                             </Col>
                                                             <Col span={11}>
@@ -479,6 +482,17 @@ class Picture extends React.Component {
                                                         </Row>
                                                     </div>
                                                     <div className='extra'>
+                                                        {
+                                                            item.tasteBrief ? (
+                                                                <div
+                                                                    className='zui-ellipsis-2'
+                                                                    style={{
+                                                                        padding: 18,
+                                                                        fontSize: 12,
+                                                                        lineHeight: '25px'
+                                                                    }}>{item.tasteBrief}</div>
+                                                            ) : null
+                                                        }
                                                         <Row>
                                                             <Col span={8} offset={1}>
                                                                 <Tooltip placement="top"

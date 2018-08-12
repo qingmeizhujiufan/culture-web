@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router';
 import PropTypes from 'prop-types';
 import {Layout, Menu, Icon, Row, Col, Steps, Progress, List, Button, Carousel} from 'antd';
 import '../index.css';
@@ -39,7 +40,7 @@ class Index extends React.Component {
             if (data.success) {
                 data = data.backData;
                 this.setState({
-                    textNews: data.slice(0,4),
+                    textNews: data.slice(0, 4),
                     pictureNews: data.slice(4)
                 });
                 console.log("data ===", data)
@@ -125,8 +126,11 @@ class Index extends React.Component {
                                             renderItem={item => (
                                                 <List.Item>
                                                     <List.Item.Meta
-                                                        title={<a className='zui-ellipsis' style={{width: 464, display: 'block'}}>{item.newsTitle}</a>}
-                                                        description={item.create_time.slice(0,10)}
+                                                        title={<Link to={`/frame/news/detail/${item.id}`} className='zui-ellipsis' style={{
+                                                            width: 464,
+                                                            display: 'block'
+                                                        }}>{item.newsTitle}</Link>}
+                                                        description={item.create_time.slice(0, 10)}
                                                     />
                                                 </List.Item>
                                             )}
@@ -142,8 +146,14 @@ class Index extends React.Component {
                                                     return (
                                                         <div key={index}>
                                                             <div className='wrap-img'>
-                                                                <img src={restUrl.BASE_HOST + item.newsCover.filePath}/>
-                                                                <div className='news-title zui-ellipsis' style={{width: 600, paddingRight: 100}}>{item.newsTitle}</div>
+                                                                <Link to={`/frame/news/detail/${item.id}`}>
+                                                                    <img
+                                                                        src={restUrl.BASE_HOST + item.newsCover.filePath}/>
+                                                                    <div className='news-title zui-ellipsis' style={{
+                                                                        width: 600,
+                                                                        paddingRight: 100
+                                                                    }}>{item.newsTitle}</div>
+                                                                </Link>
                                                             </div>
                                                         </div>
                                                     )

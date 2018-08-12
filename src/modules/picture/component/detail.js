@@ -1,19 +1,21 @@
 import React from 'react';
 import {Link} from 'react-router';
 import PropTypes from 'prop-types';
-import {Row, Col, Icon, Button, message, Spin, Avatar, Input, List, Divider} from 'antd';
+import {Row, Col, Icon, Button, message, Spin, Avatar, Input, List, Divider, Affix} from 'antd';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
 import _ from 'lodash';
 import {listToTree, shiftDate} from "Utils/util";
 import ZZComment from 'Comps/zzComment/';
 import '../index.less';
+import top5 from "Img/top5.png";
 
 const {TextArea} = Input;
 const queryDetailUrl = restUrl.ADDR + 'taste/queryDetail';
 const queryCommentListUrl = restUrl.ADDR + 'taste/queryCommentList';
 const addUrl = restUrl.ADDR + 'taste/add';
 const queryUserOtherPicUrl = restUrl.ADDR + 'taste/queryUserOtherPic';
+const queryAdsenseUrl = restUrl.ADDR + 'ad/queryAdsense';
 
 class Detail extends React.Component {
     constructor(props) {
@@ -23,7 +25,9 @@ class Detail extends React.Component {
             loading: false,
             data: {},
             commentList: [],
-            otherShow: []
+            otherShow: [],
+            ad_1: {},
+            ad_2: {}
         };
 
         this.handleCommentList = this.handleCommentList.bind(this);
@@ -34,10 +38,12 @@ class Detail extends React.Component {
 
     componentDidMount() {
         this.queryDetail(this.props.params.id);
+        this.queryAdsense('taste_1');
+        this.queryAdsense('taste_2');
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.params.id !== this.props.params.id) {
+        if (nextProps.params.id !== this.props.params.id) {
             this.queryDetail(nextProps.params.id);
         }
     }
@@ -67,6 +73,26 @@ class Detail extends React.Component {
         });
     }
 
+    //获取广告位
+    queryAdsense = adsense => {
+        const param = {};
+        param.adsense = adsense;
+        ajax.getJSON(queryAdsenseUrl, param, data => {
+            if (data.success && data.backData) {
+                if (adsense === 'taste_1') {
+                    this.setState({
+                        ad_1: data.backData
+                    });
+                }
+                if (adsense === 'taste_2') {
+                    this.setState({
+                        ad_2: data.backData
+                    });
+                }
+            }
+        });
+    }
+
     handleCommentList = commentList => {
         this.setState({commentList});
     }
@@ -87,7 +113,7 @@ class Detail extends React.Component {
     }
 
     render() {
-        const {loading, data, commentList, otherShow} = this.state;
+        const {loading, data, commentList, otherShow, ad_1, ad_2} = this.state;
 
         return (
             <div className='page-picture-detail'>
@@ -97,15 +123,19 @@ class Detail extends React.Component {
                             <Row type='flex' justify="space-between" align="middle" style={{height: 140}}>
                                 <Col span={16}>
                                     <div className='base-info'>
-                                        <h1 className="title">{data.tasteBrief}</h1>
+                                        <h1 className="title">{data.tasteTitle}</h1>
                                         <span
                                             className="date">{data.create_time ? shiftDate(data.create_time) + '发布' : null}</span>
                                     </div>
                                 </Col>
                                 <Col span={8}>
                                     <div style={{textAlign: 'right'}}>
-                                        <span style={{marginRight: 30}}><Avatar
-                                            src={data.avatar ? restUrl.BASE_HOST + data.avatar.filePath : ''}/> {data.creatorName}</span>
+                                        <span style={{marginRight: 30}}>
+                                            <Avatar
+                                                icon='user'
+                                                src={(data.avatar && data.avatar.filePath) ? restUrl.BASE_HOST + data.avatar.filePath : null}
+                                            /> {data.creatorName}
+                                        </span>
                                         <span style={{marginRight: 30}}><Icon
                                             type="message"/> {commentList.length}</span>
                                         <span><Icon type="heart-o"/> {data.likeNum}</span>
@@ -116,19 +146,43 @@ class Detail extends React.Component {
                     </div>
                     <div className='page-content'>
                         <div className='content'>
-                            <div
-                                style={{width: 900, margin: '25px 0', textAlign: 'center', backgroundColor: '#f5f5f5'}}>
-                                <img src={data.tasteCover ? restUrl.BASE_HOST + data.tasteCover.filePath : ''}
-                                     style={{maxWidth: '100%'}}/>
-                            </div>
-                            <p style={{fontSize: 14, color: '#7D7D7D'}}>{data.tasteBrief}</p>
-                            <ZZComment
-                                avatar={data.avatar ? restUrl.BASE_HOST + data.avatar.filePath : null}
-                                queryUrl={queryCommentListUrl}
-                                saveUrl={addUrl}
-                                queryParams={{tasteId: this.props.params.id}}
-                                commentList={this.handleCommentList}
-                            />
+                            <Row type='flex' justify="space-between" align="top" style={{marginTop: 50}}>
+                                <Col style={{width: 900}}>
+                                    <div
+                                        style={{
+                                            width: 900,
+                                            margin: '25px 0',
+                                            textAlign: 'center',
+                                            backgroundColor: '#f5f5f5'
+                                        }}>
+                                        <img src={data.tasteCover ? restUrl.BASE_HOST + data.tasteCover.filePath : ''}
+                                             style={{maxWidth: '100%'}}/>
+                                    </div>
+                                    <p style={{fontSize: 14, color: '#7D7D7D'}}>{data.tasteBrief}</p>
+                                    <ZZComment
+                                        avatar={data.avatar ? restUrl.BASE_HOST + data.avatar.filePath : null}
+                                        queryUrl={queryCommentListUrl}
+                                        saveUrl={addUrl}
+                                        queryParams={{tasteId: this.props.params.id}}
+                                        commentList={this.handleCommentList}
+                                    />
+                                </Col>
+                                <Col>
+                                    {/* 广告位 */}
+                                    <div className='ad'>
+                                        <a>
+                                            <img
+                                                src={(ad_1.adCover && ad_1.adCover.filePath) ? restUrl.BASE_HOST + ad_1.adCover.filePath : null}/>
+                                        </a>
+                                    </div>
+                                    <div className='ad'>
+                                        <a>
+                                            <img
+                                                src={(ad_2.adCover && ad_2.adCover.filePath) ? restUrl.BASE_HOST + ad_2.adCover.filePath : null}/>
+                                        </a>
+                                    </div>
+                                </Col>
+                            </Row>
                         </div>
                     </div>
                     <div className='page-content' style={{backgroundColor: '#FAFAFA'}}>
@@ -152,11 +206,14 @@ class Detail extends React.Component {
                                                         <div className='creator'>
                                                             <Row type="flex" justify="space-between">
                                                                 <Col span={11} offset={1}>
-                                                                    <Avatar style={{
-                                                                        marginRight: 5,
-                                                                        verticalAlign: '-7px',
-                                                                    }} size="small"
-                                                                            src={restUrl.BASE_HOST + item.avatar.filePath}
+                                                                    <Avatar
+                                                                        style={{
+                                                                            marginRight: 5,
+                                                                            verticalAlign: '-7px',
+                                                                        }}
+                                                                        size="small"
+                                                                        icon='user'
+                                                                        src={(item.avatar && item.avatar.filePath) ? restUrl.BASE_HOST + item.avatar.filePath : null}
                                                                     /> {item.creatorName}
                                                                 </Col>
                                                                 <Col span={11}>
