@@ -34,6 +34,7 @@ class Index extends React.Component {
                 id: '',
                 cityName: '湖北'
             }],
+            showMoreCity: false,
             conditionText: '',
             activeCity: ''
         };
@@ -67,6 +68,12 @@ class Index extends React.Component {
 
     onChangeType = type => {
         this.setState({type});
+    }
+
+    onMoreCity = () => {
+        this.setState({
+            showMoreCity: !this.state.showMoreCity
+        });
     }
 
     onChangeCity = id => {
@@ -158,7 +165,7 @@ class Index extends React.Component {
     }
 
     render() {
-        const {activeCity, cityList, type, conditionText} = this.state;
+        const {activeCity, cityList, type, conditionText, showMoreCity} = this.state;
 
         return (
             <div className='page-culture'>
@@ -186,7 +193,9 @@ class Index extends React.Component {
                         </Col>
                     </Row>
                 </div>
-                <div className="page-content city-section">
+                <div className="page-content city-section"
+                     style={{height: showMoreCity ? 'auto' : 53}}
+                >
                     <div className="content clearfix">
                         <ul className='zui-unstyled inline zui-pull-left city-list'>
                             {
@@ -198,8 +207,8 @@ class Index extends React.Component {
                                 })
                             }
                         </ul>
-                        <div className='zui-pull-right'>
-                            <span>更多</span>
+                        <div className='content-more' onClick={this.onMoreCity}>
+                            <span>更多<Icon type ={showMoreCity ? 'up': 'down'} style={{marginLeft:5}}></Icon></span>
                         </div>
                     </div>
                 </div>
