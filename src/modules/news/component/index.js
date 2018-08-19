@@ -59,6 +59,13 @@ class Index extends React.Component {
         this.getCityList();
     }
 
+    componentWillReceiveProps = nextProps => {
+        this.setState({
+            loading: true,
+            conditionText: sessionStorage.getItem('searchValue') ? sessionStorage.getItem('searchValue') : ''
+        })
+    }
+
     getCityList = () => {
         let param = {};
         ajax.getJSON(queryCityListUrl, param, data => {

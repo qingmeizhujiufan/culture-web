@@ -43,10 +43,14 @@ class Index extends React.Component {
     }
 
     componentDidMount = () => {
-        this.setState({
-            conditionText: localStorage.getItem('searchValue')? localStorage.getItem('searchValue'): ''
-        })
         this.getCityList();
+    }
+
+    componentWillReceiveProps = nextProps => {
+        this.setState({
+            loading: true,
+            conditionText: sessionStorage.getItem('searchValue') ? sessionStorage.getItem('searchValue') : ''
+        })
     }
 
     getCityList = () => {
@@ -154,8 +158,8 @@ class Index extends React.Component {
     }
 
     render() {
-        const {conditionText, activeCity, cityList, type} = this.state;
-        const searchValue = localStorage.getItem('searchValue');
+        const {activeCity, cityList, type, conditionText} = this.state;
+
         return (
             <div className='page-culture'>
                 <div className="page-content culture-bg">
@@ -171,7 +175,7 @@ class Index extends React.Component {
                                     </div>
                                     <Search
                                         placeholder="请输入搜索的内容"
-                                        defaultValue = {searchValue}
+                                        defaultValue={conditionText}
                                         enterButton={<span><Icon type="search"/> 搜索</span>}
                                         size="large"
                                         onSearch={value => this.onSearch(value)}

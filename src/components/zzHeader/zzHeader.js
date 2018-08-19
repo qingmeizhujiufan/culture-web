@@ -69,7 +69,8 @@ class ZZHeader extends React.Component {
             openSearch: false,
             messageList: [],
             visible: false,
-            searchValue: ''
+            searchValue: '',
+            defaultOption: 'culture'
         };
     }
 
@@ -152,8 +153,7 @@ class ZZHeader extends React.Component {
         this.setState({
             tabs,
         });
-        localStorage.removeItem('searchValue')
-
+        sessionStorage.removeItem('searchValue')
         this.context.router.push(tabs[index].link);
     }
 
@@ -174,43 +174,45 @@ class ZZHeader extends React.Component {
 
     getSelected = value => {
         this.setState({
-            option: value
+            defaultOption: value
         })
     }
 
     onSearch = (value, event) => {
-        let storage = window.localStorage;
-        storage.setItem('searchValue', value);
-        if (this.state.openSearch) {
-            let nextRouter = '';
-            let index = null;
-            switch (this.state.option) {
-                case 'culture':
-                    nextRouter = "culture/list";
-                    index = 1;
-                    break;
-                case  'news':
-                    nextRouter = "news/list";
-                    index = 2;
-                    break;
-                case  'picture':
-                    nextRouter = "picture/list";
-                    index = 3;
-                    break;
-                case  'video':
-                    nextRouter = "video/list";
-                    index = 4;
-                    break;
-                default:
-                    nextRouter = "culture/list";
-                    index = 1;
-            }
-            this.context.router.push('/frame/' + nextRouter);
-        }
         this.setState({
-            openSearch: !this.state.openSearch,
-            option: ''
+            openSearch: !this.state.openSearch
         }, () => {
+            if (!this.state.openSearch) {
+                let storage = window.sessionStorage;
+                storage.setItem('searchValue', value);
+                storage.setItem('searchOption', this.state.defaultOption);
+
+                let nextRouter = '';
+                let index = null;
+                let option = sessionStorage.getItem('searchOption');
+                switch (option) {
+                    case 'culture':
+                        nextRouter = "culture/list";
+                        index = 1;
+                        break;
+                    case  'news':
+                        nextRouter = "news/list";
+                        index = 2;
+                        break;
+                    case  'picture':
+                        nextRouter = "picture/list";
+                        index = 3;
+                        break;
+                    case  'video':
+                        nextRouter = "video/list";
+                        index = 4;
+                        break;
+                    default:
+                        nextRouter = "culture/list";
+                        index = 1;
+                }
+                this.context.router.push('/frame/' + nextRouter);
+            }
         });
     }
 
@@ -234,7 +236,7 @@ class ZZHeader extends React.Component {
     }
 
     render() {
-        const {openSearch, messageList, visible} = this.state;
+        const {openSearch, messageList, visible, defaultOption} = this.state;
 
         return (
             <Affix>
@@ -267,7 +269,7 @@ class ZZHeader extends React.Component {
                                             openSearch ? (
                                                 <div style={{display: 'inline-block'}}>
                                                     <Select
-                                                        defaultValue="culture"
+                                                        defaultValue={defaultOption}
                                                         style={{width: 82}}
                                                         onSelect={this.getSelected}
                                                     >
