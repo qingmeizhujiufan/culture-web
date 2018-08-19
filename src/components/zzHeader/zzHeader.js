@@ -68,7 +68,8 @@ class ZZHeader extends React.Component {
             tabs,
             openSearch: false,
             messageList: [],
-            visible: false
+            visible: false,
+            searchValue: ''
         };
     }
 
@@ -151,6 +152,7 @@ class ZZHeader extends React.Component {
         this.setState({
             tabs,
         });
+        localStorage.removeItem('searchValue')
 
         this.context.router.push(tabs[index].link);
     }
@@ -170,11 +172,54 @@ class ZZHeader extends React.Component {
         });
     }
 
-    onSearch = (value, event) => {
+    getSelected = value => {
         this.setState({
-            openSearch: !this.state.openSearch
+            option: value
+        })
+    }
+
+    onSearch = (value, event) => {
+        let storage = window.localStorage;
+        storage.setItem('searchValue', value);
+        if (this.state.openSearch) {
+            let nextRouter = '';
+            let index = null;
+            switch (this.state.option) {
+                case 'culture':
+                    nextRouter = "culture/list";
+                    index = 1;
+                    break;
+                case  'news':
+                    nextRouter = "news/list";
+                    index = 2;
+                    break;
+                case  'picture':
+                    nextRouter = "picture/list";
+                    index = 3;
+                    break;
+                case  'video':
+                    nextRouter = "video/list";
+                    index = 4;
+                    break;
+                default:
+                    nextRouter = "culture/list";
+                    index = 1;
+            }
+            this.context.router.push('/frame/' + nextRouter);
+        }
+        this.setState({
+            openSearch: !this.state.openSearch,
+            option: ''
+        }, () => {
         });
     }
+
+
+    // onSearch = (value, event) => {
+    //       this.setState({
+    //           openSearch: !this.state.openSearch
+    //       });
+    //   }
 
     showModal = () => {
         this.setState({
@@ -221,7 +266,11 @@ class ZZHeader extends React.Component {
                                         {
                                             openSearch ? (
                                                 <div style={{display: 'inline-block'}}>
-                                                    <Select defaultValue="culture" style={{width: 82}}>
+                                                    <Select
+                                                        defaultValue="culture"
+                                                        style={{width: 82}}
+                                                        onSelect={this.getSelected}
+                                                    >
                                                         <Option value="culture">文化</Option>
                                                         <Option value="news">新闻</Option>
                                                         <Option value="picture">图片</Option>
@@ -231,9 +280,13 @@ class ZZHeader extends React.Component {
                                                 </div>
                                             ) : null
                                         }
+                                        {
+
+                                        }
                                         <Input.Search
                                             className="input-search"
                                             placeholder={openSearch ? "请输入搜索内容" : ""}
+
                                             style={{
                                                 width: openSearch ? 155 : 45,
                                                 transition: 'width 0.2s ease-in'
