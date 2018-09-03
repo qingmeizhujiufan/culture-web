@@ -15,7 +15,7 @@ export default class App extends React.Component {
 
         this.state = {
             data: {},
-            stop: false,
+            stop: true,
             hashChange: 1
         };
     }
