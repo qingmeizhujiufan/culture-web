@@ -76,7 +76,9 @@ class Login extends React.Component {
                                     <span className='right-dot'></span>
                                 </h1>
                                 <div className='qrcode'>
+                                    <a href="https://open.weixin.qq.com/connect/qrconnect?appid=wx18a09da7e070dfb3&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect">
                                     <img src={followPublic}/>
+                                    </a>
                                 </div>
                                 <div className='tip'><Icon type="wechat" /> 扫一扫，微信账号登录</div>
                             </div>
