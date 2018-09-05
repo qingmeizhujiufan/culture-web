@@ -15,7 +15,7 @@ export default class App extends React.Component {
 
         this.state = {
             data: {},
-            stop: true,
+            stop: false,
             hashChange: 1
         };
     }
@@ -44,6 +44,7 @@ export default class App extends React.Component {
                 if (data.music && data.music.bgMusic) {
                     this.setState({
                         data: data.music.bgMusic,
+                        stop: true
                     });
                 }
             }
