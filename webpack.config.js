@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');//html模板
 const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
@@ -24,7 +25,7 @@ module.exports = {
     entry: {
         "index": path.resolve(__dirname, 'src/index'),
         //添加要打包在vendors.js里面的库
-        vendors:['react','react-dom']
+        vendors: ['react', 'react-dom'],
     },
 
     output: {
@@ -52,37 +53,33 @@ module.exports = {
                 test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader',
                 options: {
                     plugins: [
-                        'external-helpers', // why not work?
+                        'external-helpers',
                         ["transform-runtime", {polyfill: false}],
                         ["import", [{"style": "css", "libraryName": "antd"}]]
                     ],
                     presets: ['es2015', 'stage-0', 'react']
-                    // presets: [['es2015', { modules: false }], 'stage-0', 'react'] // tree-shaking
                 }
             },
             {test: /\.(jpg|png|gif)$/, loader: "url-loader?limit=8192&name=img/[name]_[hash:5].[ext]"},
             {test: /\.(woff|svg|eot|ttf)\??.*$/, loader: "url-loader?name=fonts/[name].[md5:hash:hex:7].[ext]"},
-            // 注意：如下不使用 ExtractTextPlugin 的写法，不能单独 build 出 css 文件
-            // { test: /\.less$/i, loaders: ['style-loader', 'css-loader', 'less-loader'] },
-            // { test: /\.css$/i, loaders: ['style-loader', 'css-loader'] },
             {
                 test: /\.less$/i, use: ExtractTextPlugin.extract({
-                fallback: 'style-loader',
-                use: [
-                    'css-loader', {loader: 'postcss-loader', options: postcssOpts}, 'less-loader'
-                ]
-            })
+                    fallback: 'style-loader',
+                    use: [
+                        'css-loader', {loader: 'postcss-loader', options: postcssOpts}, 'less-loader'
+                    ]
+                })
             },
             {
                 test: /\.css$/i, use: ExtractTextPlugin.extract({
-                fallback: 'style-loader',
-                use: [
-                    'css-loader', {loader: 'postcss-loader', options: postcssOpts}
-                ]
-            })
-            },{
+                    fallback: 'style-loader',
+                    use: [
+                        'css-loader', {loader: 'postcss-loader', options: postcssOpts}
+                    ]
+                })
+            }, {
                 test: /\.svg$/i,
-                use:'svg-sprite-loader',
+                use: 'svg-sprite-loader',
                 include: [
                     require.resolve('antd').replace(/warn\.js$/, ''),  // antd-mobile使用的svg目录
                     path.resolve(__dirname, './src/'),  // 个人的svg文件目录，如果自己有svg需要在这里配置
@@ -92,14 +89,22 @@ module.exports = {
     },
     plugins: [
         new webpack.optimize.ModuleConcatenationPlugin(),
-        // new webpack.optimize.CommonsChunkPlugin('shared.js'),
         new webpack.optimize.CommonsChunkPlugin({
-            // minChunks: 2,
             name: 'shared',
             filename: 'shared.[chunkhash:5].js'
         }),
         new ExtractTextPlugin({filename: '[name].[contenthash:5].css', allChunks: true}),
-        new HtmlWebpackPlugin({template: './index.html'}),
-        //...otherPlugins
+        new HtmlWebpackPlugin({
+            template: './index.html',
+            favicon: './public/favicon.ico', // 添加小图标
+        }),
+        new CleanWebpackPlugin(
+            ['build/main.*.js', 'build/manifest.*.js', 'build/shared.*.js'],　 //匹配删除的文件
+            {
+                root: __dirname,       　　　　　　　　　　//根目录
+                verbose: true,        　　　　　　　　　　//开启在控制台输出信息
+                dry: false        　　　　　　　　　　//启用删除文件
+            }
+        )
     ]
 }

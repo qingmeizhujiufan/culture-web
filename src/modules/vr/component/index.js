@@ -1,27 +1,7 @@
 import React from 'react';
-import {Link} from 'react-router';
 import PropTypes from 'prop-types';
-import {
-    Row,
-    Col,
-    Input,
-    Icon,
-    List,
-    Divider,
-    Breadcrumb,
-    Badge,
-    notification,
-    Spin,
-    message,
-    Button
-} from 'antd';
-import _ from 'lodash';
-import restUrl from 'RestUrl';
-import ajax from 'Utils/ajax';
-import ZZList from 'Comps/zzList/';
 import '../index.less';
 import vrNoData from 'Img/vr-no-data.jpg';
-import empty from "Img/personal-empty.png";
 
 class Index extends React.Component {
     constructor(props) {
