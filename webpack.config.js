@@ -99,7 +99,7 @@ module.exports = {
             favicon: './public/favicon.ico', // 添加小图标
         }),
         new CleanWebpackPlugin(
-            ['build/main.*.js', 'build/manifest.*.js', 'build/shared.*.js'],　 //匹配删除的文件
+            ['build/*'],　 //匹配删除的文件
             {
                 root: __dirname,       　　　　　　　　　　//根目录
                 verbose: true,        　　　　　　　　　　//开启在控制台输出信息
