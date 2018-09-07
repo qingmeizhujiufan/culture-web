@@ -39,7 +39,7 @@ class Detail extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.params.id !== this.props.params.id) {
+        if (nextProps.params.id !== this.props.params.id) {
             this.queryDetail(nextProps.params.id);
         }
     }
@@ -97,11 +97,11 @@ class Detail extends React.Component {
         const param = {};
         param.adsense = 'culture_1';
         ajax.getJSON(queryAdsenseUrl, param, data => {
-           if(data.success && data.backData){
-               this.setState({
-                   ad: data.backData
-               });
-           }
+            if (data.success && data.backData) {
+                this.setState({
+                    ad: data.backData
+                });
+            }
         });
     }
 
@@ -219,7 +219,9 @@ class Detail extends React.Component {
                                                                     <i>{index + 1}、</i>
                                                                 </Col>
                                                                 <Col span={22}>
-                                                                    <div className='zui-ellipsis'><Link to={`/frame/culture/detail/${item.id}`}>{item.cultureTitle}</Link></div>
+                                                                    <div className='zui-ellipsis'><Link
+                                                                        to={`/frame/culture/detail/${item.id}`}>{item.cultureTitle}</Link>
+                                                                    </div>
                                                                 </Col>
                                                             </Row>
                                                         )
@@ -229,8 +231,9 @@ class Detail extends React.Component {
                                         </div>
                                         {/* 广告位 */}
                                         <div className='ad'>
-                                            <a>
-                                                <img src={(ad.adCover && ad.adCover.filePath) ? restUrl.BASE_HOST + ad.adCover.filePath : null}/>
+                                            <a href={ad.adLink} target='_blank'>
+                                                <img
+                                                    src={(ad.adCover && ad.adCover.filePath) ? restUrl.BASE_HOST + ad.adCover.filePath : null}/>
                                             </a>
                                         </div>
                                     </Affix>
