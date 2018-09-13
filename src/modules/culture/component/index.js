@@ -176,9 +176,9 @@ class Index extends React.Component {
                                 <Col>
                                     <div className='type-group'>
                                         <span className={type === 1 ? 'type-active' : null}
-                                              onClick={() => this.onChangeType(1)}>旅游</span>
+                                              onClick={() => this.onChangeType(1)}>风土人情</span>
                                         <span className={type === 2 ? 'type-active' : null}
-                                              onClick={() => this.onChangeType(2)}>艺术品</span>
+                                              onClick={() => this.onChangeType(2)}>美食特产</span>
                                     </div>
                                     <Search
                                         placeholder="请输入搜索的内容"

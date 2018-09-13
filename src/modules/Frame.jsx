@@ -4,7 +4,7 @@ import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import ReactPlayer from 'react-player';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
-import ZZHeader from '../containers/zzHeader';
+import ZZHeader from 'Comps/zzHeader/zzHeader';
 import ZZFooter from 'Comps/zzFooter/zzFooter';
 import followPublic from 'Img/followPublic.png';
 

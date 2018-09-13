@@ -2,11 +2,13 @@ import React from 'react';
 import {Link} from 'react-router';
 import PropTypes from 'prop-types';
 import {Layout, Menu, Icon, Row, Col, Steps, Progress, List, Button, Carousel} from 'antd';
-import '../index.css';
-import '../home.less';
+import ImagesLoaded from 'imagesLoaded';
+import '../index.less';
 import banner1 from 'Img/banner1.jpg';
 import banner2 from 'Img/banner2.jpg';
 import banner3 from 'Img/banner3.jpg';
+import home_lower1 from 'Img/home_lower1.png';
+import home_lower2 from 'Img/home_lower2.png';
 
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
@@ -26,6 +28,12 @@ class Index extends React.Component {
     }
 
     componentDidMount = () => {
+        let imgLoad = ImagesLoaded(document.querySelector("#page_home"), function () {
+            // 图片加载后执行的方法
+            console.log('all images are loaded');
+        });
+        imgLoad.on('always');
+
         this.getNewsList();
         this.queryHomeCultureDetail();
     }
@@ -77,7 +85,7 @@ class Index extends React.Component {
         };
 
         return (
-            <div className="page-home">
+            <div className="page-home" id="page_home">
                 <div className="slider-box">
                     <Carousel
                         autoplay
@@ -89,7 +97,7 @@ class Index extends React.Component {
                             <div className='banner' style={{backgroundImage: `url(${banner1})`}}>
                                 <div className='carousel-content'>
                                     <h1 className='iconfont icon-shouyewenzi'></h1>
-                                    <p>专注名俗文化传播，传承湖北民俗文化</p>
+                                    <p>专注民俗文化传播</p>
                                 </div>
                             </div>
                         </div>
@@ -97,7 +105,7 @@ class Index extends React.Component {
                             <div className='banner' style={{backgroundImage: `url(${banner2})`}}>
                                 <div className='carousel-content'>
                                     <h1 className='iconfont icon-shouyewenzi'></h1>
-                                    <p>专注名俗文化传播，传承湖北民俗文化</p>
+                                    <p>专注民俗文化传播</p>
                                 </div>
                             </div>
                         </div>
@@ -105,7 +113,7 @@ class Index extends React.Component {
                             <div className='banner' style={{backgroundImage: `url(${banner3})`}}>
                                 <div className='carousel-content'>
                                     <h1 className='iconfont icon-shouyewenzi'></h1>
-                                    <p>专注名俗文化传播，传承湖北民俗文化</p>
+                                    <p>专注民俗文化传播</p>
                                 </div>
                             </div>
                         </div>
@@ -126,7 +134,8 @@ class Index extends React.Component {
                                             renderItem={item => (
                                                 <List.Item>
                                                     <List.Item.Meta
-                                                        title={<Link to={`/frame/news/detail/${item.id}`} className='zui-ellipsis' style={{
+                                                        title={<Link to={`/frame/news/detail/${item.id}`}
+                                                                     className='zui-ellipsis' style={{
                                                             width: 464,
                                                             display: 'block'
                                                         }}>{item.newsTitle}</Link>}
@@ -166,7 +175,7 @@ class Index extends React.Component {
                         </section>
                         <section className='plate'>
                             <h1>文化展示</h1>
-                            <p>最全面民俗旅游介绍、民俗艺术品的赏析</p>
+                            <p>详尽的荆楚风土人情、美食美景</p>
                             <article className='box culture'>
                                 <Carousel autoplay autoplaySpeed={5000}>
                                     {
@@ -198,14 +207,16 @@ class Index extends React.Component {
                                 </Carousel>
                             </article>
                         </section>
-                        <section className='plate'>
-                            <h1>民俗特色</h1>
-                            <p>最全面民俗旅游介绍、民俗艺术品的赏析</p>
-                            <article className='box art'>
-
-                            </article>
-                        </section>
                     </div>
+                </div>
+                <div className='page-content lower'>
+                    <section className='plate'>
+                        <h1>民俗文化平台</h1>
+                        <p>我们的核心：传承、发掘、创新</p>
+                        <article className='art'>
+
+                        </article>
+                    </section>
                 </div>
             </div>
         );
