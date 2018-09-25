@@ -2,13 +2,11 @@ import React from 'react';
 import {Link} from 'react-router';
 import PropTypes from 'prop-types';
 import {Layout, Menu, Icon, Row, Col, Steps, Progress, List, Button, Carousel} from 'antd';
-import ImagesLoaded from 'imagesLoaded';
+import LazyLoad from 'react-lazyload';
 import '../index.less';
 import banner1 from 'Img/banner1.jpg';
 import banner2 from 'Img/banner2.jpg';
 import banner3 from 'Img/banner3.jpg';
-import home_lower1 from 'Img/home_lower1.png';
-import home_lower2 from 'Img/home_lower2.png';
 
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
@@ -28,12 +26,6 @@ class Index extends React.Component {
     }
 
     componentDidMount = () => {
-        let imgLoad = ImagesLoaded(document.querySelector("#page_home"), function () {
-            // 图片加载后执行的方法
-            console.log('all images are loaded');
-        });
-        imgLoad.on('always');
-
         this.getNewsList();
         this.queryHomeCultureDetail();
     }
@@ -79,10 +71,6 @@ class Index extends React.Component {
 
     render() {
         const {cultureList, textNews, pictureNews} = this.state;
-        const arrowProps = {
-            currentSlide: 1,
-            slideCount: 3
-        };
 
         return (
             <div className="page-home" id="page_home">
@@ -156,12 +144,20 @@ class Index extends React.Component {
                                                         <div key={index}>
                                                             <div className='wrap-img'>
                                                                 <Link to={`/frame/news/detail/${item.id}`}>
-                                                                    <img
-                                                                        src={restUrl.BASE_HOST + item.newsCover.filePath}/>
-                                                                    <div className='news-title zui-ellipsis' style={{
-                                                                        width: 600,
-                                                                        paddingRight: 100
-                                                                    }}>{item.newsTitle}</div>
+                                                                    <LazyLoad
+                                                                        throttle={200}
+                                                                        height={370}
+                                                                        placeholder={<Icon type="loading"
+                                                                                           theme="outlined"/>}
+                                                                    >
+                                                                        <img
+                                                                            src={restUrl.BASE_HOST + item.newsCover.filePath}/>
+                                                                    </LazyLoad>
+                                                                    <div className='news-title zui-ellipsis'
+                                                                         style={{
+                                                                             width: 600,
+                                                                             paddingRight: 100
+                                                                         }}>{item.newsTitle}</div>
                                                                 </Link>
                                                             </div>
                                                         </div>
@@ -186,16 +182,38 @@ class Index extends React.Component {
                                                         <div className='img-list'>
                                                             <Row type='flex'>
                                                                 <Col className='wrap-img'>
-                                                                    <img
-                                                                        src={restUrl.BASE_HOST + cultureList[index].filePath}/>
+                                                                    <LazyLoad
+                                                                        throttle={200}
+                                                                        height={370}
+                                                                        placeholder={<Icon type="loading" spin
+                                                                                           theme="outlined"/>}
+                                                                    >
+                                                                        <img
+                                                                            src={restUrl.BASE_HOST + cultureList[index].filePath}/>
+                                                                    </LazyLoad>
                                                                 </Col>
-                                                                <Col className='wrap-img' style={{margin: '0 18px'}}>
-                                                                    <img
-                                                                        src={restUrl.BASE_HOST + cultureList[index + 1].filePath}/>
+                                                                <Col className='wrap-img'
+                                                                     style={{margin: '0 18px'}}>
+                                                                    <LazyLoad
+                                                                        throttle={200}
+                                                                        height={370}
+                                                                        placeholder={<Icon type="loading" spin
+                                                                                           theme="outlined"/>}
+                                                                    >
+                                                                        <img
+                                                                            src={restUrl.BASE_HOST + cultureList[index + 1].filePath}/>
+                                                                    </LazyLoad>
                                                                 </Col>
                                                                 <Col className='wrap-img'>
-                                                                    <img
-                                                                        src={restUrl.BASE_HOST + cultureList[index + 2].filePath}/>
+                                                                    <LazyLoad
+                                                                        throttle={200}
+                                                                        height={370}
+                                                                        placeholder={<Icon type="loading" spin
+                                                                                           theme="outlined"/>}
+                                                                    >
+                                                                        <img
+                                                                            src={restUrl.BASE_HOST + cultureList[index + 2].filePath}/>
+                                                                    </LazyLoad>
                                                                 </Col>
                                                             </Row>
                                                         </div>
@@ -213,9 +231,7 @@ class Index extends React.Component {
                     <section className='plate'>
                         <h1>民俗文化平台</h1>
                         <p>我们的核心：传承、发掘、创新</p>
-                        <article className='art'>
-
-                        </article>
+                        <article className='art'/>
                     </section>
                 </div>
             </div>
