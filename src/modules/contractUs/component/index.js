@@ -50,11 +50,11 @@ class Index extends React.Component {
                                 }}>
                                     <h1>联系我们</h1>
                                     <p>商务合作：</p>
-                                    <p>wuwei@tashan.com</p>
+                                    <p>hbminsu@sina.com</p>
                                     <p>用户反馈及帮助：</p>
-                                    <p>wangtian@tashan.com</p>
+                                    <p>hbminsu@sina.com</p>
                                     <p>公司地址</p>
-                                    <p>武汉市洪山区 他山书院黄兴路120号 邮编：050070 </p>
+                                    <p>武汉市江汉区黄兴路35号 邮编：430010 </p>
                                 </div>
                             </Col>
                             <Col span={17}>
