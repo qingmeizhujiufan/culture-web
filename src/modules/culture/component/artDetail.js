@@ -8,6 +8,7 @@ import '../index.less';
 import {shiftDate} from "Utils/util";
 import top5 from 'Img/top5.png';
 import ZZComment from 'Comps/zzComment/';
+import draftToHtml from "draftjs-to-html";
 
 const queryDetailUrl = restUrl.ADDR + 'art/queryDetail';
 const queryCommentListUrl = restUrl.ADDR + 'art/queryCommentList';
@@ -56,6 +57,10 @@ class ArtDetail extends React.Component {
                     item.active = false;
                 });
                 data.artCover[0].active = true;
+                if (data.artContent && data.artContent !== '') {
+                    data.artContent = JSON.parse(data.artContent);
+                    data.contentHtml = draftToHtml(data.artContent);
+                }
                 this.setState({
                     data,
                     currentPreview: data.artCover[0]
@@ -224,16 +229,8 @@ class ArtDetail extends React.Component {
                                             <Button icon='shop' href={data.buyUrl} target='_blank'>去商城查看</Button>
                                         </div>
                                     </div>
-                                    <div className="img-list">
-                                        {
-                                            data.artContent && data.artContent.map(item => {
-                                                return (
-                                                    <div key={item.id} className='wrap-img'>
-                                                        <img key src={restUrl.BASE_HOST + item.filePath}/>
-                                                    </div>
-                                                )
-                                            })
-                                        }
+                                    <div className="wrap-html" >
+                                        <div dangerouslySetInnerHTML={{__html: data.contentHtml}}></div>
                                     </div>
                                     <ZZComment
                                         id='comment'

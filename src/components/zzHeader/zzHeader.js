@@ -83,6 +83,7 @@ class ZZHeader extends React.Component {
     }
 
     componentWillReceiveProps = nextProps => {
+        console.log('zzheader nextProps === ', nextProps);
         if ('hash' in nextProps && nextProps.hash !== this.props.hash) {
             this.selectActiveTab();
         }
