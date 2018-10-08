@@ -153,7 +153,7 @@ class Index extends React.Component {
                     </div>
                     <div className='zui-card-item-content'>
                         <div className='zui-ellipsis'>{item.artTitle}</div>
-                        <div className='price'>{`¥${item.artMoney.toFixed(2)}`}</div>
+                        <div className='price'>{item.create_time ? item.create_time.substring(0, 10) : null}</div>
                     </div>
                     <div className='zui-card-item-footer'>
                         <span><Icon type="eye-o"/> {item.readNum}人</span>
@@ -208,7 +208,7 @@ class Index extends React.Component {
                             }
                         </ul>
                         <div className='content-more' onClick={this.onMoreCity}>
-                            <span>更多<Icon type ={showMoreCity ? 'up': 'down'} style={{marginLeft:5}}></Icon></span>
+                            <span>更多<Icon type={showMoreCity ? 'up' : 'down'} style={{marginLeft: 5}}></Icon></span>
                         </div>
                     </div>
                 </div>

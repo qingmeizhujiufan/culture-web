@@ -38,7 +38,7 @@ class ArtDetail extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.params.id !== this.props.params.id) {
+        if (nextProps.params.id !== this.props.params.id) {
             this.queryDetail(nextProps.params.id);
         }
     }
@@ -140,10 +140,12 @@ class ArtDetail extends React.Component {
             // 找到锚点
             let anchorElement = document.getElementById(anchorName);
             // 如果对应id的锚点存在，就跳转到锚点
-            if(anchorElement) { anchorElement.scrollIntoView({
-                block: 'start',
-                behavior: 'smooth'
-            }); }
+            if (anchorElement) {
+                anchorElement.scrollIntoView({
+                    block: 'start',
+                    behavior: 'smooth'
+                });
+            }
         }
     }
 
@@ -153,83 +155,55 @@ class ArtDetail extends React.Component {
         return (
             <div className='page-culture-artdetail'>
                 <Spin spinning={loading} size={"large"}>
+                    <div className="page-content" style={{borderBottom: '1px solid #EAEAEA'}}>
+                        <div className="content">
+                            <Row type='flex' justify="space-between" align="middle" style={{height: 140}}>
+                                <Col span={16}>
+                                    <div className='base-info'>
+                                        <Breadcrumb separator=">" className='zui-breadcrumb'>
+                                            <Breadcrumb.Item
+                                                href="#/frame/culture/list/2">美食特产</Breadcrumb.Item>
+                                            <Breadcrumb.Item>{data.cityName}</Breadcrumb.Item>
+                                        </Breadcrumb>
+                                        <h1 className="title">{data.artTitle}</h1>
+                                        <span
+                                            className="date">{data.create_time ? shiftDate(data.create_time) + '发布' : null}</span>
+                                        <span className='read-info' style={{marginLeft: 20}}><Icon
+                                            type="eye-o"/> {data.readNum}人</span>
+                                    </div>
+                                </Col>
+                                <Col span={8}>
+                                    <div style={{textAlign: 'right', lineHeight: '24px'}}>
+                                        <span style={{marginRight: 75, verticalAlign: 'sub', cursor: 'pointer'}}
+                                              onClick={() => this.scrollToAnchor('comment')}>
+                                            <Icon type="form" style={{
+                                                marginRight: 10,
+                                                fontSize: 24,
+                                                color: '#FFA600',
+                                                verticalAlign: 'sub',
+                                            }}/>评论
+                                        </span>
+                                        <span style={{verticalAlign: 'sub', cursor: 'pointer'}}
+                                              onClick={() => this.collect()}>
+                                            <Icon
+                                                type={data.isCollect ? "star" : "star-o"}
+                                                style={{
+                                                    marginRight: 10,
+                                                    fontSize: 24,
+                                                    color: '#FFA600',
+                                                    verticalAlign: 'sub'
+                                                }}/>收藏
+                                        </span>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </div>
+                    </div>
                     <div className="page-content">
                         <div className="content">
                             <Row type='flex' justify="space-between" align="top" style={{marginTop: 50}}>
                                 <Col style={{width: 900}}>
-                                    <div className='clearfix'>
-                                        <div className='preview'>
-                                            <div className='preview-active'>
-                                                <img
-                                                    src={currentPreview.filePath ? (restUrl.BASE_HOST + currentPreview.filePath) : null}/>
-                                            </div>
-                                            <Row type='flex' justify="space-between" align="center"
-                                                 className='preview-list'>
-                                                {
-                                                    data.artCover && data.artCover.map((item, index) => {
-                                                        return (
-                                                            <Col key={item.id}
-                                                                 className={item.active ? 'active-preivew' : null}
-                                                                 onClick={() => this.onChangePreview(item, index)}
-                                                            >
-                                                                <img
-                                                                    src={restUrl.BASE_HOST + item.filePath}/>
-                                                            </Col>
-                                                        )
-                                                    })
-                                                }
-                                            </Row>
-                                        </div>
-                                        <div className='art-info'>
-                                            <Row type='flex' justify="start">
-                                                <Col>
-                                                    <Breadcrumb separator=">" className='zui-breadcrumb'>
-                                                        <Breadcrumb.Item
-                                                            href="#/frame/culture/list/2">艺术品</Breadcrumb.Item>
-                                                        <Breadcrumb.Item>{data.cityName}</Breadcrumb.Item>
-                                                    </Breadcrumb>
-                                                </Col>
-                                                <Col style={{marginLeft: 45}}>
-                                                    <span
-                                                        className="date">{data.create_time ? shiftDate(data.create_time) + '发布' : null}</span>
-                                                </Col>
-                                                <Col style={{marginLeft: 20}}>
-                                                    <span className='read-info'><Icon type="eye-o"/> {data.readNum}人</span>
-                                                </Col>
-                                            </Row>
-                                            <div className='art-title'>{data.artTitle}</div>
-                                            <div
-                                                className='art-money'>{data.artMoney ? `¥${data.artMoney.toFixed(2)}` : '¥--'}</div>
-                                            <div style={{
-                                                margin: '20px 0 30px',
-                                                fontSize: 14,
-                                                color: '#313131',
-                                                lineHeight: '24px'
-                                            }}>
-                                                <span style={{marginRight: 40, cursor: 'pointer'}} onClick={() => this.scrollToAnchor('comment')}>
-                                                    <Icon type="form" style={{
-                                                        marginRight: 10,
-                                                        fontSize: 24,
-                                                        color: '#FFA600',
-                                                        verticalAlign: 'sub'
-                                                    }}/>评论
-                                                </span>
-                                                <span style={{verticalAlign: 'sub', cursor: 'pointer'}}
-                                                      onClick={() => this.collect()}>
-                                                    <Icon
-                                                        type={data.isCollect ? "star" : "star-o"}
-                                                        style={{
-                                                            marginRight: 10,
-                                                            fontSize: 24,
-                                                            color: '#FFA600',
-                                                            verticalAlign: 'sub'
-                                                        }}/>收藏
-                                                </span>
-                                            </div>
-                                            <Button icon='shop' href={data.buyUrl} target='_blank'>去商城查看</Button>
-                                        </div>
-                                    </div>
-                                    <div className="wrap-html" >
+                                    <div className="wrap-html">
                                         <div dangerouslySetInnerHTML={{__html: data.contentHtml}}></div>
                                     </div>
                                     <ZZComment
@@ -255,12 +229,14 @@ class ArtDetail extends React.Component {
                                                                             src={item.artCover ? (restUrl.BASE_HOST + item.artCover[0].filePath) : null}/>
                                                                     </div>
                                                                     <div className='zui-card-item-content'>
-                                                                        <div className='zui-ellipsis'>{item.artTitle}</div>
+                                                                        <div
+                                                                            className='zui-ellipsis'>{item.artTitle}</div>
                                                                         <div
                                                                             className='price'>{item.artMoney ? `¥${item.artMoney.toFixed(2)}` : '¥--'}</div>
                                                                     </div>
                                                                     <div className='zui-card-item-footer'>
-                                                                        <span><Icon type="eye-o"/> {item.readNum}人</span>
+                                                                        <span><Icon
+                                                                            type="eye-o"/> {item.readNum}人</span>
                                                                         <span style={{marginLeft: 35}}><Icon
                                                                             type="star-o"/> {item.collectNum}人</span>
                                                                     </div>

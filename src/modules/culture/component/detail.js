@@ -156,7 +156,7 @@ class Detail extends React.Component {
                                     <div className='base-info'>
                                         <Breadcrumb separator=">" className='zui-breadcrumb'>
                                             <Breadcrumb.Item
-                                                href="#/frame/culture/list/1">旅游</Breadcrumb.Item>
+                                                href="#/frame/culture/list/1">风土人情</Breadcrumb.Item>
                                             <Breadcrumb.Item>{data.cityName}</Breadcrumb.Item>
                                         </Breadcrumb>
                                         <h1 className="title">{data.cultureTitle}</h1>
