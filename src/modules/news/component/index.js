@@ -56,7 +56,6 @@ class Index extends React.Component {
                 loading: false
             });
         });
-        this.getCityList();
     }
 
     componentWillReceiveProps = nextProps => {
@@ -64,37 +63,6 @@ class Index extends React.Component {
             loading: true,
             conditionText: sessionStorage.getItem('searchValue') ? sessionStorage.getItem('searchValue') : ''
         })
-    }
-
-    getCityList = () => {
-        let param = {};
-        ajax.getJSON(queryCityListUrl, param, data => {
-            if (data.success) {
-                let cityList = [...this.state.cityList].concat(data.backData);
-                this.setState({
-                    cityList,
-                });
-            }
-        });
-    }
-
-    onChangeCity = id => {
-        const {cityList, activeCity} = this.state;
-        const city = _.find(cityList, {id: id});
-        if (activeCity === city) return;
-        this.setState({
-            loading: true,
-            pageNumber: 1,
-            activeCity: id,
-            conditionText: ''
-        }, () => {
-            this.getList(data => {
-                this.setState({
-                    listData: data.backData,
-                    loading: false
-                });
-            });
-        });
     }
 
     getList = callback => {
@@ -216,23 +184,6 @@ class Index extends React.Component {
                             />
                         </Col>
                     </Row>
-                </div>
-                <div className="page-content city-section">
-                    <div className="content clearfix">
-                        <ul className='zui-unstyled inline zui-pull-left city-list'>
-                            {
-                                cityList.map(item => {
-                                    return (
-                                        <li key={item.id} className={item.id === activeCity ? 'active' : null}
-                                            onClick={() => this.onChangeCity(item.id)}>{item.cityName}</li>
-                                    )
-                                })
-                            }
-                        </ul>
-                        <div className='zui-pull-right'>
-                            <span>更多</span>
-                        </div>
-                    </div>
                 </div>
                 <div className="page-content">
                     <div className="content">
