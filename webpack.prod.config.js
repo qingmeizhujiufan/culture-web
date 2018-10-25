@@ -3,10 +3,9 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');//html模板
-const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const autoprefixer = require('autoprefixer');
 const CustomTheme = require('./src/util/customTheme');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const postcssOpts = {
     ident: 'postcss',
@@ -18,13 +17,10 @@ const postcssOpts = {
 };
 
 module.exports = {
-    devtool: 'inline-source-map',
-    devServer: {
-        disableHostCheck: true
-    },
-
     entry: {
-        "index": path.resolve(__dirname, 'src/index')
+        "index": path.resolve(__dirname, 'src/index'),
+        //添加要打包在vendor.js里面的库
+        vendor: ['react', 'react-dom', 'react-router']
     },
 
     output: {
@@ -33,11 +29,10 @@ module.exports = {
         path: path.join(__dirname, '/build'),
     },
 
+    externals: {},
+
     resolve: {
-        modules: [
-            path.resolve(__dirname, 'node_modules'),
-            path.join(__dirname, 'src')
-        ],
+        modules: [path.resolve(__dirname, 'node_modules'), path.join(__dirname, 'src')],
         extensions: ['.web.js', '.jsx', '.js', '.json'],
         //设置别名方便引用
         alias: {
@@ -57,7 +52,7 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         presets: [
-                            "env",
+                            "es2015",
                             "stage-0",
                             "react"
                         ],
@@ -116,13 +111,17 @@ module.exports = {
                 test: /\.svg$/i,
                 use: 'svg-sprite-loader',
                 include: [
-                    require.resolve('antd').replace(/warn\.js$/, ''),
-                    path.resolve(__dirname, './src/'),
+                    require.resolve('antd').replace(/warn\.js$/, ''),  // antd-mobile使用的svg目录
+                    path.resolve(__dirname, './src/'),  // 个人的svg文件目录，如果自己有svg需要在这里配置
                 ]
             }
         ]
     },
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('production')
+        }),
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         new CleanWebpackPlugin(
             ['build/*'],　                    //匹配删除的文件
             {
@@ -131,19 +130,35 @@ module.exports = {
                 dry: false        　　　　　　　　 //启用删除文件
             }
         ),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-        new webpack.optimize.ModuleConcatenationPlugin(),
-        new webpack.DllReferencePlugin({
-            context: path.join(__dirname, '.', 'dll'),
-            manifest: require('./dll/vendor-manifest.json')
-        }),
-        new ExtractTextPlugin({filename: '[name].[contenthash:5].css', allChunks: true}),
         new HtmlWebpackPlugin({
             template: './public/index.html',
             favicon: './public/favicon.ico', // 添加小图标
         }),
-        new HtmlWebpackIncludeAssetsPlugin({assets: ['../dll/vendor.dll.js'], append: false}),
+        new webpack.optimize.ModuleConcatenationPlugin(),
+        new webpack.optimize.OccurrenceOrderPlugin(),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            filename: 'vendor.[chunkhash:5].js',
+            minChunks: Infinity,
+        }),
+        new ExtractTextPlugin({
+            filename: '[name].[contenthash:5].css',
+            allChunks: true
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            uglifyOptions: {
+                ecma: 8,
+                compress: {
+                    comparisons: false
+                },
+                output: {
+                    ascii_only: true
+                },
+                warnings: true
+            }
+        }),//最小化一切
+        new webpack.optimize.AggressiveMergingPlugin(),//合并块
         /* 分析包的大小分布 */
         // new BundleAnalyzerPlugin(),
     ]
-}
+};

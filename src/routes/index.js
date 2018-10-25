@@ -1,33 +1,102 @@
 import React from 'react';
-import {Router, Route, IndexRoute, IndexRedirect, hashHistory} from 'react-router'
+import {Router, Route, IndexRoute, IndexRedirect, hashHistory} from 'react-router';
+import {Icon} from 'antd';
+import Loadable from 'react-loadable';
 
-import App from '../modules/App';
-import Frame from '../modules/Frame';
+function Loading(props) {
+    if (props.error) {
+        return <div>错误! <button onClick={props.retry}>点击重试</button></div>;
+    } else if (props.timedOut) {
+        return <div>已经超时加载... <button onClick={props.retry}>点击重试</button></div>;
+    } else if (props.pastDelay) {
+        return (
+            <div style={{
+                padding: '30px 0',
+                textAlign: 'center'
+            }}>
+                <Icon type="loading" style={{fontSize: 24}}/>
+            </div>
+        );
+    } else {
+        return null;
+    }
+}
+
+const App = Loadable({
+    loader: () => import('../modules/App'),
+    loading: Loading
+});
+const Frame = Loadable({
+    loader: () => import('../modules/Frame'),
+    loading: Loading
+});
 
 /* 首页 */
-import Home from '../modules/home/component/home';
+const Home = Loadable({
+    loader: () => import('../modules/home/component/home'),
+    loading: Loading
+});
 /* 文化展示 */
-import Culture from '../modules/culture/component/';
-import CultureDetail from '../modules/culture/component/detail';
-import ArtDetail from '../modules/culture/component/artDetail';
+const Culture = Loadable({
+    loader: () => import('../modules/culture/component/'),
+    loading: Loading
+});
+const CultureDetail = Loadable({
+    loader: () => import('../modules/culture/component/detail'),
+    loading: Loading
+});
+const ArtDetail = Loadable({
+    loader: () => import('../modules/culture/component/artDetail'),
+    loading: Loading
+});
 /* 新闻资讯 */
-import News from '../modules/news/component/';
-import NewsDetail from '../modules/news/component/detail';
+const News = Loadable({
+    loader: () => import('../modules/news/component/'),
+    loading: Loading
+});
+const NewsDetail = Loadable({
+    loader: () => import('../modules/news/component/detail'),
+    loading: Loading
+});
 /* 图片展示 */
-import Picture from '../modules/picture/component/';
-import PictureDetail from '../modules/picture/component/detail';
+const Picture = Loadable({
+    loader: () => import('../modules/picture/component/'),
+    loading: Loading
+});
+const PictureDetail = Loadable({
+    loader: () => import('../modules/picture/component/detail'),
+    loading: Loading
+});
 /* 在线视频 */
-import Video from '../modules/video/component/';
-import VideoDetail from '../modules/video/component/detail';
+const Video = Loadable({
+    loader: () => import('../modules/video/component/'),
+    loading: Loading
+});
+const VideoDetail = Loadable({
+    loader: () => import('../modules/video/component/detail'),
+    loading: Loading
+});
 /* VR视频 */
-import VR from '../modules/vr/component/';
+const VR = Loadable({
+    loader: () => import('../modules/vr/component/'),
+    loading: Loading
+});
 /* 联系我们 */
-import ContractUs from '../modules/contractUs/component/';
+const ContractUs = Loadable({
+    loader: () => import('../modules/contractUs/component/'),
+    loading: Loading
+});
 /* 个人中心 */
-import User from '../modules/user/component/';
+const User = Loadable({
+    loader: () => import('../modules/user/component/'),
+    loading: Loading
+});
 
 /* 登录 */
-import Login from '../modules/login/component/login';
+const Login = Loadable({
+    loader: () => import('../modules/login/component/login'),
+    loading: Loading
+});
 
 module.exports = (
     <Router history={hashHistory}>
