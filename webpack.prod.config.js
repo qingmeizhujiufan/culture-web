@@ -146,16 +146,12 @@ module.exports = {
             allChunks: true
         }),
         new webpack.optimize.UglifyJsPlugin({
-            uglifyOptions: {
-                ecma: 8,
-                compress: {
-                    comparisons: false
-                },
-                output: {
-                    ascii_only: true
-                },
-                warnings: true
-            }
+            compress: {
+                warnings: false,
+                drop_debugger: true,
+                drop_console: true
+            },
+            sourceMap: true
         }),//最小化一切
         new webpack.optimize.AggressiveMergingPlugin(),//合并块
         /* 分析包的大小分布 */
