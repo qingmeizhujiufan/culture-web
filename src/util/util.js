@@ -1,5 +1,7 @@
 /* created by zhongzheng 2018.7.10 */
 
+import assign from 'lodash/assign';
+
 /**
  * @param 使用js让数字的千分位用,分隔
  */
@@ -74,7 +76,7 @@ export function shiftDate(dateStr) {
 export function listToTree(list) {
     if (list.length === 0) return [];
     const _list = [];
-    list.map(item => _list.push(_.assign({}, item)));
+    list.map(item => _list.push(assign({}, item)));
     let arr = [];
     //首先状态顶层节点
     _list.map(item => {
