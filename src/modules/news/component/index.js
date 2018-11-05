@@ -8,14 +8,8 @@ import {
     Icon,
     List,
     Divider,
-    Breadcrumb,
-    Badge,
-    notification,
-    Spin,
-    message,
-    Button
+    Message
 } from 'antd';
-import _ from 'lodash';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
 import ZZList from 'Comps/zzList/';
@@ -24,7 +18,6 @@ import newsLogo from 'Img/news-logo.png';
 
 const Search = Input.Search;
 const queryListUrl = restUrl.ADDR + 'news/queryList';
-const queryCityListUrl = restUrl.ADDR + 'city/queryList';
 
 class Index extends React.Component {
     constructor(props) {
@@ -77,7 +70,7 @@ class Index extends React.Component {
                 if (typeof callback === 'function') callback(data);
 
             } else {
-                message.error(data.backMsg);
+                Message.error(data.backMsg);
             }
         });
     }
@@ -165,7 +158,7 @@ class Index extends React.Component {
     }
 
     render() {
-        const {conditionText, activeCity, cityList} = this.state;
+        const {conditionText, activeCity} = this.state;
 
         return (
             <div className='page-news'>

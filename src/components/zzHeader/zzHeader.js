@@ -11,14 +11,12 @@ import {
     Menu,
     Avatar,
     Divider,
-    notification,
     Badge,
     Select,
     Modal,
     List
 } from 'antd';
-import _ from 'lodash';
-import pathToRegexp from 'path-to-regexp';
+import _forEach from 'lodash/forEach';
 import restUrl from 'RestUrl';
 import ajax from 'Utils/ajax';
 import './zzHeader.less';
@@ -100,7 +98,7 @@ class ZZHeader extends React.Component {
             return;
         }
         const regexp = '/frame/' + path[2];
-        _.forEach(tabs, (item, index) => {
+        _forEach(tabs, (item, index) => {
             if (item.link !== '' && item.link.indexOf(regexp) > -1) {
                 this.setActiveTab(index);
                 return;
@@ -217,13 +215,6 @@ class ZZHeader extends React.Component {
         });
     }
 
-
-    // onSearch = (value, event) => {
-    //       this.setState({
-    //           openSearch: !this.state.openSearch
-    //       });
-    //   }
-
     showModal = () => {
         this.setState({
             visible: true,
@@ -282,9 +273,6 @@ class ZZHeader extends React.Component {
                                                     <Divider type="vertical"/>
                                                 </div>
                                             ) : null
-                                        }
-                                        {
-
                                         }
                                         <Input.Search
                                             className="input-search"
