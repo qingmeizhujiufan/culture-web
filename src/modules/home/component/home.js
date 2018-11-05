@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
 import PropTypes from 'prop-types';
-import {Layout, Menu, Icon, Row, Col, Steps, Progress, List, Button, Carousel} from 'antd';
+import {Icon, Row, Col, List, Carousel} from 'antd';
 import LazyLoad from 'react-lazyload';
 import '../index.less';
 import banner1 from 'Img/banner1.jpg';
@@ -9,10 +9,7 @@ import banner2 from 'Img/banner2.jpg';
 import banner3 from 'Img/banner3.jpg';
 
 import restUrl from 'RestUrl';
-import ajax from 'Utils/ajax';
-
-const queryNewsListUrl = restUrl.ADDR + 'news/queryList';
-const queryHomeCulutreDetail = restUrl.ADDR + 'Server/queryHomeCulutreDetail';
+import axios from "Utils/axios";
 
 class Index extends React.Component {
     constructor(props) {
@@ -35,8 +32,10 @@ class Index extends React.Component {
         param.pageNumber = 1;
         param.pageSize = 7;
         param.conditionText = '';
-        param.cityId = null;
-        ajax.getJSON(queryNewsListUrl, param, data => {
+        param.cityId = '';
+        axios.get('news/queryList', {
+            params: param
+        }).then(res => res.data).then(data => {
             if (data.success) {
                 data = data.backData;
                 this.setState({
@@ -51,7 +50,7 @@ class Index extends React.Component {
     }
 
     queryHomeCultureDetail = () => {
-        ajax.getJSON(queryHomeCulutreDetail, '', (data) => {
+        axios.get('Server/queryHomeCulutreDetail').then(res => res.data).then(data => {
             if (data.success) {
                 const cultureList = [];
                 data = data.backData;
@@ -135,7 +134,7 @@ class Index extends React.Component {
                                     </Col>
                                     <Col style={{width: 600, height: 370}}>
                                         <Carousel
-                                            autoplay
+                                            autoplay={pictureNews.length > 0}
                                             className='news-list-image'
                                         >
                                             {
@@ -173,7 +172,10 @@ class Index extends React.Component {
                             <h1>文化展示</h1>
                             <p>详尽的荆楚风土人情、美食美景</p>
                             <article className='box culture'>
-                                <Carousel autoplay autoplaySpeed={5000}>
+                                <Carousel
+                                    autoplay={cultureList.length > 0}
+                                    autoplaySpeed={5000}
+                                >
                                     {
                                         cultureList.map((item, index) => {
                                             if (index % 3 === 0) {

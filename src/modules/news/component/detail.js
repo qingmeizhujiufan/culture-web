@@ -1,14 +1,9 @@
 import React from 'react';
-import {Link} from 'react-router';
 import PropTypes from 'prop-types';
-import {Row, Col, Icon, Badge, notification, Spin} from 'antd';
+import {Icon, Spin} from 'antd';
 import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
-import restUrl from 'RestUrl';
-import ajax from 'Utils/ajax';
 import '../index.less';
-
-const queryDetailUrl = restUrl.ADDR + 'news/queryDetail';
+import axios from "Utils/axios";
 
 class Detail extends React.Component {
     constructor(props) {
@@ -34,7 +29,7 @@ class Detail extends React.Component {
         this.setState({
             loading: true
         });
-        ajax.getJSON(queryDetailUrl, param, (data) => {
+        axios.get('news/queryDetail', {params: param}).then(res => res.data).then(data => {
             if (data.success) {
                 data = data.backData;
                 if (data.newsContent && data.newsContent !== '') {
@@ -44,7 +39,7 @@ class Detail extends React.Component {
                         data
                     });
                 }
-            }else {
+            } else {
                 message.error(data.backMsg);
             }
 
@@ -62,11 +57,12 @@ class Detail extends React.Component {
                 <div className="page-content">
                     <div className="content">
                         <Spin spinning={loading} size={"large"}>
-                            <div className="wrap-html" >
+                            <div className="wrap-html">
                                 <h1 className="title">{data.newsTitle}</h1>
                                 <p style={{marginBottom: 50}}>
-                                    <span className="date">{data.create_time ? data.create_time.substring(0, 10) : null}</span>
-                                    <span><Icon type="eye-o" /> {data.readNum}人</span>
+                                    <span
+                                        className="date">{data.create_time ? data.create_time.substring(0, 10) : null}</span>
+                                    <span><Icon type="eye-o"/> {data.readNum}人</span>
                                 </p>
                                 <div dangerouslySetInnerHTML={{__html: data.contentHtml}}></div>
                             </div>

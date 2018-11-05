@@ -3,13 +3,10 @@ import {Link} from 'react-router';
 import PropTypes from 'prop-types';
 import {Form, Icon, Row, Col, message} from 'antd';
 import restUrl from 'RestUrl';
-import ajax from 'Utils/ajax';
 import '../login.less';
 
 import loginLeft from 'Img/login-left.png';
 import followPublic from 'Img/followPublic.png';
-
-const FormItem = Form.Item;
 
 const loginUrl = restUrl.ADDR + 'server/login';
 
@@ -77,10 +74,10 @@ class Login extends React.Component {
                                 </h1>
                                 <div className='qrcode'>
                                     <a href="https://open.weixin.qq.com/connect/qrconnect?appid=wx18a09da7e070dfb3&redirect_uri=REDIRECT_URI&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect">
-                                    <img src={followPublic}/>
+                                        <img src={followPublic}/>
                                     </a>
                                 </div>
-                                <div className='tip'><Icon type="wechat" /> 扫一扫，微信账号登录</div>
+                                <div className='tip'><Icon type="wechat"/> 扫一扫，微信账号登录</div>
                             </div>
                         </Col>
                     </Row>

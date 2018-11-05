@@ -3,12 +3,11 @@ import {Layout, Icon, BackTop, Popover, LocaleProvider} from 'antd';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import ReactPlayer from 'react-player';
 import restUrl from 'RestUrl';
-import ajax from 'Utils/ajax';
 import ZZHeader from 'Comps/zzHeader/zzHeader';
 import ZZFooter from 'Comps/zzFooter/zzFooter';
 import followPublic from 'Img/followPublic.png';
+import axios from "Utils/axios";
 
-const queryMusicUrl = restUrl.ADDR + 'Server/queryMusic';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -39,8 +38,7 @@ export default class App extends React.Component {
         this.setState({
             loading: true
         });
-        let param = {};
-        ajax.getJSON(queryMusicUrl, param, data => {
+        axios.get('Server/queryMusic').then(res => res.data).then(data => {
             if (data.success) {
                 if (data.music && data.music.bgMusic) {
                     this.setState({

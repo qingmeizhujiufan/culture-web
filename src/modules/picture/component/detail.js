@@ -1,21 +1,15 @@
 import React from 'react';
 import {Link} from 'react-router';
 import PropTypes from 'prop-types';
-import {Row, Col, Icon, Button, message, Spin, Avatar, Input, List, Divider, Affix} from 'antd';
+import {Row, Col, Icon, message, Spin, Avatar} from 'antd';
 import restUrl from 'RestUrl';
-import ajax from 'Utils/ajax';
-import _ from 'lodash';
-import {listToTree, shiftDate} from "Utils/util";
+import {shiftDate} from "Utils/util";
 import ZZComment from 'Comps/zzComment/';
 import '../index.less';
-import top5 from "Img/top5.png";
+import axios from "Utils/axios";
 
-const {TextArea} = Input;
-const queryDetailUrl = restUrl.ADDR + 'taste/queryDetail';
-const queryCommentListUrl = restUrl.ADDR + 'taste/queryCommentList';
-const addUrl = restUrl.ADDR + 'taste/add';
-const queryUserOtherPicUrl = restUrl.ADDR + 'taste/queryUserOtherPic';
-const queryAdsenseUrl = restUrl.ADDR + 'ad/queryAdsense';
+const queryCommentListUrl = 'taste/queryCommentList';
+const addUrl = 'taste/add';
 
 class Detail extends React.Component {
     constructor(props) {
@@ -55,7 +49,7 @@ class Detail extends React.Component {
         this.setState({
             loading: true
         });
-        ajax.getJSON(queryDetailUrl, param, (data) => {
+        axios.get('taste/queryDetail', {params: param}).then(res => res.data).then(data => {
             if (data.success) {
                 data = data.backData;
                 this.queryUserOtherPic(data.creator);
@@ -77,7 +71,7 @@ class Detail extends React.Component {
     queryAdsense = adsense => {
         const param = {};
         param.adsense = adsense;
-        ajax.getJSON(queryAdsenseUrl, param, data => {
+        axios.get('ad/queryAdsense', {params: param}).then(res => res.data).then(data => {
             if (data.success && data.backData) {
                 if (adsense === 'taste_1') {
                     this.setState({
@@ -101,7 +95,7 @@ class Detail extends React.Component {
         const param = {};
         param.userId = userId;
         param.tasteId = this.props.params.id;
-        ajax.getJSON(queryUserOtherPicUrl, param, data => {
+        axios.get('taste/queryUserOtherPic', {params: param}).then(res => res.data).then(data => {
             if (data.success) {
                 this.setState({
                     otherShow: data.backData

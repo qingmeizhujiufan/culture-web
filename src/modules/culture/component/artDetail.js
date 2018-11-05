@@ -1,20 +1,16 @@
 import React from 'react';
 import {Link} from 'react-router';
 import PropTypes from 'prop-types';
-import {Row, Col, Icon, Badge, message, Spin, Affix, Breadcrumb, Button} from 'antd';
+import {Row, Col, Icon, message, Spin, Breadcrumb} from 'antd';
 import restUrl from 'RestUrl';
-import ajax from 'Utils/ajax';
 import '../index.less';
 import {shiftDate} from "Utils/util";
-import top5 from 'Img/top5.png';
 import ZZComment from 'Comps/zzComment/';
 import draftToHtml from "draftjs-to-html";
+import axios from "Utils/axios";
 
-const queryDetailUrl = restUrl.ADDR + 'art/queryDetail';
 const queryCommentListUrl = restUrl.ADDR + 'art/queryCommentList';
 const addUrl = restUrl.ADDR + 'art/add';
-const queryRecommendTop3Url = restUrl.ADDR + 'art/queryRecommendTop3';
-const collectUrl = restUrl.ADDR + 'art/collect';
 
 class ArtDetail extends React.Component {
     constructor(props) {
@@ -50,7 +46,7 @@ class ArtDetail extends React.Component {
         this.setState({
             loading: true
         });
-        ajax.getJSON(queryDetailUrl, param, (data) => {
+        axios.get('art/queryDetail', {params: param}).then(res => res.data).then(data => {
             if (data.success) {
                 data = data.backData;
                 data.artCover.map(item => {
@@ -80,7 +76,7 @@ class ArtDetail extends React.Component {
         this.setState({
             recommendLoading: true
         });
-        ajax.getJSON(queryRecommendTop3Url, null, data => {
+        axios.get('art/queryRecommendTop3').then(res => res.data).then(data => {
             if (data.success) {
                 data = data.backData;
                 this.setState({
@@ -115,7 +111,7 @@ class ArtDetail extends React.Component {
         const param = {};
         param.artId = this.props.params.id;
         param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
-        ajax.postJSON(collectUrl, JSON.stringify(param), data => {
+        axios.get('art/collect', {params: param}).then(res => res.data).then(data => {
             if (data.success) {
                 const data = this.state.data;
                 const isCollect = data.isCollect;

@@ -1,8 +1,8 @@
 import React from 'react';
-import {Row, Col, Icon, Button, message, Spin, List} from 'antd';
-import _ from 'lodash';
+import {Icon, Button, message, Spin, List} from 'antd';
+import _assign from 'lodash/assign';
 import './index.less';
-import ajax from "Utils/ajax";
+import axios from "Utils/axios";
 import empty from 'Img/empty.jpg';
 
 class ZZList extends React.Component {
@@ -42,13 +42,15 @@ class ZZList extends React.Component {
     getList = (queryParams, callback) => {
         const {queryUrl} = this.props;
         const {pageNumber} = this.state;
-        const param = _.assign({}, queryParams);
+        const param = _assign({}, queryParams);
         param.pageNumber = pageNumber;
         param.pageSize = 10;
         this.setState({loading: true});
-        ajax.getJSON(queryUrl, param, data => {
+        axios.get(queryUrl, {
+            params: param
+        }).then(res => res.data).then(data => {
             if (data.success) {
-                if(typeof callback === 'function') callback(data);
+                if (typeof callback === 'function') callback(data);
             } else {
                 message.error(data.backMsg);
             }

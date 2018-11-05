@@ -14,7 +14,6 @@ import '../index.less';
 import videoLogo from 'Img/video-logo.png';
 
 const Search = Input.Search;
-const queryListUrl = restUrl.ADDR + 'video/queryList';
 
 class Index extends React.Component {
     constructor(props) {
@@ -85,7 +84,7 @@ class Index extends React.Component {
                     <div className="content">
                         <ZZCardList
                             renderItem={this.renderItem}
-                            queryUrl={queryListUrl}
+                            queryUrl='video/queryList'
                             queryParams={{
                                 conditionText: conditionText
                             }}

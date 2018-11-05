@@ -7,21 +7,16 @@ import {
     Input,
     Icon,
     List,
-    Divider,
-    Card,
-    BackTop
+    Divider
 } from 'antd';
-import _ from 'lodash';
+import _find from 'lodash/find';
 import restUrl from 'RestUrl';
-import ajax from 'Utils/ajax';
+import axios from "Utils/axios";
 import ZZList from 'Comps/zzList/';
 import ZZCardList from "Comps/zzCardList";
 import '../index.less';
 
 const Search = Input.Search;
-const queryListUrl = restUrl.ADDR + 'culture/queryList';
-const queryArtListUrl = restUrl.ADDR + 'art/queryList';
-const queryCityListUrl = restUrl.ADDR + 'city/queryList';
 
 class Index extends React.Component {
     constructor(props) {
@@ -55,8 +50,7 @@ class Index extends React.Component {
     }
 
     getCityList = () => {
-        let param = {};
-        ajax.getJSON(queryCityListUrl, param, data => {
+        axios.get('city/queryList').then(res => res.data).then(data => {
             if (data.success) {
                 let cityList = [...this.state.cityList].concat(data.backData);
                 this.setState({
@@ -78,7 +72,7 @@ class Index extends React.Component {
 
     onChangeCity = id => {
         const {cityList, activeCity} = this.state;
-        const city = _.find(cityList, {id: id});
+        const city = _find(cityList, {id: id});
         if (activeCity === city) return;
         this.setState({
             activeCity: id,
@@ -218,7 +212,7 @@ class Index extends React.Component {
                             type === 1 ? (
                                 <ZZList
                                     renderItem={this.renderItem}
-                                    queryUrl={queryListUrl}
+                                    queryUrl='culture/queryList'
                                     queryParams={{
                                         conditionText: conditionText,
                                         cityId: activeCity
@@ -227,7 +221,7 @@ class Index extends React.Component {
                             ) : (
                                 <ZZCardList
                                     renderItem={this.renderArtItem}
-                                    queryUrl={queryArtListUrl}
+                                    queryUrl='art/queryList'
                                     queryParams={{
                                         conditionText: conditionText,
                                         cityId: activeCity
@@ -237,9 +231,6 @@ class Index extends React.Component {
                         }
                     </div>
                 </div>
-                <BackTop>
-                    <div className="zui-up"><Icon type="up"/></div>
-                </BackTop>
             </div>
         );
     }

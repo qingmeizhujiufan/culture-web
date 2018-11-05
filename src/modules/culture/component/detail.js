@@ -1,21 +1,17 @@
 import React from 'react';
 import {Link} from 'react-router';
 import PropTypes from 'prop-types';
-import {Row, Col, Icon, message, Spin, Affix, Breadcrumb} from 'antd';
+import {Row, Col, Icon, message, Spin, Breadcrumb} from 'antd';
 import draftToHtml from 'draftjs-to-html';
 import restUrl from 'RestUrl';
-import ajax from 'Utils/ajax';
 import '../index.less';
 import {shiftDate} from "Utils/util";
 import top5 from 'Img/top5.png';
 import ZZComment from 'Comps/zzComment/';
+import axios from "Utils/axios";
 
-const queryDetailUrl = restUrl.ADDR + 'culture/queryDetail';
 const queryCommentListUrl = restUrl.ADDR + 'culture/queryCommentList';
-const queryRecommendTop5Url = restUrl.ADDR + 'culture/queryRecommendTop5';
-const queryAdsenseUrl = restUrl.ADDR + 'ad/queryAdsense';
 const addUrl = restUrl.ADDR + 'culture/add';
-const collectUrl = restUrl.ADDR + 'culture/collect';
 
 class Detail extends React.Component {
     constructor(props) {
@@ -51,7 +47,7 @@ class Detail extends React.Component {
         this.setState({
             loading: true
         });
-        ajax.getJSON(queryDetailUrl, param, (data) => {
+        axios.get('culture/queryDetail', {params: param}).then(res => res.data).then(data => {
             if (data.success) {
                 data = data.backData;
                 if (data.cultureContent && data.cultureContent !== '') {
@@ -76,7 +72,7 @@ class Detail extends React.Component {
         this.setState({
             recommendLoading: true
         });
-        ajax.getJSON(queryRecommendTop5Url, null, data => {
+        axios.get('culture/queryRecommendTop5').then(res => res.data).then(data => {
             if (data.success) {
                 data = data.backData;
                 this.setState({
@@ -96,7 +92,7 @@ class Detail extends React.Component {
     queryAdsense = () => {
         const param = {};
         param.adsense = 'culture_1';
-        ajax.getJSON(queryAdsenseUrl, param, data => {
+        axios.get('ad/queryAdsense', {params: param}).then(res => res.data).then(data => {
             if (data.success && data.backData) {
                 this.setState({
                     ad: data.backData
@@ -109,7 +105,7 @@ class Detail extends React.Component {
         const param = {};
         param.cultureId = this.props.params.id;
         param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
-        ajax.postJSON(collectUrl, JSON.stringify(param), data => {
+        axios.post('culture/collect', param).then(res => res.data).then(data => {
             if (data.success) {
                 const data = this.state.data;
                 const isCollect = data.isCollect;

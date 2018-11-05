@@ -1,21 +1,16 @@
 import React from 'react';
 import {Link} from 'react-router';
 import PropTypes from 'prop-types';
-import {Row, Col, Input, Icon, Tabs, Avatar, List, Card, message, Modal} from 'antd';
+import {Icon, Tabs, Avatar, List, Card, message, Modal} from 'antd';
 import _ from 'lodash';
 import restUrl from 'RestUrl';
-import ajax from 'Utils/ajax';
 import '../index.less';
 import defaultUser from 'Img/default-user.jpg';
 import {shiftDate} from "../../../util/util";
 import empty from 'Img/personal-empty.png';
+import axios from "Utils/axios";
 
 const TabPane = Tabs.TabPane;
-const Search = Input.Search;
-const queryListUrl = restUrl.ADDR + 'taste/queryUserPic';
-const queryLikeTotalUrl = restUrl.ADDR + 'taste/queryLikeTotal';
-const queryUserCollectArtUrl = restUrl.ADDR + 'art/queryUserCollectArt';
-const queryUserCollectCultureUrl = restUrl.ADDR + 'culture/queryUserCollectCulture';
 const deleteUrl = restUrl.ADDR + 'taste/delete';
 const delete2Url = restUrl.ADDR + 'art/delete2';
 const delete3Url = restUrl.ADDR + 'culture/delete2';
@@ -64,7 +59,7 @@ class Index extends React.Component {
         let param = {};
         param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
         this.setState({loading: true});
-        ajax.getJSON(queryListUrl, param, data => {
+        axios.get('taste/queryUserPic', {params: param}).then(res => res.data).then(data => {
             if (data.success) {
                 let backData = data.backData;
 
@@ -82,7 +77,7 @@ class Index extends React.Component {
         let param = {};
         param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
         this.setState({loading: true});
-        ajax.getJSON(queryUserCollectArtUrl, param, data => {
+        axios.get('art/queryUserCollectArt', {params: param}).then(res => res.data).then(data => {
             if (data.success) {
                 let backData = data.backData;
 
@@ -99,7 +94,7 @@ class Index extends React.Component {
     queryLikeTotal = () => {
         let param = {};
         param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
-        ajax.getJSON(queryLikeTotalUrl, param, data => {
+        axios.get('taste/queryLikeTotal', {params: param}).then(res => res.data).then(data => {
             if (data.success) {
                 this.setState({
                     likeTotal: data.total
@@ -114,7 +109,7 @@ class Index extends React.Component {
         let param = {};
         param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
         this.setState({loading: true});
-        ajax.getJSON(queryUserCollectCultureUrl, param, data => {
+        axios.get('culture/queryUserCollectCulture', {params: param}).then(res => res.data).then(data => {
             if (data.success) {
                 let backData = data.backData;
 
@@ -280,7 +275,8 @@ class Index extends React.Component {
                                                         </div>
                                                         <div className='zui-card-item-content'>
                                                             <div>{item.artTitle}</div>
-                                                            <div className='price'>{'¥' + item.artMoney.toFixed(2)}</div>
+                                                            <div
+                                                                className='price'>{'¥' + item.artMoney.toFixed(2)}</div>
                                                         </div>
                                                         <div className='zui-card-item-footer'>
                                                             <a className='delete'

@@ -11,13 +11,11 @@ import {
     Message
 } from 'antd';
 import restUrl from 'RestUrl';
-import ajax from 'Utils/ajax';
 import ZZList from 'Comps/zzList/';
 import '../index.less';
 import newsLogo from 'Img/news-logo.png';
 
 const Search = Input.Search;
-const queryListUrl = restUrl.ADDR + 'news/queryList';
 
 class Index extends React.Component {
     constructor(props) {
@@ -38,17 +36,7 @@ class Index extends React.Component {
         };
     }
 
-    componentWillMount = () => {
-    }
-
     componentDidMount = () => {
-        this.setState({loading: true});
-        this.getList(data => {
-            this.setState({
-                listData: data.backData,
-                loading: false
-            });
-        });
     }
 
     componentWillReceiveProps = nextProps => {
@@ -56,23 +44,6 @@ class Index extends React.Component {
             loading: true,
             conditionText: sessionStorage.getItem('searchValue') ? sessionStorage.getItem('searchValue') : ''
         })
-    }
-
-    getList = callback => {
-        const {pageNumber, conditionText, activeCity} = this.state;
-        let param = {};
-        param.pageNumber = pageNumber;
-        param.pageSize = 10;
-        param.conditionText = conditionText;
-        param.cityId = activeCity;
-        ajax.getJSON(queryListUrl, param, data => {
-            if (data.success) {
-                if (typeof callback === 'function') callback(data);
-
-            } else {
-                Message.error(data.backMsg);
-            }
-        });
     }
 
     onLoadMore = () => {
@@ -182,7 +153,7 @@ class Index extends React.Component {
                     <div className="content">
                         <ZZList
                             renderItem={this.renderItem}
-                            queryUrl={queryListUrl}
+                            queryUrl='news/queryList'
                             queryParams={{
                                 conditionText: conditionText,
                                 cityId: activeCity
@@ -195,7 +166,8 @@ class Index extends React.Component {
     }
 }
 
-Index.contextTypes = {
+Index
+    .contextTypes = {
     router: PropTypes.object
 }
 

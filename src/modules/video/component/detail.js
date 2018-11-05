@@ -1,15 +1,13 @@
 import React from 'react';
-import {Link} from 'react-router';
 import PropTypes from 'prop-types';
-import {Row, Col, Icon, Badge, message, Spin, Affix, Breadcrumb, Button} from 'antd';
+import {message, Spin} from 'antd';
 import restUrl from 'RestUrl';
-import ajax from 'Utils/ajax';
 import '../index.less';
 import {shiftDate} from "Utils/util";
 import {Player} from 'video-react';
 import "video-react/dist/video-react.css";
+import axios from "Utils/axios";
 
-const queryDetailUrl = restUrl.ADDR + 'video/queryDetail';
 
 class VideoDetail extends React.Component {
     constructor(props) {
@@ -28,14 +26,14 @@ class VideoDetail extends React.Component {
         this.queryDetail();
     }
 
-    //获取艺术品详情
+    //获取视频详情
     queryDetail = () => {
         let param = {};
         param.id = this.props.params.id;
         this.setState({
             loading: true
         });
-        ajax.getJSON(queryDetailUrl, param, (data) => {
+        axios.get('video/queryDetail', {params: param}).then(res => res.data).then(data => {
             if (data.success) {
                 data = data.backData;
                 this.setState({

@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router';
 import PropTypes from 'prop-types';
 import {
     Row,
@@ -19,9 +18,8 @@ import {
 import imagesLoaded from 'imagesLoaded';
 import Masonry from 'masonry-layout';
 import InfiniteScroll from 'react-infinite-scroller';
-import _ from 'lodash';
 import restUrl from 'RestUrl';
-import ajax from 'Utils/ajax';
+import axios from "Utils/axios";
 import {shiftDate, reverseToDate} from "Utils/util";
 import '../index.less';
 
@@ -29,9 +27,6 @@ const Dragger = Upload.Dragger;
 const {TextArea} = Input;
 const Step = Steps.Step;
 const FormItem = Form.Item;
-const queryListUrl = restUrl.ADDR + 'taste/queryList';
-const saveUrl = restUrl.ADDR + 'taste/save';
-const collectUrl = restUrl.ADDR + 'taste/collect';
 
 const steps = [{
     title: '上传预览',
@@ -110,7 +105,7 @@ class Picture extends React.Component {
         param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
         param.pageNumber = this.state.pageNumber;
         param.pageSize = 10;
-        ajax.getJSON(queryListUrl, param, data => {
+        axios.get('taste/queryList', {params: param}).then(res => res.data).then(data => {
             if (data.success) {
                 if (typeof callback === 'function') callback(data);
             } else {
@@ -206,7 +201,7 @@ class Picture extends React.Component {
                 }).join(',');
                 values.creator = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
                 this.setState({submitLoading: true});
-                ajax.postJSON(saveUrl, JSON.stringify(values), data => {
+                axios.post('taste/save', values).then(res => res.data).then(data => {
                     if (data.success) {
                         message.success('上传图片成功');
                         this.setState({
@@ -231,7 +226,7 @@ class Picture extends React.Component {
         const param = {};
         param.tasteId = obj.id;
         param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
-        ajax.postJSON(collectUrl, JSON.stringify(param), data => {
+        axios.post('taste/collect', param).then(res => res.data).then(data => {
             if (data.success) {
                 const dataSource = this.state.dataSource;
                 const isLike = obj.isLike;

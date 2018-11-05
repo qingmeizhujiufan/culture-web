@@ -17,46 +17,43 @@ import {
     List
 } from 'antd';
 import _forEach from 'lodash/forEach';
-import restUrl from 'RestUrl';
-import ajax from 'Utils/ajax';
 import './zzHeader.less';
 import defaultUser from 'Img/default-user.jpg';
 import {shiftDate} from "Utils/util";
+import axios from "Utils/axios";
 
-const logoutUrl = restUrl.ADDR + 'server/LoginOut';
-const queryMessageListUrl = restUrl.ADDR + 'message/queryList';
-const deleteUrl = restUrl.ADDR + 'message/delete';
 const Option = Select.Option;
 
-const tabs = [{
-    active: false,
-    title: '首页',
-    link: ''
-}, {
-    active: false,
-    title: '文化展示',
-    link: '/frame/culture/list'
-}, {
-    active: false,
-    title: '新闻资讯',
-    link: '/frame/news/list'
-}, {
-    active: false,
-    title: '图片展示',
-    link: '/frame/picture/list'
-}, {
-    active: false,
-    title: '在线视频',
-    link: '/frame/video/list'
-}, {
-    active: false,
-    title: 'VR视频',
-    link: '/frame/vr/list'
-}, {
-    active: false,
-    title: '联系我们',
-    link: '/frame/ContractUs'
-}];
+const tabs = [
+    {
+        active: false,
+        title: '首页',
+        link: ''
+    }, {
+        active: false,
+        title: '文化展示',
+        link: '/frame/culture/list'
+    }, {
+        active: false,
+        title: '新闻资讯',
+        link: '/frame/news/list'
+    }, {
+        active: false,
+        title: '图片展示',
+        link: '/frame/picture/list'
+    }, {
+        active: false,
+        title: '在线视频',
+        link: '/frame/video/list'
+    }, {
+        active: false,
+        title: 'VR视频',
+        link: '/frame/vr/list'
+    }, {
+        active: false,
+        title: '联系我们',
+        link: '/frame/ContractUs'
+    }];
 
 class ZZHeader extends React.Component {
     constructor(props) {
@@ -109,7 +106,7 @@ class ZZHeader extends React.Component {
     queryMessageList = () => {
         const param = {};
         param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
-        ajax.getJSON(queryMessageListUrl, param, data => {
+        axios.get('message/queryList', {params: param}).then(res => res.data).then(data => {
             if (data.success) {
                 this.setState({
                     messageList: data.backData
@@ -121,7 +118,7 @@ class ZZHeader extends React.Component {
     onDelete = id => {
         const param = {};
         param.id = id;
-        ajax.postJSON(deleteUrl, JSON.stringify(param), data => {
+        axios.post('message/delete', param).then(res => res.data).then(data => {
             if (data.success) {
                 const messageList = [...this.state.messageList].filter(item => item.id !== id);
                 this.setState({
@@ -159,7 +156,7 @@ class ZZHeader extends React.Component {
     logout = () => {
         let param = {};
         param.userId = localStorage.userId;
-        ajax.postJSON(logoutUrl, JSON.stringify(param), (data) => {
+        axios.post('server/LoginOut', param).then(res => res.data).then(data => {
             if (data.success) {
                 localStorage.removeItem('token');
                 localStorage.removeItem('userId');

@@ -1,26 +1,27 @@
 import React from 'react';
 import {Row, Col, Icon, Button, message, Spin, Avatar, Input, List, Divider} from 'antd';
 import restUrl from 'RestUrl';
-import _ from 'lodash';
+import _assign from 'lodash/assign';
 import {listToTree, shiftDate} from "Utils/util";
 import './index.less';
-import ajax from "Utils/ajax";
+import axios from "Utils/axios";
 
 const {TextArea} = Input;
 const sort = (a, b) => new Date(a.create_time).getTime() < new Date(b.create_time).getTime();
 
 function buildParents(list) {
     function getParents(item) {
-        if(!item.parents) item.parents = [];
-        if(item.pId === "") return [];
+        if (!item.parents) item.parents = [];
+        if (item.pId === "") return [];
         for (let i = 0; i < list.length; i++) {
-            if(item.pId === list[i].id){
+            if (item.pId === list[i].id) {
                 item.parents.push(list[i]);
-                if(list[i].pId === "") return item.parents;
+                if (list[i].pId === "") return item.parents;
                 else return item.parents.concat(getParents(list[i]));
             }
         }
     }
+
     for (let i = 0; i < list.length; i++) {
         list[i].create_time = shiftDate(list[i].create_time);
         list[i].parents = Array.from(new Set(getParents(list[i])));
@@ -83,11 +84,11 @@ class ZZComment extends React.Component {
     //获取评论列表
     queryCommentList = (queryParams, init) => {
         const {queryUrl} = this.props;
-        const param = _.assign({}, queryParams);
+        const param = _assign({}, queryParams);
         this.setState({
             loading: true
         });
-        ajax.getJSON(queryUrl, param, (data) => {
+        axios.get(queryUrl, {params: param}).then(res => res.data).then(data => {
             if (data.success) {
                 const commentList = data.backData;
                 const commentTree = this.buildCommentTree(commentList, init);
@@ -155,20 +156,20 @@ class ZZComment extends React.Component {
     addComment = (pId) => {
         const {queryParams, saveUrl} = this.props;
         const {commentText, replyText} = this.state;
-        const param = _.assign({}, queryParams);
+        const param = _assign({}, queryParams);
         param.pId = pId;
         param.userId = 'fd6dd05d-4b9a-48a2-907a-16743a5125dd';
         param.comment = pId ? replyText : commentText;
         if (!pId) this.setState({commentLoading: true});
         else this.setState({replyLoading: true});
-        ajax.postJSON(saveUrl, JSON.stringify(param), data => {
+        axios.post(saveUrl, param).then(res => res.data).then(data => {
             if (data.success) {
                 this.setState({
                     commentText: '',
                     replyText: '',
                 });
                 this.queryCommentList(this.props.queryParams);
-            }else {
+            } else {
                 message.error(data.backMsg);
             }
             this.setState({

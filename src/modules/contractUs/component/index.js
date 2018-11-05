@@ -1,17 +1,9 @@
 import React from 'react';
-import {Link} from 'react-router';
 import PropTypes from 'prop-types';
-import {Row, Col, Input, Icon, Tabs, Avatar, Breadcrumb, Badge, notification, Spin, message, Button} from 'antd';
+import {Row, Col} from 'antd';
 import {Map} from 'react-amap';
 import Marker from 'react-amap/lib/marker';
-import restUrl from 'RestUrl';
-import ajax from 'Utils/ajax';
 import '../index.less';
-import defaultUser from 'Img/default-user.jpg';
-
-const TabPane = Tabs.TabPane;
-const Search = Input.Search;
-const queryListUrl = restUrl.ADDR + 'news/queryList';
 
 class Index extends React.Component {
     constructor(props) {
@@ -28,7 +20,9 @@ class Index extends React.Component {
 
     render() {
         const markerEvents = {
-            created: (ins) => {console.log(ins)},
+            created: (ins) => {
+                console.log(ins)
+            },
             click: e => {
                 const lnglat = e.lnglat;
                 let url = `https://uri.amap.com/marker?position=${lnglat.lng},${lnglat.lat}`;

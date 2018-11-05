@@ -4,7 +4,7 @@ const path = require('path');
 const webpack = require('webpack');
 module.exports = {
     entry: {
-        vendor: ['antd', 'react', 'react-dom', 'react-router', 'react-router-redux', 'react-redux', 'redux']
+        vendor: ['antd', 'react', 'react-dom']
     },
     output: {
         path: path.resolve(__dirname, 'dll'),
