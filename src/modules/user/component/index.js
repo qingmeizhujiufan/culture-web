@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router';
 import PropTypes from 'prop-types';
 import {Icon, Tabs, Avatar, List, Card, message, Modal} from 'antd';
-import _ from 'lodash';
+import _find from 'lodash/find';
 import restUrl from 'RestUrl';
 import '../index.less';
 import defaultUser from 'Img/default-user.jpg';
@@ -11,9 +11,9 @@ import empty from 'Img/personal-empty.png';
 import axios from "Utils/axios";
 
 const TabPane = Tabs.TabPane;
-const deleteUrl = restUrl.ADDR + 'taste/delete';
-const delete2Url = restUrl.ADDR + 'art/delete2';
-const delete3Url = restUrl.ADDR + 'culture/delete2';
+const deleteUrl = 'taste/delete';
+const delete2Url = 'art/delete2';
+const delete3Url = 'culture/delete2';
 
 class Index extends React.Component {
     constructor(props) {
@@ -149,7 +149,7 @@ class Index extends React.Component {
                 else if (type === 'culture') url = delete3Url;
                 const param = {};
                 param.id = id;
-                ajax.postJSON(url, JSON.stringify(param), data => {
+                axios.post('culture/queryUserCollectCulture', param).then(res => res.data).then(data => {
                     if (data.success) {
                         message.success('删除成功！');
                         if (type === 'taste') {
@@ -173,7 +173,7 @@ class Index extends React.Component {
 
     render() {
         const {loading, myPic, collectArt, collectCulture, likeTotal, stateList} = this.state;
-        const activeState = _.find(stateList, {active: true}).state;
+        const activeState = _find(stateList, {active: true}).state;
         const filterPic = activeState !== null ? myPic.filter(item => item.state === activeState) : myPic;
 
         return (
