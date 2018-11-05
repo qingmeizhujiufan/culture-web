@@ -207,36 +207,37 @@ class Detail extends React.Component {
                                     />
                                 </Col>
                                 <Col>
-                                    <Affix offsetTop={100}>
-                                        <div className='top5'>
-                                            <h1 className='title'><img src={top5}/></h1>
-                                            <div className='recommend-list'>
-                                                {
-                                                    recommendList.map((item, index) => {
-                                                        return (
-                                                            <Row key={index}>
-                                                                <Col span={2}>
-                                                                    <i>{index + 1}、</i>
-                                                                </Col>
-                                                                <Col span={22}>
-                                                                    <div className='zui-ellipsis'><Link
-                                                                        to={`/frame/culture/detail/${item.id}`}>{item.cultureTitle}</Link>
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-                                                        )
-                                                    })
-                                                }
-                                            </div>
+                                    <div className='top5'>
+                                        <h1 className='title'><img src={top5}/></h1>
+                                        <div className='recommend-list'>
+                                            {
+                                                recommendList.map((item, index) => {
+                                                    return (
+                                                        <Row key={index}>
+                                                            <Col span={2}>
+                                                                <i>{index + 1}、</i>
+                                                            </Col>
+                                                            <Col span={22}>
+                                                                <div className='zui-ellipsis'><Link
+                                                                    to={`/frame/culture/detail/${item.id}`}>{item.cultureTitle}</Link>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                    )
+                                                })
+                                            }
                                         </div>
-                                        {/* 广告位 */}
+                                    </div>
+                                    {/* 广告位 */}
+                                    {(ad.adCover && ad.adCover.filePath) ? (
                                         <div className='ad'>
                                             <a href={ad.adLink} target='_blank'>
                                                 <img
-                                                    src={(ad.adCover && ad.adCover.filePath) ? restUrl.BASE_HOST + ad.adCover.filePath : null}/>
+                                                    src={restUrl.BASE_HOST + ad.adCover.filePath}/>
                                             </a>
                                         </div>
-                                    </Affix>
+                                    ) : null
+                                    }
                                 </Col>
                             </Row>
                         </div>

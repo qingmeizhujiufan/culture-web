@@ -169,18 +169,26 @@ class Detail extends React.Component {
                                 </Col>
                                 <Col>
                                     {/* 广告位 */}
-                                    <div className='ad'>
-                                        <a href={ad_1.adLink} target='_blank'>
-                                            <img
-                                                src={(ad_1.adCover && ad_1.adCover.filePath) ? restUrl.BASE_HOST + ad_1.adCover.filePath : null}/>
-                                        </a>
-                                    </div>
-                                    <div className='ad'>
-                                        <a href={ad_2.adLink} target='_blank'>
-                                            <img
-                                                src={(ad_2.adCover && ad_2.adCover.filePath) ? restUrl.BASE_HOST + ad_2.adCover.filePath : null}/>
-                                        </a>
-                                    </div>
+                                    {
+                                        (ad_1.adCover && ad_1.adCover.filePath) ? (
+                                            <div className='ad'>
+                                                <a href={ad_1.adLink} target='_blank'>
+                                                    <img
+                                                        src={restUrl.BASE_HOST + ad_1.adCover.filePath}/>
+                                                </a>
+                                            </div>
+                                        ) : null
+                                    }
+                                    {
+                                        (ad_2.adCover && ad_2.adCover.filePath) ? (
+                                            <div className='ad'>
+                                                <a href={ad_2.adLink} target='_blank'>
+                                                    <img
+                                                        src={restUrl.BASE_HOST + ad_2.adCover.filePath}/>
+                                                </a>
+                                            </div>
+                                        ) : null
+                                    }
                                 </Col>
                             </Row>
                         </div>

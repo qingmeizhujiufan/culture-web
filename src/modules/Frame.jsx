@@ -65,7 +65,9 @@ export default class App extends React.Component {
             <LocaleProvider locale={zh_CN}>
                 <Layout>
                     <ZZHeader hash={hashChange}/>
-                    {this.props.children}
+                    <div style={{minHeight: 'calc(100vh - 314px)'}}>
+                        {this.props.children}
+                    </div>
                     <ZZFooter/>
                     <Popover
                         placement="left"
